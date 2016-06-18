@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+
+<BorderPane prefHeight="631.0" prefWidth="869.0"
+	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="com.jbd.controller.MainController">
+	<top>
+		<SplitPane dividerPositions="0.5" orientation="VERTICAL"
+			prefHeight="206.0" prefWidth="798.0" BorderPane.alignment="CENTER">
+			<items>
+				<AnchorPane minHeight="100.0" minWidth="0.0" prefHeight="88.0"
+					prefWidth="796.0">
+
+					<children>
+						<Button layoutX="124.0" layoutY="3.0" mnemonicParsing="false"
+							prefHeight="90.0" prefWidth="90.0" style="-fx-background-color: Orange;"
+							styleClass="bigButtons" text="Ordenes" textAlignment="CENTER"
+							onMouseClicked="#openTableLocation" onTouchPressed="#openTableLocation"
+							wrapText="true" id="vOrders" />
+						<Button layoutX="224.0" layoutY="3.0" mnemonicParsing="false"
+							prefHeight="90.0" prefWidth="90.0" style="-fx-background-color: #993774;"
+							styleClass="bigButtons" text="Para llevar" textAlignment="CENTER"
+							wrapText="true" />
+						<Button layoutX="324.0" layoutY="3.0" mnemonicParsing="false"
+							prefHeight="90.0" prefWidth="90.0" style="-fx-background-color: #00445A;"
+							styleClass="bigButtons" text="Menú" textAlignment="CENTER"
+							wrapText="true" />
+						<Button layoutX="424.0" layoutY="3.0" mnemonicParsing="false"
+							prefHeight="90.0" prefWidth="90.0" style="-fx-background-color: #C61A19;"
+							styleClass="bigButtons" text="Generar Reportes" textAlignment="CENTER"
+							wrapText="true" />
+						<Button layoutX="525.0" layoutY="3.0" mnemonicParsing="false"
+							prefHeight="90.0" prefWidth="90.0" style="-fx-background-color: #66d8d9;"
+							styleClass="bigButtons" text="Reservaciones" textAlignment="CENTER"
+							wrapText="true" />
+						<Button layoutX="626.0" layoutY="3.0" mnemonicParsing="false"
+							prefHeight="90.0" prefWidth="90.0" style="-fx-background-color: #BFC000;"
+							styleClass="bigButtons" text="Imprimir Facturas" textAlignment="CENTER"
+							wrapText="true" />
+						<Button layoutX="757.0" layoutY="3.0" mnemonicParsing="false"
+							onMouseClicked="#exitApp" onTouchPressed="#exitApp" prefHeight="90.0"
+							prefWidth="90.0" style="-fx-background-color: #C00100;"
+							styleClass="bigButtons" text="Salir" textAlignment="CENTER" />
+						<Button layoutX="24.0" layoutY="3.0" mnemonicParsing="false"
+							onMouseClicked="#openTableLocation" onTouchPressed="#openTableLocation"
+							prefHeight="90.0" prefWidth="90.0" style="-fx-background-color: Green;"
+							styleClass="bigButtons" text="Nueva Orden" textAlignment="CENTER"
+							wrapText="true" id="nOrder"/>
+					</children>
+				</AnchorPane>
+				<AnchorPane fx:id="menuTypePane" minHeight="205.0"
+					minWidth="0.0" prefHeight="200.0" prefWidth="160.0">
+					<children>
+
+
+					</children>
+				</AnchorPane>
+			</items>
+		</SplitPane>
+	</top>
+	<center>
+		<SplitPane dividerPositions="0.6693194925028836" prefHeight="160.0"
+			prefWidth="200.0" BorderPane.alignment="CENTER">
+			<items>
+
+
+
+				<AnchorPane fx:id="principal" minHeight="0.0" minWidth="0.0"
+					prefHeight="160.0" prefWidth="100.0">
+
+				</AnchorPane>
+
+
+
+				<AnchorPane fx:id="rightSide" minHeight="0.0" minWidth="0.0"
+					prefHeight="160.0" prefWidth="100.0">
+					<children>
+						<TableView fx:id="itemsOrderTable" layoutX="4.0"
+							layoutY="14.0" prefHeight="370.0" prefWidth="390.0"></TableView>
+						<Button layoutX="400.0" layoutY="320.0" mnemonicParsing="false"
+							onMouseClicked="#confirmOrder" onTouchPressed="#confirmOrder"
+							prefHeight="50.0" prefWidth="125.0" styleClass="bigButtons2"
+							text="Confirmar Orden" textAlignment="CENTER" wrapText="true" fx:id="confirmButton" />
+						<Label fx:id="totalL" text="Total: $ " layoutX="400.0"
+							layoutY="100.0"></Label>
+					</children>
+				</AnchorPane>
+			</items>
+		</SplitPane>
+	</center>
+</BorderPane>

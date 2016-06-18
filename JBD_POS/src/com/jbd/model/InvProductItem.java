@@ -1,0 +1,124 @@
+package com.jbd.model;
+
+import java.io.Serializable;
+import javax.persistence.*;
+import java.util.Date;
+
+
+/**
+ * The persistent class for the inv_product_item database table.
+ *
+ */
+@Entity
+@Table(name="inv_product_item")
+@NamedQuery(name="InvProductItem.findAll", query="SELECT i FROM InvProductItem i")
+public class InvProductItem implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="INV_PRODUCT_ID")
+	private int invProductId;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="ENTRY_DATE")
+	private Date entryDate;
+
+	@Column(name="ENTRY_USER")
+	private String entryUser;
+
+	@Column(name="PRODUCT_PRICE")
+	private float productPrice;
+
+	@Column(name="PRODUCT_QTY")
+	private int productQty;
+
+	@Column(name="PRODUCT_QTY_AVAILABILITY")
+	private int productQtyAvailability;
+
+	private String state;
+
+	@Column(name="TRANSACTION_TYPE_ID")
+	private String transactionTypeId;
+
+	//bi-directional many-to-one association to CtgProduct
+	@ManyToOne
+	@JoinColumn(name="PRODUCT_ID")
+	private CtgProduct ctgProduct;
+
+	public InvProductItem() {
+	}
+
+	public int getInvProductId() {
+		return this.invProductId;
+	}
+
+	public void setInvProductId(int invProductId) {
+		this.invProductId = invProductId;
+	}
+
+	public Date getEntryDate() {
+		return this.entryDate;
+	}
+
+	public void setEntryDate(Date entryDate) {
+		this.entryDate = entryDate;
+	}
+
+	public String getEntryUser() {
+		return this.entryUser;
+	}
+
+	public void setEntryUser(String entryUser) {
+		this.entryUser = entryUser;
+	}
+
+	public float getProductPrice() {
+		return this.productPrice;
+	}
+
+	public void setProductPrice(float productPrice) {
+		this.productPrice = productPrice;
+	}
+
+	public int getProductQty() {
+		return this.productQty;
+	}
+
+	public void setProductQty(int productQty) {
+		this.productQty = productQty;
+	}
+
+	public int getProductQtyAvailability() {
+		return this.productQtyAvailability;
+	}
+
+	public void setProductQtyAvailability(int productQtyAvailability) {
+		this.productQtyAvailability = productQtyAvailability;
+	}
+
+	public String getState() {
+		return this.state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getTransactionTypeId() {
+		return this.transactionTypeId;
+	}
+
+	public void setTransactionTypeId(String transactionTypeId) {
+		this.transactionTypeId = transactionTypeId;
+	}
+
+	public CtgProduct getCtgProduct() {
+		return this.ctgProduct;
+	}
+
+	public void setCtgProduct(CtgProduct ctgProduct) {
+		this.ctgProduct = ctgProduct;
+	}
+
+}

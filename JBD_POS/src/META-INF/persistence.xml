@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="Modelos" transaction-type="RESOURCE_LOCAL">
+		<!-- <class>modeloCorrespondencia.Division</class> -->
+		<!-- <class>modeloCorrespondencia.Institucion</class> -->
+		<!-- <class>modeloCorrespondencia.Rol</class> -->
+		<!-- <class>modeloCorrespondencia.Usuario</class> -->
+		<!-- <class>modeloCorrespondencia.Dual</class> -->
+		<!-- <class>modeloCorrespondencia.Report</class> -->
+		<!-- <class>modeloCorrespondencia.CBitacora</class> -->
+		<!-- <class>modeloCorrespondencia.CBitacoraPK</class> -->
+		<!-- <class>modeloCorrespondencia.CDetaDocu</class> -->
+		<!-- <class>modeloCorrespondencia.CDetaDocuPK</class> -->
+		<!-- <class>modeloCorrespondencia.CDia</class> -->
+		<!-- <class>modeloCorrespondencia.CEncaDocu</class> -->
+		<!-- <class>modeloCorrespondencia.CEncaDocuPK</class> -->
+		<!-- <class>modeloCorrespondencia.CEtapaDocu</class> -->
+		<!-- <class>modeloCorrespondencia.CInstruccion</class> -->
+		<!-- <class>modeloCorrespondencia.CMvtoDocu</class> -->
+		<!-- <class>modeloCorrespondencia.CMvtoDocuPK</class> -->
+		<!-- <class>modeloCorrespondencia.CPersonalTipo</class> -->
+		<!-- <class>modeloCorrespondencia.CSubtipoDocu</class> -->
+		<!-- <class>modeloCorrespondencia.CSubtipoDocuPK</class> -->
+		<!-- <class>modeloCorrespondencia.CTipoDocu</class> -->
+		<!-- <class>modeloCorrespondencia.CTipoMovi</class> -->
+		<!-- <class>modeloCorrespondencia.CUserSegu</class> -->
+		<!-- <class>modeloCorrespondencia.CUserSeguPK</class> -->
+		<!-- <class>modeloCorrespondencia.VDocsPendiente</class> -->
+		<!-- <class>modeloCorrespondencia.VDocsFinalizado</class> -->
+
+		<properties>
+			<!-- Configuración de la BD -->
+
+
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+
+			<!-- ********************************************************************************* -->
+			<!-- ********************************************************************************* -->
+
+			<!-- Debido a que se inyectan en ejecucion a este archivo, -->
+			<!-- los parametros de usuario y pass, no se colocan en este archivo -->
+
+
+
+
+
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/restoracio" />
+			<property name="javax.persistence.jdbc.user" value="root" />
+			<property name="javax.persistence.jdbc.password" value="root" />
+
+			<!-- ********************************************************************************* -->
+			<!-- ********************************************************************************* -->
+
+
+
+
+			<!-- dialecto SQL -->
+			<!-- <property name="hibernate.dialect" value="org.hibernate.dialect.OracleDialect"
+				/> -->
+			<property name="hibernate.connection.autocommit" value="false" />
+
+
+
+<!-- 			<property name="hibernate.show_sql" value="true" /> -->
+
+			<!-- Modo de actualización del esquema de base de datos -->
+			<property name="hibernate.hbm2ddl.auto" value="" />
+
+			<property name="hibernate.format_sql" value="true" />
+			<!-- <property name="hibernate.default_schema" value="SISCORRDGP" /> -->
+			<!-- <property name="hibernate.bytecode.provider" value="cglib"/> -->
+		</properties>
+
+
+
+
+	</persistence-unit>
+
+</persistence>

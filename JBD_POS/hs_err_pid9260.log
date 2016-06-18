@@ -1,0 +1,166 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (malloc) failed to allocate 1048576 bytes for AllocateHeap
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   In 32 bit mode, the process size limit was hit
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Use 64 bit Java on a 64 bit OS
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (memory/allocation.inline.hpp:61), pid=9260, tid=12440
+#
+# JRE version:  (8.0_51-b16) (build )
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.51-b03 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0000000002222800):  JavaThread "Unknown thread" [_thread_in_vm, id=12440, stack(0x00000000020c0000,0x00000000021c0000)]
+
+Stack: [0x00000000020c0000,0x00000000021c0000]
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x32b4ca]
+V  [jvm.dll+0x2797e3]
+V  [jvm.dll+0x27a479]
+V  [jvm.dll+0x271765]
+V  [jvm.dll+0x1606]
+V  [jvm.dll+0x3f7dd2]
+V  [jvm.dll+0x3f876f]
+V  [jvm.dll+0x3f883d]
+V  [jvm.dll+0x3f8a06]
+V  [jvm.dll+0xf2c22]
+V  [jvm.dll+0x20f0a9]
+V  [jvm.dll+0x240d2a]
+V  [jvm.dll+0x15b9a1]
+C  [javaw.exe+0x217e]
+C  [javaw.exe+0xcd37]
+C  [javaw.exe+0xcdcb]
+C  [KERNEL32.DLL+0x18102]
+C  [ntdll.dll+0x5c2e4]
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+
+Other Threads:
+
+=>0x0000000002222800 (exited) JavaThread "Unknown thread" [_thread_in_vm, id=12440, stack(0x00000000020c0000,0x00000000021c0000)]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap:
+ PSYoungGen      total 18432K, used 317K [0x00000000eba00000, 0x00000000ece80000, 0x0000000100000000)
+  eden space 15872K, 2% used [0x00000000eba00000,0x00000000eba4f5d0,0x00000000ec980000)
+  from space 2560K, 0% used [0x00000000ecc00000,0x00000000ecc00000,0x00000000ece80000)
+  to   space 2560K, 0% used [0x00000000ec980000,0x00000000ec980000,0x00000000ecc00000)
+ ParOldGen       total 42496K, used 0K [0x00000000c2e00000, 0x00000000c5780000, 0x00000000eba00000)
+  object space 42496K, 0% used [0x00000000c2e00000,0x00000000c2e00000,0x00000000c5780000)
+ Metaspace       used 742K, capacity 4480K, committed 4480K, reserved 1056768K
+  class space    used 75K, capacity 384K, committed 384K, reserved 1048576K
+
+Card table byte_map: [0x00000000116e0000,0x00000000118d0000] byte_map_base: 0x00000000110c9000
+
+Marking Bits: (ParMarkBitMap*) 0x0000000062ef4040
+ Begin Bits: [0x0000000011e20000, 0x0000000012d68000)
+ End Bits:   [0x0000000012d68000, 0x0000000013cb0000)
+
+Polling page: 0x0000000002040000
+
+CodeCache: size=245760Kb used=328Kb max_used=328Kb free=245431Kb
+ bounds [0x0000000002320000, 0x0000000002590000, 0x0000000011320000]
+ total_blobs=57 nmethods=0 adapters=37
+ compilation: enabled
+
+Compilation events (0 events):
+No events
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (10 events):
+Event: 0.044 loading class java/lang/Short
+Event: 0.044 loading class java/lang/Short done
+Event: 0.044 loading class java/lang/Integer
+Event: 0.045 loading class java/lang/Integer done
+Event: 0.045 loading class java/lang/Long
+Event: 0.045 loading class java/lang/Long done
+Event: 0.046 loading class java/lang/NullPointerException
+Event: 0.046 loading class java/lang/NullPointerException done
+Event: 0.046 loading class java/lang/ArithmeticException
+Event: 0.046 loading class java/lang/ArithmeticException done
+
+
+Dynamic libraries:
+0x00007ff6450a0000 - 0x00007ff6450d7000 	C:\Program Files\Java\jre1.8.0_51\bin\javaw.exe
+0x00007ffee7d80000 - 0x00007ffee7f41000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007ffee70f0000 - 0x00007ffee719d000 	C:\WINDOWS\system32\KERNEL32.DLL
+0x00007ffee4830000 - 0x00007ffee4a18000 	C:\WINDOWS\system32\KERNELBASE.dll
+0x00007ffee7ab0000 - 0x00007ffee7b57000 	C:\WINDOWS\system32\ADVAPI32.dll
+0x00007ffee71a0000 - 0x00007ffee723d000 	C:\WINDOWS\system32\msvcrt.dll
+0x00007ffee77b0000 - 0x00007ffee780b000 	C:\WINDOWS\system32\sechost.dll
+0x00007ffee7240000 - 0x00007ffee735c000 	C:\WINDOWS\system32\RPCRT4.dll
+0x00007ffee7880000 - 0x00007ffee79d6000 	C:\WINDOWS\system32\USER32.dll
+0x00007ffee7360000 - 0x00007ffee74e6000 	C:\WINDOWS\system32\GDI32.dll
+0x00007ffed64f0000 - 0x00007ffed6764000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.10586.0_none_8c15ae12515e1c22\COMCTL32.dll
+0x00007ffee5710000 - 0x00007ffee598d000 	C:\WINDOWS\system32\combase.dll
+0x00007ffee46b0000 - 0x00007ffee471a000 	C:\WINDOWS\system32\bcryptPrimitives.dll
+0x00007ffee70b0000 - 0x00007ffee70eb000 	C:\WINDOWS\system32\IMM32.DLL
+0x0000000062570000 - 0x0000000062642000 	C:\Program Files\Java\jre1.8.0_51\bin\msvcr100.dll
+0x00000000626f0000 - 0x0000000062f73000 	C:\Program Files\Java\jre1.8.0_51\bin\server\jvm.dll
+0x00007ffee7870000 - 0x00007ffee7878000 	C:\WINDOWS\system32\PSAPI.DLL
+0x00007ffedf270000 - 0x00007ffedf27a000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x00007ffed5790000 - 0x00007ffed57b3000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007ffee1550000 - 0x00007ffee1559000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
+0x00007ffee59a0000 - 0x00007ffee5a0b000 	C:\WINDOWS\system32\WS2_32.dll
+0x0000000002090000 - 0x00000000020bc000 	C:\WINDOWS\SYSTEM32\WINMMBASE.dll
+0x00007ffee4a20000 - 0x00007ffee4a63000 	C:\WINDOWS\system32\cfgmgr32.dll
+0x00000000626e0000 - 0x00000000626ef000 	C:\Program Files\Java\jre1.8.0_51\bin\verify.dll
+0x00000000626b0000 - 0x00000000626d9000 	C:\Program Files\Java\jre1.8.0_51\bin\java.dll
+0x0000000062690000 - 0x00000000626a6000 	C:\Program Files\Java\jre1.8.0_51\bin\zip.dll
+0x00007ffee0670000 - 0x00007ffee07fc000 	C:\WINDOWS\SYSTEM32\dbghelp.dll
+
+VM Arguments:
+jvm_args: -Dfile.encoding=Cp1252 
+java_command: application.Main
+java_class_path (initial): C:\Users\Julio\workspaceSDK\JBD_POS\target\classes;C:\Users\Julio\Downloads\eclipse-SDK-4.5.2-win32-x86_64-distro-2.3.0\eclipse\plugins\org.eclipse.fx.ide.css.jfx8_2.3.0.201603020810.jar;C:\Users\Julio\.m2\repository\org\hibernate\hibernate-entitymanager\4.3.6.Final\hibernate-entitymanager-4.3.6.Final.jar;C:\Users\Julio\.m2\repository\org\jboss\logging\jboss-logging\3.1.3.GA\jboss-logging-3.1.3.GA.jar;C:\Users\Julio\.m2\repository\org\jboss\logging\jboss-logging-annotations\1.2.0.Beta1\jboss-logging-annotations-1.2.0.Beta1.jar;C:\Users\Julio\.m2\repository\org\hibernate\hibernate-core\4.3.6.Final\hibernate-core-4.3.6.Final.jar;C:\Users\Julio\.m2\repository\antlr\antlr\2.7.7\antlr-2.7.7.jar;C:\Users\Julio\.m2\repository\org\jboss\jandex\1.1.0.Final\jandex-1.1.0.Final.jar;C:\Users\Julio\.m2\repository\dom4j\dom4j\1.6.1\dom4j-1.6.1.jar;C:\Users\Julio\.m2\repository\xml-apis\xml-apis\1.0.b2\xml-apis-1.0.b2.jar;C:\Users\Julio\.m2\repository\org\hibernate\common\hibernate-commons-annotations\4.0.5.Final\hibernate-commons-annotations-4.0.5.Final.jar;C:\Users\Julio\.m2\repository\org\jboss\spec\javax\transaction\jboss-transaction-api_1.2_spec\1.0.0.Final\jboss-transaction-api_1.2_spec-1.0.0.Final.jar;C:\Users\Julio\.m2\repository\org\javassist\javassist\3.18.1-GA\javassist-3.18.1-GA.jar;C:\Users\Julio\.m2\repository\org\hibernate\javax\persistence\hibernate-jpa-2.1-api\1.0.0.Final\hibernate-jpa-2.1-api-1.0.0.Final.jar;C:\Users\Julio\.m2\repository\mysql\mysql-connector-java\5.1.38\mysql-connector-java-5.1.38.jar;C:\Users\Julio\.m2\repository\org\springframework\spring-beans\3.2.3.RELEASE\spring-beans-3.2.3.RELEASE.jar;C:\Users\Julio\.m2\repository\org\springframework\spring-core\3.2.3.RELEASE\spring-core-3.2.3.RELEASE.jar;C:\Users\Julio\.m2\repository\commons-logging\commons-logging\1.1.1\commons-logging-1.1.1.jar;C:\Users\Julio\.m2\repository\org\springframework\spring-context-support\3.2.3.RELEASE\spring-context-support-3.2.3.RELEASE.jar;C:\Us
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=C:/Program Files/Java/jre1.8.0_51/bin/server;C:/Program Files/Java/jre1.8.0_51/bin;C:/Program Files/Java/jre1.8.0_51/lib/amd64;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\EgisTec MyWinLocker\x64;C:\Program Files (x86)\EgisTec MyWinLocker\;C:\Program Files (x86)\Intel\OpenCL SDK\2.0\bin\x86;C:\Program Files (x86)\Intel\OpenCL SDK\2.0\bin\x64;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Microsoft SQL Server\110\Tools\Binn\;C:\Program Files (x86)\Microsoft SDKs\TypeScript\1.0\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Users\Julio\Downloads\eclipse-SDK-4.5.2-win32-x86_64-distro-2.3.0\eclipse;
+USERNAME=Julio
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 58 Stepping 9, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 10.0 , 64 bit Build 10586 (10.0.10586.0)
+
+CPU:total 4 (2 cores per cpu, 2 threads per core) family 6 model 58 stepping 9, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, clmul, erms, ht, tsc, tscinvbit, tscinv
+
+Memory: 4k page, physical 4005144k(741196k free), swap 16063768k(4824k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (25.51-b03) for windows-amd64 JRE (1.8.0_51-b16), built on Jun  8 2015 18:03:07 by "java_re" with MS VC++ 10.0 (VS2010)
+
+time: Mon May 30 22:51:34 2016
+elapsed time: 1 seconds (0d 0h 0m 1s)
+
