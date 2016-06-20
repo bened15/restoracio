@@ -132,7 +132,7 @@
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                              <children>
-                                                <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="125.0" style="-fx-background-color: #20E1A5;" text="Chili con Carne" wrapText="true" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER">
+                                                <Button mnemonicParsing="false" prefHeight="75.0" prefWidth="125.0" style="-fx-background-color: #FEFCB8;" text="Chili con Carne" textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER">
                                                    <effect>
                                                       <DropShadow />
                                                    </effect>
@@ -140,7 +140,7 @@
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Button>
-                                                <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="125.0" style="-fx-background-color: #20E1A5;" text="Dedos de Queso" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                                <Button mnemonicParsing="false" prefHeight="75.0" prefWidth="125.0" style="-fx-background-color: #FEFCB8;" text="Dedos de Queso" textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                                    <effect>
                                                       <DropShadow />
                                                    </effect>
@@ -148,7 +148,7 @@
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Button>
-                                                <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="125.0" style="-fx-background-color: #20E1A5;" text="Alitas" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                                <Button mnemonicParsing="false" prefHeight="75.0" prefWidth="125.0" style="-fx-background-color: #FEFCB8;" text="Alitas" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                                    <effect>
                                                       <DropShadow />
                                                    </effect>
@@ -156,7 +156,7 @@
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Button>
-                                                <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="125.0" style="-fx-background-color: #20E1A5;" text="Aros de Cebolla" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                                <Button mnemonicParsing="false" prefHeight="75.0" prefWidth="125.0" style="-fx-background-color: #FEFCB8;" text="Aros de Cebolla" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                                    <effect>
                                                       <DropShadow />
                                                    </effect>
@@ -164,7 +164,7 @@
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Button>
-                                                <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="125.0" style="-fx-background-color: #20E1A5;" text="Crema de Tomate" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                <Button mnemonicParsing="false" prefHeight="75.0" prefWidth="125.0" style="-fx-background-color: #FEFCB8;" text="Crema de Tomate" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                                    <effect>
                                                       <DropShadow />
                                                    </effect>
@@ -172,7 +172,7 @@
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Button>
-                                                <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="125.0" style="-fx-background-color: #20E1A5;" text="Crema de Papa c/ Tocino" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                <Button mnemonicParsing="false" prefHeight="75.0" prefWidth="125.0" style="-fx-background-color: #FEFCB8;" text="Crema de Papa c/ Tocino" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                                    <effect>
                                                       <DropShadow />
                                                    </effect>
@@ -180,7 +180,7 @@
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Button>
-                                                <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="125.0" style="-fx-background-color: #20E1A5;" text="Chicharrones de Queso" wrapText="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                <Button mnemonicParsing="false" prefHeight="75.0" prefWidth="125.0" style="-fx-background-color: #FEFCB8;" text="Chicharrones de Queso" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                                    <effect>
                                                       <DropShadow />
                                                    </effect>
@@ -207,33 +207,46 @@
                                           <Label layoutX="19.0" layoutY="16.0" text="Mesa" />
                                           <AnchorPane layoutX="5.0" layoutY="407.0" prefHeight="49.0" prefWidth="454.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                              <children>
-                                                <Button layoutY="5.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #507E8A;" text="Borrar Item" textFill="WHITE" wrapText="true">
-                                                   <effect>
-                                                      <InnerShadow>
-                                                         <input>
-                                                            <DropShadow />
-                                                         </input>
-                                                      </InnerShadow>
-                                                   </effect>
-                                                </Button>
-                                                <Button layoutX="115.0" layoutY="5.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #507E8A;" text="Crear Nueva Cuenta" textFill="WHITE" wrapText="true">
-                                                   <effect>
-                                                      <InnerShadow>
-                                                         <input>
-                                                            <DropShadow />
-                                                         </input>
-                                                      </InnerShadow>
-                                                   </effect>
-                                                </Button>
-                                                <Button layoutX="234.0" layoutY="5.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #507E8A;" text="Cambiar Mesa" textFill="WHITE" wrapText="true" AnchorPane.leftAnchor="234.0">
-                                                   <effect>
-                                                      <InnerShadow>
-                                                         <input>
-                                                            <DropShadow />
-                                                         </input>
-                                                      </InnerShadow>
-                                                   </effect>
-                                                </Button>
+                                                <GridPane layoutX="-53.0" layoutY="-31.0" prefHeight="59.0" prefWidth="444.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                  <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                  </columnConstraints>
+                                                  <rowConstraints>
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                  </rowConstraints>
+                                                   <children>
+                                                      <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #507E8A;" text="Crear Nueva Cuenta" textFill="WHITE" wrapText="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                         <effect>
+                                                            <InnerShadow>
+                                                               <input>
+                                                                  <DropShadow />
+                                                               </input>
+                                                            </InnerShadow>
+                                                         </effect>
+                                                      </Button>
+                                                      <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #507E8A;" text="Borrar Item" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                         <effect>
+                                                            <InnerShadow>
+                                                               <input>
+                                                                  <DropShadow />
+                                                               </input>
+                                                            </InnerShadow>
+                                                         </effect>
+                                                      </Button>
+                                                      <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #507E8A;" text="Cambiar Mesa" textFill="WHITE" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                         <effect>
+                                                            <InnerShadow>
+                                                               <input>
+                                                                  <DropShadow />
+                                                               </input>
+                                                            </InnerShadow>
+                                                         </effect>
+                                                      </Button>
+                                                   </children>
+                                                </GridPane>
                                              </children>
                                           </AnchorPane>
                                        </children>
