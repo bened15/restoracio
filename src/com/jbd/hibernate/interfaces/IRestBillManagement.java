@@ -17,4 +17,6 @@ public interface IRestBillManagement {
 
 	public List<RestBill> findBillsWithRestTableAccount(RestTableAccount account);
 
+	public Double getTotalAccountFromTable(RestTableAccount ta);
+
 }

@@ -627,10 +627,16 @@ public class MainController {
 					if (billsQuantity.size() == 1) {
 						itemsList.add(item);
 						RestBillDetail billDetail = new RestBillDetail();
-						billDetail.setRestBill(billsQuantity.get(0));
+						RestBill bill = billsQuantity.get(0);
+						bill.setBillSubtotal(bill.getBillSubtotal() + item.getMenuItemPrice());
+						bill.setBillTip(bill.getBillSubtotal() * 0.10);
+						bill.setBillTotal(bill.getBillSubtotal() * 1.10);
+
+						billDetail.setRestBill(bill);
 						billDetail.setBillDetailSubtotal(item.getMenuItemPrice());
 						billDetail.setBillDetailTotal(item.getMenuItemPrice() * 1.10);
 						billsDetailQuantity.add(billDetail);
+						manageRestBill.updateRestBill(bill);
 						refreshTable();
 					} else {
 						Pane p = new Pane();
@@ -869,6 +875,7 @@ public class MainController {
 					totalL.setText("Total: $ " + decimFormat.format(priceTotal) + "\n\n" + "Propina (10%) $"
 							+ (decimFormat.format(priceTotal * 0.10)) + "\n" + "\n" + "----------" + "\n" + "Total: $ "
 							+ decimFormat.format(priceTotal + (priceTotal * 0.10)));
+					billsDetailQuantity.remove(itemsOrderTable.getSelectionModel().getSelectedIndex());
 					itemsList.remove(itemsOrderTable.getSelectionModel().getSelectedItem());
 
 					refreshTable();
@@ -988,16 +995,25 @@ public class MainController {
 
 			@Override
 			public void handle(MouseEvent event) {
-				RestBillDetail billDetail = new RestBillDetail();
-				billDetail.setRestBill((RestBill) billsList.getSelectionModel().getSelectedItem());
-				billDetail.setBillDetailSubtotal(item.getMenuItemPrice());
-				billDetail.setBillDetailTotal(item.getMenuItemPrice() * 1.10);
+				try {
+					RestBillDetail billDetail = new RestBillDetail();
+					RestBill bill = (RestBill) billsList.getSelectionModel().getSelectedItem();
+					bill.setBillSubtotal(bill.getBillSubtotal() + item.getMenuItemPrice());
+					bill.setBillTip(bill.getBillSubtotal() * 0.10);
+					bill.setBillTotal(bill.getBillSubtotal() * 1.10);
+					billDetail.setRestBill(bill);
+					billDetail.setBillDetailSubtotal(item.getMenuItemPrice());
+					billDetail.setBillDetailTotal(item.getMenuItemPrice() * 1.10);
 
-				billsDetailQuantity.add(billDetail);
-				itemsList.add(item);
-				refreshTable();
-				principal.getChildren().remove(p);
+					billsDetailQuantity.add(billDetail);
+					itemsList.add(item);
+					refreshTable();
+					manageRestBill.updateRestBill(bill);
+					principal.getChildren().remove(p);
 
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 
 		});
@@ -1186,6 +1202,7 @@ public class MainController {
 	public void disableControls(boolean s) {
 		itemsOrderTable.setDisable(s);
 		confirmButton.setDisable(s);
+		totalL.setText("Total: $ \n\n" + "Propina (10%) $\n" + "\n" + "----------" + "\n" + "Total: $ ");
 
 	}
 

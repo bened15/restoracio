@@ -52,9 +52,10 @@ public class RestBillPaymentManagementDAO implements IRestBillPaymentManagement 
 	}
 
 	@Override
-	public boolean isAmmountPaymentEqualOrMoreThanAccount(double totalAccount,RestTableAccount tableAc) {
+	public boolean isAmmountPaymentEqualOrMoreThanAccount(double totalAccount, RestTableAccount tableAc) {
 		try {
-			Query q = em.createQuery("select sum(p.amount) from RestBillPayment p where p.restBill.restTableAccount=:tableAc",
+			Query q = em.createQuery(
+					"select sum(p.amount) from RestBillPayment p where p.restBill.restTableAccount=:tableAc",
 					Double.class);
 			q.setParameter("tableAc", tableAc);
 			double result = (Double) q.getSingleResult();
@@ -70,7 +71,6 @@ public class RestBillPaymentManagementDAO implements IRestBillPaymentManagement 
 			e.printStackTrace();
 			return false;
 		}
-
 	}
 
 }

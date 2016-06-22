@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
@@ -64,7 +66,7 @@ public class PaymentController {
 	private static String RestBillN = "";
 	private List<RestBillDetail> bDetails = new ArrayList<RestBillDetail>();
 	private static double totalAccount = 0.0;
-	private static boolean actualizoLabels = false;
+	// private static boolean actualizoLabels = false;
 
 	public PaymentController() {
 
@@ -76,7 +78,6 @@ public class PaymentController {
 					.getRestBill().getRestTableAccount().getTableAccountId());
 			// this.mainAppC = mainC;
 			enableAutowireCapabilities();
-			loadBillsToChoiceBox(MainController.getBillsDetailQuantity().get(0).getRestBill().getRestTableAccount());
 
 			this.secondaryStage.setTitle("Pago");
 			this.secondaryStage.initModality(Modality.WINDOW_MODAL);
@@ -104,7 +105,8 @@ public class PaymentController {
 	public void initialize() {
 
 		enableAutowireCapabilities();
-		this.facturaAPagar.getSelectionModel().selectFirst();
+		loadBillsToChoiceBox(MainController.getBillsDetailQuantity().get(0).getRestBill().getRestTableAccount());
+
 		fillTotalLabels();
 	}
 
@@ -112,30 +114,10 @@ public class PaymentController {
 		try {
 
 			List<RestBill> bills = manageRestBill.findBillsWithRestTableAccount(account);
-			int i = 0, x = 0;
-			double totalBill = 0.0;
+			int i = 0;
 
 			ObservableList<String> billsList = FXCollections.observableArrayList();
 			while (i < bills.size()) {
-
-				bDetails = manageRestBillDetail.findAllRestBillDetailFromRestBill(bills.get(i));
-
-				while (x < bDetails.size()) {
-
-					totalBill = totalBill + bDetails.get(x).getBillDetailSubtotal();
-
-					x++;
-				}
-
-				RestBill rb = new RestBill();
-				rb = bills.get(i);
-				rb.setBillSubtotal(totalBill);
-				rb.setBillTotal(totalBill * 1.10);
-				rb.setBillTip(totalBill * 0.10);
-				manageRestBill.updateRestBill(rb);
-				totalAccount = totalAccount + totalBill;
-				x = 0;
-				totalBill = 0;
 
 				System.out.println("Valores" + bills.get(i).getBillName());
 				billsList.add(bills.get(i).getBillName() + "--" + bills.get(i).getBillId());
@@ -146,14 +128,16 @@ public class PaymentController {
 
 			facturaAPagar.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 				public void changed(ObservableValue ov, Number value, Number new_value) {
-
-					RestBillN = (String) facturaAPagar.getItems().get((Integer) new_value);
-					if (actualizoLabels) {
+					if (facturaAPagar.getItems().size() > 0) {
+						RestBillN = (String) facturaAPagar.getItems().get((Integer) new_value);
+						// if (actualizoLabels) {
 						fillTotalLabels();
 
+						// }
 					}
 				}
 			});
+			PaymentController.facturaAPagar.getSelectionModel().selectFirst();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -161,9 +145,8 @@ public class PaymentController {
 
 	}
 
-
 	public void fillTotalLabels() {
-		actualizoLabels = true;
+		// actualizoLabels = true;
 		int i = 0;
 		double totalCuenta = 0;
 		List<RestBillDetail> rbd;
@@ -177,6 +160,7 @@ public class PaymentController {
 		}
 		this.totalCuenta.setText(decimFormat.format(totalCuenta * 1.10));
 		this.totalPropina.setText(decimFormat.format(totalCuenta * 0.10));
+		this.totalRecibido.setText("");
 
 	}
 
@@ -260,32 +244,43 @@ public class PaymentController {
 
 	@FXML
 	public void generarPagoSelected() {
-		RestBillPayment rbp = new RestBillPayment();
-		System.out.println("Esto trae billname: " + RestBillN);
-		String[] bills = RestBillN.split("--");
-		rbp.setAmount(Float.parseFloat(totalRecibido.getText()));
-		rbp.setRestBill(new RestBill(Integer.parseInt(bills[1])));
-		rbp.setCtgPaymentMethod(this.paymentMethod);
-		manageRestBillPayment.insertRestBillPayment(rbp);
-		System.out.println("supuestamente " + totalAccount);
-		if (manageRestBillPayment.isAmmountPaymentEqualOrMoreThanAccount(totalAccount,
-				MainController.getBillsDetailQuantity().get(0).getRestBill().getRestTableAccount())) {
+		if (Double.parseDouble(this.totalCambio.getText()) >= 0 && this.totalRecibido.getText() != "") {
 
-			System.out.println("cuenta completada");
+			RestBillPayment rbp = new RestBillPayment();
+			System.out.println("Esto trae billname: " + RestBillN);
+			String[] bills = RestBillN.split("--");
+			rbp.setAmount(Float.parseFloat(totalRecibido.getText()));
+			rbp.setRestBill(new RestBill(Integer.parseInt(bills[1])));
+			rbp.setCtgPaymentMethod(this.paymentMethod);
+			manageRestBillPayment.insertRestBillPayment(rbp);
 			RestTableAccount ta = MainController.getBillsDetailQuantity().get(0).getRestBill().getRestTableAccount();
-			ta.setClosedDatetime(new Date());
-			ta.setAccountStatus("Cerrada");
+			// System.out.println("supuestamente " + totalAccount);
+			if (manageRestBillPayment.isAmmountPaymentEqualOrMoreThanAccount(
+					manageRestBill.getTotalAccountFromTable(ta),
+					MainController.getBillsDetailQuantity().get(0).getRestBill().getRestTableAccount())) {
 
-			manageRestTableAccount.updateRestTableAccount(ta);
+				ta.setClosedDatetime(new Date());
+				ta.setAccountStatus("Cerrada");
+
+				manageRestTableAccount.updateRestTableAccount(ta);
+				JOptionPane.showMessageDialog(null,
+						"Se ha efectuado el pago completo de la cuenta total de la mesa, esta ventana se cerrará");
+				// se deberia de cerrar la ventana y colorear nuevvamente las
+				// mesas
+
+			} else {
+
+				// falta pagar todavia alguna alguna bill pendiente
+				JOptionPane.showMessageDialog(null,
+						"Pago efectuado, sin embargo existen todavia facturas pendientes por pagar");
+			}
 			loadBillsToChoiceBox(ta);
-			// se deberia de cerrar la ventana
+			fillTotalLabels();
 
 		} else {
+			JOptionPane.showMessageDialog(null, "No se puede efectuar un pago inferior al monto que indica la factura");
 
-			// falta pagar todavia alguna alguna bill pendiente
-			System.out.println("falta pagar alguna bill");
 		}
-
 	}
 
 }

@@ -4,13 +4,13 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jbd.hibernate.interfaces.IRestBillManagement;
 import com.jbd.model.RestBill;
-import com.jbd.model.RestMenuItem;
 import com.jbd.model.RestTableAccount;
 
 public class RestBillManagementDAO implements IRestBillManagement {
@@ -65,7 +65,8 @@ public class RestBillManagementDAO implements IRestBillManagement {
 	public List<RestBill> findBillsWithRestTableAccount(RestTableAccount account) {
 		try {
 
-			TypedQuery<RestBill> tq = em.createQuery("select b from RestBill b where b.restTableAccount=:tableAccount and b not in(select p.restBill from RestBillPayment p where p.restBill=b)",
+			TypedQuery<RestBill> tq = em.createQuery(
+					"select b from RestBill b where b.restTableAccount=:tableAccount and b not in(select p.restBill from RestBillPayment p where p.restBill=b)",
 					RestBill.class);
 			tq.setParameter("tableAccount", account);
 			List<RestBill> billItems = tq.getResultList();
@@ -81,6 +82,22 @@ public class RestBillManagementDAO implements IRestBillManagement {
 			return null;
 
 		}
+	}
+
+	@Override
+	public Double getTotalAccountFromTable(RestTableAccount ta) {
+		try {
+			Query q = em.createQuery(
+					"select sum(b.billSubtotal) from RestBill b where b.restTableAccount=:ta and b.restTableAccount.closedDatetime is null",
+					Double.class);
+			q.setParameter("ta", ta);
+			return (Double) q.getSingleResult();
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 
 }
