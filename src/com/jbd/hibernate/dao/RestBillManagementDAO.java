@@ -48,16 +48,30 @@ public class RestBillManagementDAO implements IRestBillManagement {
 
 	}
 
+	@Transactional
 	@Override
 	public void deleteRestBill(RestBill o) {
-		// TODO Auto-generated method stub
+		try {
+			RestBill aeliminar = em.find(RestBill.class, o.getBillId());
+			if (aeliminar != null) {
+				em.remove(aeliminar);
+				em.flush();
+				em.clear();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
 	@Override
 	public RestBill findRestBill(Integer oId) {
-		return null;
-		// TODO Auto-generated method stub
+		try {
+			return em.find(RestBill.class, oId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 

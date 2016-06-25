@@ -42,9 +42,19 @@ public class RestBillDetailManagementDAO implements IRestBillDetailManagement {
 
 	}
 
+	@Transactional
 	@Override
 	public void deleteRestBillDetail(RestBillDetail o) {
-		// TODO Auto-generated method stub
+		try {
+			RestBillDetail aeliminar = em.find(RestBillDetail.class, o.getBillDetailId());
+			if (aeliminar != null) {
+				em.remove(aeliminar);
+				em.flush();
+				em.clear();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -75,8 +85,8 @@ public class RestBillDetailManagementDAO implements IRestBillDetailManagement {
 	@Override
 	public List<RestBillDetail> findAllRestBillDetailFromRestBill(RestBill bill) {
 		try {
-			TypedQuery<RestBillDetail> tq = em.createQuery(
-					"select d from RestBillDetail d where d.restBill=:bill", RestBillDetail.class);
+			TypedQuery<RestBillDetail> tq = em.createQuery("select d from RestBillDetail d where d.restBill=:bill",
+					RestBillDetail.class);
 			tq.setParameter("bill", bill);
 			List<RestBillDetail> billDetail = tq.getResultList();
 			return billDetail;

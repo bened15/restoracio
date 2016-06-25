@@ -1,6 +1,7 @@
 package com.jbd.controller;
 
 import java.text.DecimalFormat;
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +46,7 @@ public class PaymentController {
 	private MainController mainAppC;
 	@FXML
 	private GridPane numbersArea;
+
 	@FXML
 	private Label totalPropina, totalRecibido, totalCuenta, totalCambio, totalDescuento;
 	@FXML
@@ -66,6 +68,7 @@ public class PaymentController {
 	private static String RestBillN = "";
 	private List<RestBillDetail> bDetails = new ArrayList<RestBillDetail>();
 	private static double totalAccount = 0.0;
+	private int dotCounter = 0;
 	// private static boolean actualizoLabels = false;
 
 	public PaymentController() {
@@ -186,8 +189,13 @@ public class PaymentController {
 		if (bClicked.getText().contains("Borrar")) {
 			String valor = totalRecibido.getText();
 			totalRecibido.setText(valor.substring(0, valor.length() - 1));
+			totalCambio.setText(this.decimFormat
+					.format(Double.parseDouble(totalRecibido.getText()) - Double.parseDouble(totalCuenta.getText())));
+
 		}
 		if (bClicked.getText().contains("Limpiar")) {
+
+			totalCambio.setText("0");
 			totalRecibido.setText("");
 		}
 
@@ -196,9 +204,23 @@ public class PaymentController {
 				|| bClicked.getText().contains("6") || bClicked.getText().contains("7")
 				|| bClicked.getText().contains("8") || bClicked.getText().contains("9")
 				|| bClicked.getText().contains("0") || bClicked.getText().contains(".")) {
-			totalRecibido.setText(totalRecibido.getText() + bClicked.getText());
-			totalCambio.setText(this.decimFormat
-					.format(Double.parseDouble(totalRecibido.getText()) - Double.parseDouble(totalCuenta.getText())));
+
+			if (bClicked.getText().contains(".") && totalRecibido.getText().contains(".")) {
+
+			} else {
+				String totalRecibidoT = totalRecibido.getText() + bClicked.getText();
+				if (totalRecibidoT.contains(".") && (totalRecibidoT.length() - 3) > totalRecibidoT.indexOf(".")) {
+					System.out.println("tiene punto y se intneto meter mas de dos decimales");
+					String t = totalRecibidoT.substring(0, totalRecibidoT.indexOf(".") + 3);
+					totalRecibidoT = t;
+
+				}
+				totalRecibido.setText(totalRecibidoT);
+
+				totalCambio.setText(this.decimFormat.format(
+						Double.parseDouble(totalRecibido.getText()) - Double.parseDouble(totalCuenta.getText())));
+
+			}
 		}
 	}
 
@@ -244,7 +266,8 @@ public class PaymentController {
 
 	@FXML
 	public void generarPagoSelected() {
-		if (Double.parseDouble(this.totalCambio.getText()) >= 0 && this.totalRecibido.getText() != "") {
+		if (Double.parseDouble(this.totalCambio.getText()) >= 0 && this.totalCambio.getText() != ""
+				&& this.totalRecibido.getText() != "") {
 
 			RestBillPayment rbp = new RestBillPayment();
 			System.out.println("Esto trae billname: " + RestBillN);

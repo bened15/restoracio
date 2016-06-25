@@ -3,39 +3,40 @@ package com.jbd.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import org.hibernate.annotations.Cascade;
 
 /**
  * The persistent class for the rest_bill_detail database table.
  *
  */
 @Entity
-@Table(name="rest_bill_detail")
-@NamedQuery(name="RestBillDetail.findAll", query="SELECT r FROM RestBillDetail r")
+@Table(name = "rest_bill_detail")
+@NamedQuery(name = "RestBillDetail.findAll", query = "SELECT r FROM RestBillDetail r")
 public class RestBillDetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="BILL_DETAIL_ID")
+	@Column(name = "BILL_DETAIL_ID")
 	private int billDetailId;
 
-	@Column(name="BILL_DETAIL_SUBTOTAL")
+	@Column(name = "BILL_DETAIL_SUBTOTAL")
 	private double billDetailSubtotal;
 
-	@Column(name="BILL_DETAIL_TOTAL")
+	@Column(name = "BILL_DETAIL_TOTAL")
 	private double billDetailTotal;
 
-	@Column(name="DISCOUNT_ID")
+	@Column(name = "DISCOUNT_ID")
 	private int discountId;
 
-	//bi-directional many-to-one association to RestBill
+	// bi-directional many-to-one association to RestBill
 	@ManyToOne
-	@JoinColumn(name="BILL_ID")
+	@JoinColumn(name = "BILL_ID")
 	private RestBill restBill;
 
-	//bi-directional many-to-one association to RestOrder
+	// bi-directional many-to-one association to RestOrder
 	@ManyToOne
-	@JoinColumn(name="ORDER_ID")
+	@JoinColumn(name = "ORDER_ID")
 	private RestOrder restOrder;
 
 	public RestBillDetail() {
