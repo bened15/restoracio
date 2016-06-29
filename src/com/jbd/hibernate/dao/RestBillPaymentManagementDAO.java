@@ -1,8 +1,11 @@
 package com.jbd.hibernate.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,15 +48,25 @@ public class RestBillPaymentManagementDAO implements IRestBillPaymentManagement 
 	}
 
 	@Override
-	public RestBillPayment findRestBillPayment(Integer oId) {
-		return null;
-		// TODO Auto-generated method stub
+	public List<RestBillPayment> findRestBillPayments(Integer billId) {
+		try {
+			TypedQuery<RestBillPayment> q = em.createQuery(
+					"select rbp from RestBillPayment rbp where rbp.restBill.billId=:billId", RestBillPayment.class);
+			q.setParameter("billId", billId);
+			return q.getResultList();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+
+		}
 
 	}
 
 	@Override
 	public boolean isAmmountPaymentEqualOrMoreThanAccount(double totalAccount, RestTableAccount tableAc) {
 		try {
+			System.out.println("Total account supuestamente" + totalAccount);
 			Query q = em.createQuery(
 					"select sum(p.amount) from RestBillPayment p where p.restBill.restTableAccount=:tableAc",
 					Double.class);

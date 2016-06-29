@@ -80,7 +80,7 @@ public class RestBillManagementDAO implements IRestBillManagement {
 		try {
 
 			TypedQuery<RestBill> tq = em.createQuery(
-					"select b from RestBill b where b.restTableAccount=:tableAccount and b not in(select p.restBill from RestBillPayment p where p.restBill=b)",
+					"select b from RestBill b where b.restTableAccount=:tableAccount and b not in(select p.restBill from RestBillPayment p where p.restBill=b and p.amount=p.restBill.billTotal)",
 					RestBill.class);
 			tq.setParameter("tableAccount", account);
 			List<RestBill> billItems = tq.getResultList();
@@ -102,7 +102,7 @@ public class RestBillManagementDAO implements IRestBillManagement {
 	public Double getTotalAccountFromTable(RestTableAccount ta) {
 		try {
 			Query q = em.createQuery(
-					"select sum(b.billSubtotal) from RestBill b where b.restTableAccount=:ta and b.restTableAccount.closedDatetime is null",
+					"select sum(b.billTotal) from RestBill b where b.restTableAccount=:ta and b.restTableAccount.closedDatetime is null",
 					Double.class);
 			q.setParameter("ta", ta);
 			return (Double) q.getSingleResult();

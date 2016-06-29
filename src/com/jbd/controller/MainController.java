@@ -393,7 +393,8 @@ public class MainController {
 							Button clickeado = (Button) arg0.getSource();
 
 							efe.applyFadeTransitionToButton(clickeado);
-							restTable.setTableId(Integer.parseInt(clickeado.getId()));
+							restTable = manageRestTables.findRestTable(Integer.parseInt(clickeado.getId()));
+
 							List<String> op = new ArrayList<String>();
 							op.add("Pagar");
 							op.add("Cancelar Orden");
@@ -425,7 +426,7 @@ public class MainController {
 							Button clickeado = (Button) arg0.getSource();
 							efe.applyFadeTransitionToButton(clickeado);
 							//
-							restTable.setTableId(Integer.parseInt(clickeado.getId()));
+							restTable = manageRestTables.findRestTable(Integer.parseInt(clickeado.getId()));
 							//
 							// loadPanesForMenuType(manageCtgMenuType.loadMenuType(),
 							// menuTypePane, "#eadfff");
@@ -1157,6 +1158,8 @@ public class MainController {
 		// manageRestTableAccount.insertRestTableAccount(restTableAccount);
 
 		// }
+		restTable.setStatus("Ocupado");
+		manageRestTables.updateRestTable(restTable);
 		if (itemsList.size() > 0) {
 
 			while (i < itemsList.size()) {
@@ -1301,6 +1304,8 @@ public class MainController {
 						if (n == JOptionPane.YES_OPTION) {
 							try {
 								manageRestTableAccount.deleteRestTableAccount(restTableAccount);
+								restTable.setStatus("Desocupado");
+								manageRestTables.updateRestTable(restTable);
 								JOptionPane.showMessageDialog(null, "La(s) Ordene(s) se CANCELARON exitosamente");
 								loadPanesForTables(manageRestTables.findTablesByArea(restArea), principal, "#c4f195");
 							} catch (Exception e) {

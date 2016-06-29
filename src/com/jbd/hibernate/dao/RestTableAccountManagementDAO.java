@@ -39,7 +39,7 @@ public class RestTableAccountManagementDAO implements IRestTableAccountManagemen
 		try {
 			em.merge(o);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 
 	}

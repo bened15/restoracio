@@ -34,9 +34,14 @@ public class RestTableManagementDAO implements IRestTableManagement {
 
 	}
 
+	@Transactional
 	@Override
 	public void updateRestTable(RestTable o) {
-		// TODO Auto-generated method stub
+		try {
+			em.merge(o);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -48,8 +53,12 @@ public class RestTableManagementDAO implements IRestTableManagement {
 
 	@Override
 	public RestTable findRestTable(Integer oId) {
-		return null;
-		// TODO Auto-generated method stub
+		try {
+			return em.find(RestTable.class, oId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
@@ -62,10 +71,10 @@ public class RestTableManagementDAO implements IRestTableManagement {
 			tq.setParameter("areas", area);
 			List<RestTable> tables = tq.getResultList();
 			System.out.println("Tmaño de tables" + tables.size());
-//			for (RestTable t : tables) {
-//				System.out.println("Resultados :" + t.getTableId());
-//
-//			}
+			// for (RestTable t : tables) {
+			// System.out.println("Resultados :" + t.getTableId());
+			//
+			// }
 
 			return tables;
 		} catch (Exception e) {

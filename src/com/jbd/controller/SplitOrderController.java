@@ -99,8 +99,12 @@ public class SplitOrderController {
 			enableAutowireCapabilities();
 
 			this.secondaryStage.setTitle("Dividir Orden");
-			this.secondaryStage.initModality(Modality.WINDOW_MODAL);
-			this.secondaryStage.initOwner(Main.primaryStage);
+			if (this.secondaryStage.getModality() != Modality.WINDOW_MODAL) {
+				this.secondaryStage.initModality(Modality.WINDOW_MODAL);
+			}
+			if (this.secondaryStage.getOwner() != Main.primaryStage) {
+				this.secondaryStage.initOwner(Main.primaryStage);
+			}
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("../com/jbd/view/W_SplitOrderView.fxml"));
 			AnchorPane paymentOverview = (AnchorPane) loader.load();
@@ -348,7 +352,7 @@ public class SplitOrderController {
 
 					det = bDetails.get(i);
 					det.setRestOrder(itemsList.get(i));
-//					manageRestBillDetail.deleteRestBillDetail(MainController.getBillsDetailQuantity().get(i));
+					// manageRestBillDetail.deleteRestBillDetail(MainController.getBillsDetailQuantity().get(i));
 					manageRestBill.deleteRestBill(MainController.getBillsDetailQuantity().get(i).getRestBill());
 					manageRestBillDetail.insertRestBillDetail(det);
 

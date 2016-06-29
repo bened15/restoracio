@@ -33,7 +33,17 @@ public class RestTable implements Serializable {
 	@OneToMany(mappedBy = "restTable")
 	private List<RestTableAccount> restTableAccounts;
 
+	private String status;
+
 	public RestTable() {
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public int getTableId() {
