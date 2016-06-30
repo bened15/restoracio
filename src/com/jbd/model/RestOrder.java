@@ -5,55 +5,54 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * The persistent class for the rest_order database table.
  *
  */
 @Entity
-@Table(name="rest_order")
-@NamedQuery(name="RestOrder.findAll", query="SELECT r FROM RestOrder r")
+@Table(name = "rest_order")
+@NamedQuery(name = "RestOrder.findAll", query = "SELECT r FROM RestOrder r")
 public class RestOrder implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="ORDER_ID")
+	@Column(name = "ORDER_ID")
 	private int orderId;
 
 	private String attendant;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="ENTRY_DATE")
+	@Column(name = "ENTRY_DATE")
 	private Date entryDate;
 
-	@Column(name="ORDER_COMMENT")
+	@Column(name = "ORDER_COMMENT")
 	private String orderComment;
 
-	@Column(name="ORDER_STATUS")
+	@Column(name = "ORDER_STATUS")
 	private String orderStatus;
 
-	//bi-directional many-to-one association to RestBillDetail
-	@OneToMany(mappedBy="restOrder")
+	// bi-directional many-to-one association to RestBillDetail
+	@OneToMany(mappedBy = "restOrder")
 	private List<RestBillDetail> restBillDetails;
 
-	//bi-directional many-to-one association to RestMenuItem
+	// bi-directional many-to-one association to RestMenuItem
 	@ManyToOne
-	@JoinColumn(name="MENU_ITEM_ID")
+	@JoinColumn(name = "MENU_ITEM_ID")
 	private RestMenuItem restMenuItem;
 
-	//bi-directional many-to-one association to RestShift
+	// bi-directional many-to-one association to RestShift
 	@ManyToOne
-	@JoinColumn(name="ID_SHIFT")
+	@JoinColumn(name = "ID_SHIFT")
 	private RestShift restShift;
 
-	//bi-directional many-to-one association to RestTableAccount
+	// bi-directional many-to-one association to RestTableAccount
 	@ManyToOne
-	@JoinColumn(name="TABLE_ACCOUNT_ID")
+	@JoinColumn(name = "TABLE_ACCOUNT_ID")
 	private RestTableAccount restTableAccount;
 
-	//bi-directional many-to-one association to RestOrderLog
-	@OneToMany(mappedBy="restOrder")
+	// bi-directional many-to-one association to RestOrderLog
+	@OneToMany(mappedBy = "restOrder")
 	private List<RestOrderLog> restOrderLogs;
 
 	public RestOrder() {
@@ -165,6 +164,28 @@ public class RestOrder implements Serializable {
 		restOrderLog.setRestOrder(null);
 
 		return restOrderLog;
+	}
+
+	@Transient
+	private String menuItemName;
+
+	@Transient
+	private double menuItemPrice;
+
+	public String getMenuItemName() {
+		return menuItemName;
+	}
+
+	public void setMenuItemName(String menuItemName) {
+		this.menuItemName = menuItemName;
+	}
+
+	public double getMenuItemPrice() {
+		return menuItemPrice;
+	}
+
+	public void setMenuItemPrice(double menuItemPrice) {
+		this.menuItemPrice = menuItemPrice;
 	}
 
 }

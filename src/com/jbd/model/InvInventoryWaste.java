@@ -2,6 +2,7 @@ package com.jbd.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.Date;
 
 
 /**
@@ -19,8 +20,20 @@ public class InvInventoryWaste implements Serializable {
 	@Column(name="ID_INVENTORY_WASTE")
 	private int idInventoryWaste;
 
-	@Column(name="ID_MEASURE_TYPE")
-	private int idMeasureType;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="ENTRY_DATE")
+	private Date entryDate;
+
+	@Column(name="ENTRY_USER")
+	private String entryUser;
+
+	@Column(name="PRODUCT_QTY_WASTE")
+	private int productQtyWaste;
+
+	//bi-directional many-to-one association to InvProductItem
+	@ManyToOne
+	@JoinColumn(name="INV_PRODUCT_ID")
+	private InvProductItem invProductItem;
 
 	public InvInventoryWaste() {
 	}
@@ -33,12 +46,36 @@ public class InvInventoryWaste implements Serializable {
 		this.idInventoryWaste = idInventoryWaste;
 	}
 
-	public int getIdMeasureType() {
-		return this.idMeasureType;
+	public Date getEntryDate() {
+		return this.entryDate;
 	}
 
-	public void setIdMeasureType(int idMeasureType) {
-		this.idMeasureType = idMeasureType;
+	public void setEntryDate(Date entryDate) {
+		this.entryDate = entryDate;
+	}
+
+	public String getEntryUser() {
+		return this.entryUser;
+	}
+
+	public void setEntryUser(String entryUser) {
+		this.entryUser = entryUser;
+	}
+
+	public int getProductQtyWaste() {
+		return this.productQtyWaste;
+	}
+
+	public void setProductQtyWaste(int productQtyWaste) {
+		this.productQtyWaste = productQtyWaste;
+	}
+
+	public InvProductItem getInvProductItem() {
+		return this.invProductItem;
+	}
+
+	public void setInvProductItem(InvProductItem invProductItem) {
+		this.invProductItem = invProductItem;
 	}
 
 }

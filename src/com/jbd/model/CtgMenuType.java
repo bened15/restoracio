@@ -17,11 +17,10 @@ public class CtgMenuType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="MENU_TYPE_ID")
 	private int menuTypeId;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="ENTRY_DATE")
 	private Date entryDate;
 
@@ -33,6 +32,10 @@ public class CtgMenuType implements Serializable {
 
 	@Column(name="MENU_TYPE_NAME")
 	private String menuTypeName;
+
+	//bi-directional many-to-one association to CtgDiscount
+	@OneToMany(mappedBy="ctgMenuType")
+	private List<CtgDiscount> ctgDiscounts;
 
 	//bi-directional many-to-one association to RestMenuItem
 	@OneToMany(mappedBy="ctgMenuType")
@@ -79,6 +82,28 @@ public class CtgMenuType implements Serializable {
 
 	public void setMenuTypeName(String menuTypeName) {
 		this.menuTypeName = menuTypeName;
+	}
+
+	public List<CtgDiscount> getCtgDiscounts() {
+		return this.ctgDiscounts;
+	}
+
+	public void setCtgDiscounts(List<CtgDiscount> ctgDiscounts) {
+		this.ctgDiscounts = ctgDiscounts;
+	}
+
+	public CtgDiscount addCtgDiscount(CtgDiscount ctgDiscount) {
+		getCtgDiscounts().add(ctgDiscount);
+		ctgDiscount.setCtgMenuType(this);
+
+		return ctgDiscount;
+	}
+
+	public CtgDiscount removeCtgDiscount(CtgDiscount ctgDiscount) {
+		getCtgDiscounts().remove(ctgDiscount);
+		ctgDiscount.setCtgMenuType(null);
+
+		return ctgDiscount;
 	}
 
 	public List<RestMenuItem> getRestMenuItems() {

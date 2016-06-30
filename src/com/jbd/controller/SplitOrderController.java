@@ -198,6 +198,8 @@ public class SplitOrderController {
 					efe.applyFadeTransitionToButton(clickeado);
 
 					RestOrder or = menuItemOrder.get(Integer.parseInt(clickeado.getId()));
+					or.setMenuItemName(or.getRestMenuItem().getMenuItemName());
+					or.setMenuItemPrice(Double.parseDouble(decimFormat.format(or.getRestMenuItem().getMenuItemPrice())));
 					// String[] partida = clickeado.getText().split("\n");
 					// item.setMenuItemId(Integer.parseInt(clickeado.getId()));
 					// item.setMenuItemName(partida[0]);
@@ -323,8 +325,8 @@ public class SplitOrderController {
 		// TableColumn total = new TableColumn("Total");
 
 		id.setCellValueFactory(new PropertyValueFactory<RestOrder, String>("orderId"));
-		elemento.setCellValueFactory(new PropertyValueFactory<RestOrder, String>("restMenuItem"));
-		precio.setCellValueFactory(new PropertyValueFactory<RestOrder, Double>("restMenuItem"));
+		elemento.setCellValueFactory(new PropertyValueFactory<RestOrder, String>("menuItemName"));
+		precio.setCellValueFactory(new PropertyValueFactory<RestOrder, Double>("menuItemPrice"));
 		// total.setCellValueFactory(new PropertyValueFactory<>("total"));
 
 		// itemsLocalList.setItems(itemsList);

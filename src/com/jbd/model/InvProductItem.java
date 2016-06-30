@@ -3,6 +3,7 @@ package com.jbd.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -16,6 +17,7 @@ public class InvProductItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="INV_PRODUCT_ID")
 	private int invProductId;
 
@@ -39,6 +41,10 @@ public class InvProductItem implements Serializable {
 
 	@Column(name="TRANSACTION_TYPE_ID")
 	private String transactionTypeId;
+
+	//bi-directional many-to-one association to InvInventoryWaste
+	@OneToMany(mappedBy="invProductItem")
+	private List<InvInventoryWaste> invInventoryWastes;
 
 	//bi-directional many-to-one association to RestProduct
 	@ManyToOne
@@ -110,6 +116,28 @@ public class InvProductItem implements Serializable {
 
 	public void setTransactionTypeId(String transactionTypeId) {
 		this.transactionTypeId = transactionTypeId;
+	}
+
+	public List<InvInventoryWaste> getInvInventoryWastes() {
+		return this.invInventoryWastes;
+	}
+
+	public void setInvInventoryWastes(List<InvInventoryWaste> invInventoryWastes) {
+		this.invInventoryWastes = invInventoryWastes;
+	}
+
+	public InvInventoryWaste addInvInventoryWaste(InvInventoryWaste invInventoryWaste) {
+		getInvInventoryWastes().add(invInventoryWaste);
+		invInventoryWaste.setInvProductItem(this);
+
+		return invInventoryWaste;
+	}
+
+	public InvInventoryWaste removeInvInventoryWaste(InvInventoryWaste invInventoryWaste) {
+		getInvInventoryWastes().remove(invInventoryWaste);
+		invInventoryWaste.setInvProductItem(null);
+
+		return invInventoryWaste;
 	}
 
 	public RestProduct getRestProduct() {

@@ -54,10 +54,6 @@ public class RestBill implements Serializable {
 	@Column(name = "SHIFT_ID")
 	private int shiftId;
 
-	// bi-directional many-to-one association to CtgDiscount
-	@ManyToOne
-	@JoinColumn(name = "BILL_DISCOUNT_ID")
-	private CtgDiscount ctgDiscount;
 
 	// bi-directional many-to-one association to CtgPaymentMethod
 	@ManyToOne
@@ -78,6 +74,11 @@ public class RestBill implements Serializable {
 	@OneToMany(mappedBy = "restBill")
 	@Cascade({ org.hibernate.annotations.CascadeType.DELETE })
 	private List<RestBillPayment> restBillPayments;
+
+	// bi-directional many-to-one association to RestBillDetailXDiscount
+	@OneToMany(mappedBy = "restBill")
+	@Cascade({ org.hibernate.annotations.CascadeType.DELETE })
+	private List<RestBillDetailXDiscount> restBillDetailXDiscounts;
 
 	public RestBill() {
 	}
@@ -150,14 +151,6 @@ public class RestBill implements Serializable {
 		this.shiftId = shiftId;
 	}
 
-	public CtgDiscount getCtgDiscount() {
-		return this.ctgDiscount;
-	}
-
-	public void setCtgDiscount(CtgDiscount ctgDiscount) {
-		this.ctgDiscount = ctgDiscount;
-	}
-
 	public CtgPaymentMethod getCtgPaymentMethod() {
 		return this.ctgPaymentMethod;
 	}
@@ -226,4 +219,25 @@ public class RestBill implements Serializable {
 		return restBillPayment;
 	}
 
+	public List<RestBillDetailXDiscount> getRestBillDetailXDiscounts() {
+		return this.restBillDetailXDiscounts;
+	}
+
+	public void setRestBillDetailXDiscounts(List<RestBillDetailXDiscount> restBillDetailXDiscounts) {
+		this.restBillDetailXDiscounts = restBillDetailXDiscounts;
+	}
+
+	public RestBillDetailXDiscount addRestBillDetailXDiscount(RestBillDetailXDiscount restBillDetailXDiscount) {
+		getRestBillDetailXDiscounts().add(restBillDetailXDiscount);
+		restBillDetailXDiscount.setRestBill(this);
+
+		return restBillDetailXDiscount;
+	}
+
+	public RestBillDetailXDiscount removeRestBillDetailXDiscount(RestBillDetailXDiscount restBillDetailXDiscount) {
+		getRestBillDetailXDiscounts().remove(restBillDetailXDiscount);
+		restBillDetailXDiscount.setRestBill(null);
+
+		return restBillDetailXDiscount;
+	}
 }

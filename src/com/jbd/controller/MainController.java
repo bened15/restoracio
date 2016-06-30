@@ -650,9 +650,10 @@ public class MainController {
 						itemsList.add(item);
 						RestBillDetail billDetail = new RestBillDetail();
 						RestBill bill = billsQuantity.get(0);
-						bill.setBillSubtotal(bill.getBillSubtotal() + item.getMenuItemPrice());
-						bill.setBillTip(bill.getBillSubtotal() * 0.10);
-						bill.setBillTotal(bill.getBillSubtotal() * 1.10);
+						bill.setBillSubtotal(Double
+								.parseDouble(decimFormat.format(bill.getBillSubtotal() + item.getMenuItemPrice())));
+						bill.setBillTip(Double.parseDouble(decimFormat.format(bill.getBillSubtotal() * 0.10)));
+						bill.setBillTotal(Double.parseDouble(decimFormat.format(bill.getBillSubtotal() * 1.10)));
 
 						billDetail.setRestBill(bill);
 						billDetail.setBillDetailSubtotal(item.getMenuItemPrice());
@@ -1122,12 +1123,14 @@ public class MainController {
 					try {
 						RestBillDetail billDetail = new RestBillDetail();
 						RestBill bill = bills.get(Integer.parseInt(clickeado.getId()));
-						bill.setBillSubtotal(bill.getBillSubtotal() + item.getMenuItemPrice());
-						bill.setBillTip(bill.getBillSubtotal() * 0.10);
-						bill.setBillTotal(bill.getBillSubtotal() * 1.10);
+						bill.setBillSubtotal(Double
+								.parseDouble(decimFormat.format(bill.getBillSubtotal() + item.getMenuItemPrice())));
+						bill.setBillTip(Double.parseDouble(decimFormat.format(bill.getBillSubtotal() * 0.10)));
+						bill.setBillTotal(Double.parseDouble(decimFormat.format(bill.getBillSubtotal() * 1.10)));
 						billDetail.setRestBill(bill);
 						billDetail.setBillDetailSubtotal(item.getMenuItemPrice());
-						billDetail.setBillDetailTotal(item.getMenuItemPrice() * 1.10);
+						billDetail.setBillDetailTotal(
+								Double.parseDouble(decimFormat.format(item.getMenuItemPrice() * 1.10)));
 
 						MainController.getBillsDetailQuantity().add(billDetail);
 						itemsList.add(item);
