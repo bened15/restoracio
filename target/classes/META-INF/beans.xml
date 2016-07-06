@@ -71,6 +71,8 @@
 		autowire="byType"></bean>
 	<bean id="manageRestBillDetail" class="com.jbd.hibernate.dao.RestBillDetailManagementDAO"
 		autowire="byType"></bean>
+	<bean id="manageRestOrderDetailLess" class="com.jbd.hibernate.dao.RestOrderDetailLessManagementDAO"
+		autowire="byType"></bean>
 
 	<bean
 		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />

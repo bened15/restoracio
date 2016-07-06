@@ -59,6 +59,11 @@ public class RestTableAccount implements Serializable {
 	@Cascade({ CascadeType.DELETE })
 	private List<RestOrder> restOrders;
 
+	// bi-directional many-to-one association to RestOrderDetailLess
+	@OneToMany(mappedBy = "restTableAccount")
+	@Cascade({ CascadeType.DELETE })
+	private List<RestOrderDetailLess> restOrderDetailLesses;
+
 	// bi-directional many-to-one association to RestShift
 	@ManyToOne
 	@JoinColumn(name = "ID_SHIFT_CLOSED")
@@ -185,4 +190,25 @@ public class RestTableAccount implements Serializable {
 		this.restTable = restTable;
 	}
 
+	public List<RestOrderDetailLess> getRestOrderDetailLesses() {
+		return this.restOrderDetailLesses;
+	}
+
+	public void setRestOrderDetailLesses(List<RestOrderDetailLess> restOrderDetailLesses) {
+		this.restOrderDetailLesses = restOrderDetailLesses;
+	}
+
+	public RestOrderDetailLess addRestOrderDetailLess(RestOrderDetailLess restOrderDetailLess) {
+		getRestOrderDetailLesses().add(restOrderDetailLess);
+		restOrderDetailLess.setRestTableAccount(this);
+
+		return restOrderDetailLess;
+	}
+
+	public RestOrderDetailLess removeRestOrderDetailLess(RestOrderDetailLess restOrderDetailLess) {
+		getRestOrderDetailLesses().remove(restOrderDetailLess);
+		restOrderDetailLess.setRestTableAccount(null);
+
+		return restOrderDetailLess;
+	}
 }

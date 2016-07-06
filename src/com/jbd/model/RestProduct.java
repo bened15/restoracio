@@ -5,69 +5,72 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * The persistent class for the rest_product database table.
  *
  */
 @Entity
-@Table(name="rest_product")
-@NamedQuery(name="RestProduct.findAll", query="SELECT r FROM RestProduct r")
+@Table(name = "rest_product")
+@NamedQuery(name = "RestProduct.findAll", query = "SELECT r FROM RestProduct r")
 public class RestProduct implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="PRODUCT_ID")
+	@Column(name = "PRODUCT_ID")
 	private int productId;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="ENTRY_DATE")
+	@Column(name = "ENTRY_DATE")
 	private Date entryDate;
 
-	@Column(name="ENTRY_USER")
+	@Column(name = "ENTRY_USER")
 	private String entryUser;
 
-	@Column(name="PRODUCT_DESCRIPTION")
+	@Column(name = "PRODUCT_DESCRIPTION")
 	private String productDescription;
 
-	@Column(name="PRODUCT_NAME")
+	@Column(name = "PRODUCT_NAME")
 	private String productName;
 
-	@Column(name="PRODUCT_QTY_AVAILABILITY")
+	@Column(name = "PRODUCT_QTY_AVAILABILITY")
 	private float productQtyAvailability;
 
-	@Column(name="PRODUCT_QTY_TRESHOLD")
+	@Column(name = "PRODUCT_QTY_TRESHOLD")
 	private float productQtyTreshold;
 
-	@Column(name="PRODUCT_WASTE")
+	@Column(name = "PRODUCT_WASTE")
 	private float productWaste;
 
-	//bi-directional many-to-one association to InvProductItem
-	@OneToMany(mappedBy="restProduct")
+	// bi-directional many-to-one association to InvProductItem
+	@OneToMany(mappedBy = "restProduct")
 	private List<InvProductItem> invProductItems;
 
-	//bi-directional many-to-one association to InvProductTransactionLog
-	@OneToMany(mappedBy="restProduct")
+	// bi-directional many-to-one association to InvProductTransactionLog
+	@OneToMany(mappedBy = "restProduct")
 	private List<InvProductTransactionLog> invProductTransactionLogs;
 
-	//bi-directional many-to-one association to RestMenuItemProduct
-	@OneToMany(mappedBy="restProduct")
+	// bi-directional many-to-one association to RestMenuItemProduct
+	@OneToMany(mappedBy = "restProduct")
 	private List<RestMenuItemProduct> restMenuItemProducts;
 
-	//bi-directional many-to-one association to CtgMeasureUnit
+	// bi-directional many-to-one association to CtgMeasureUnit
 	@ManyToOne
-	@JoinColumn(name="MEASURE_UNIT_ID")
+	@JoinColumn(name = "MEASURE_UNIT_ID")
 	private CtgMeasureUnit ctgMeasureUnit;
 
-	//bi-directional many-to-one association to CtgProductType
+	// bi-directional many-to-one association to CtgProductType
 	@ManyToOne
-	@JoinColumn(name="PRODUCT_TYPE_ID")
+	@JoinColumn(name = "PRODUCT_TYPE_ID")
 	private CtgProductType ctgProductType;
 
-	//bi-directional many-to-one association to CtgSupplier
+	// bi-directional many-to-one association to CtgSupplier
 	@ManyToOne
-	@JoinColumn(name="SUPPLIER_ID")
+	@JoinColumn(name = "SUPPLIER_ID")
 	private CtgSupplier ctgSupplier;
+
+	// bi-directional many-to-one association to RestOrderDetailLess
+	@OneToMany(mappedBy = "restProduct")
+	private List<RestOrderDetailLess> restOrderDetailLesses;
 
 	public RestProduct() {
 	}
@@ -226,4 +229,25 @@ public class RestProduct implements Serializable {
 		this.ctgSupplier = ctgSupplier;
 	}
 
+	public List<RestOrderDetailLess> getRestOrderDetailLesses() {
+		return this.restOrderDetailLesses;
+	}
+
+	public void setRestOrderDetailLesses(List<RestOrderDetailLess> restOrderDetailLesses) {
+		this.restOrderDetailLesses = restOrderDetailLesses;
+	}
+
+	public RestOrderDetailLess addRestOrderDetailLess(RestOrderDetailLess restOrderDetailLess) {
+		getRestOrderDetailLesses().add(restOrderDetailLess);
+		restOrderDetailLess.setRestProduct(this);
+
+		return restOrderDetailLess;
+	}
+
+	public RestOrderDetailLess removeRestOrderDetailLess(RestOrderDetailLess restOrderDetailLess) {
+		getRestOrderDetailLesses().remove(restOrderDetailLess);
+		restOrderDetailLess.setRestProduct(null);
+
+		return restOrderDetailLess;
+	}
 }

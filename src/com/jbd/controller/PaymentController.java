@@ -438,7 +438,6 @@ public class PaymentController {
 		txtComment.setLayoutY(80.0);
 		txtComment.setPrefWidth(375.0);
 
-
 		txtComment.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
 			@Override
@@ -497,7 +496,7 @@ public class PaymentController {
 			RestBillPayment rbp = new RestBillPayment();
 			System.out.println("Esto trae billname: " + RestBillN);
 			String[] bills = RestBillN.split("--");
-			rbp.setAmount(Float.parseFloat(totalRecibido.getText()));
+			rbp.setAmount(Float.parseFloat(totalRecibido.getText()) - Float.parseFloat(totalCambio.getText()));
 			rbp.setRestBill(new RestBill(Integer.parseInt(bills[1])));
 			rbp.setCtgPaymentMethod(this.paymentMethod);
 			rbp.setComments(commentForPaymentMethod);

@@ -3,6 +3,7 @@
 	-fx-pref-width: 90.0;
 	-fx-pref-height: 90.0;
 	-fx-font-weight: bold;
+	-fx-text-fill: white ;
 	-fx-alignment: center;
 	-fx-border-radius: 10.0px;
 	-fx-border-color:  rgb(228.0,228.0,228.0) ;
