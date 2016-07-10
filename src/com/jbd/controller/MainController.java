@@ -117,7 +117,7 @@ public class MainController {
 	private TableView<RestMenuItem> itemsOrderTable = new TableView<RestMenuItem>();
 	@FXML
 	private Label totalL = new Label();
-	int optionSplit = 0;
+	int optionSplit = 0, inProcess = 0;
 
 	public static ObservableList<RestOrder> getItemsListOrders() {
 		return itemsListOrders;
@@ -227,52 +227,54 @@ public class MainController {
 	public void openTableLocation(MouseEvent event) {
 
 		try {
-			Button b = (Button) event.getSource();
-			if (b.getId().contains("nOrder")) {
-				opcionSelected = 1;
-				itemsList.clear();
-				itemsListOrders.clear();
-				billsDetailQuantity.clear();
-				billsDetailQuantityAddition.clear();
-				itemsListAddition.clear();
-				billsQuantity.clear();
-				editandoOrden = false;
+			if (verifyPendingOrderToComplete()) {
+				Button b = (Button) event.getSource();
+				if (b.getId().contains("nOrder")) {
+					opcionSelected = 1;
+					itemsList.clear();
+					itemsListOrders.clear();
+					billsDetailQuantity.clear();
+					billsDetailQuantityAddition.clear();
+					itemsListAddition.clear();
+					billsQuantity.clear();
+					editandoOrden = false;
 
-				// refreshTable();
-				disableControls(false);
+					// refreshTable();
+					disableControls(false);
 
+				}
+				if (b.getId().contains("vOrder")) {
+					opcionSelected = 2;
+					itemsList.clear();
+					itemsListOrders.clear();
+					billsDetailQuantity.clear();
+					billsDetailQuantityAddition.clear();
+					itemsListAddition.clear();
+					billsQuantity.clear();
+					editandoOrden = false;
+					// refreshTable();
+					disableControls(true);
+
+				}
+				if (b.getId().contains("lleOrder")) {
+					opcionSelected = 1;
+					itemsList.clear();
+					itemsListOrders.clear();
+					billsDetailQuantity.clear();
+					billsDetailQuantityAddition.clear();
+					itemsListAddition.clear();
+					billsQuantity.clear();
+					editandoOrden = false;
+
+					// refreshTable();
+					disableControls(false);
+
+				}
+
+				principal.getChildren().clear();
+				menuTypePane.getChildren().clear();
+				loadPanesForAreas(manageRestAreas.getAllAreas(), principal, "#e9dfb1");
 			}
-			if (b.getId().contains("vOrder")) {
-				opcionSelected = 2;
-				itemsList.clear();
-				itemsListOrders.clear();
-				billsDetailQuantity.clear();
-				billsDetailQuantityAddition.clear();
-				itemsListAddition.clear();
-				billsQuantity.clear();
-				editandoOrden = false;
-				// refreshTable();
-				disableControls(true);
-
-			}
-			if (b.getId().contains("lleOrder")) {
-				opcionSelected = 1;
-				itemsList.clear();
-				itemsListOrders.clear();
-				billsDetailQuantity.clear();
-				billsDetailQuantityAddition.clear();
-				itemsListAddition.clear();
-				billsQuantity.clear();
-				editandoOrden = false;
-
-				// refreshTable();
-				disableControls(false);
-
-			}
-
-			principal.getChildren().clear();
-			menuTypePane.getChildren().clear();
-			loadPanesForAreas(manageRestAreas.getAllAreas(), principal, "#e9dfb1");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -534,18 +536,18 @@ public class MainController {
 			case 9:
 				p.setLayoutX(810);
 				break;
-//			case 10:
-//				p.setLayoutX(910);
-//				break;
-//			case 11:
-//				p.setLayoutX(1010);
-//				break;
-//			case 12:
-//				p.setLayoutX(1110);
-//				break;
-//			case 13:
-//				p.setLayoutX(1210);
-//				break;
+			// case 10:
+			// p.setLayoutX(910);
+			// break;
+			// case 11:
+			// p.setLayoutX(1010);
+			// break;
+			// case 12:
+			// p.setLayoutX(1110);
+			// break;
+			// case 13:
+			// p.setLayoutX(1210);
+			// break;
 
 			}
 			p.setLayoutY(y);
@@ -722,80 +724,84 @@ public class MainController {
 		}
 	}
 
-	public void loadPanesForMenuItemProduct(List<RestMenuItemProduct> menuItemProduct, Pane ap, String color) {
-		int i = 0, pos = 1;
-		int y = 10;
-
-		while (i < menuItemProduct.size()) {
-			Button p = new Button();
-
-			p.setPrefHeight(50);
-			p.setPrefWidth(50);
-
-			switch (pos) {
-			case 1:
-				p.setLayoutX(5);
-				break;
-			case 2:
-				p.setLayoutX(60);
-				break;
-			case 3:
-				p.setLayoutX(115);
-				break;
-			case 4:
-				p.setLayoutX(170);
-				break;
-			case 5:
-				p.setLayoutX(225);
-				break;
-
-			}
-			p.setLayoutY(y);
-			if (pos % 5 == 0) {
-				y = y + 55;
-				// se pone cero porque se aumenta abajo
-				pos = 0;
-			}
-			p.setStyle("-fx-background-color: " + color + ";-fx-font-size:8px");
-
-			p.setId(String.valueOf(i));
-
-			String menuItemName = "";
-			if (menuItemProduct.get(i).getRestProduct().getProductName().length() > 20) {
-				menuItemName = menuItemProduct.get(i).getRestProduct().getProductName().substring(0, 19) + "..";
-			} else {
-				menuItemName = menuItemProduct.get(i).getRestProduct().getProductName();
-
-			}
-
-			p.setText(menuItemName);
-			p.setWrapText(true);
-			p.setTextAlignment(TextAlignment.CENTER);
-			p.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-				@Override
-				public void handle(MouseEvent arg0) {
-					// ap.getChildren().clear();
-					// JOptionPane.showMessageDialog(null, "Alerta" +
-					// listaObjeto.getClass());
-					Button clickeado = (Button) arg0.getSource();
-
-					RestOrderDetailLess rodl = new RestOrderDetailLess();
-					rodl.setRestProduct(menuItemProduct.get(Integer.valueOf(clickeado.getId())).getRestProduct());
-					rodl.setRestTableAccount(restTableAccount);
-					rodl.setQuantity(menuItemProduct.get(Integer.valueOf(clickeado.getId())).getQuantity());
-					ordenDetailLess.add(rodl);
-					ap.getChildren().remove(clickeado);
-
-				}
-
-			});
-
-			ap.getChildren().add(p);
-			i++;
-			pos++;
-		}
-	}
+	// public void loadPanesForMenuItemProduct(List<RestMenuItemProduct>
+	// menuItemProduct, Pane ap, String color) {
+	// int i = 0, pos = 1;
+	// int y = 10;
+	//
+	// while (i < menuItemProduct.size()) {
+	// Button p = new Button();
+	//
+	// p.setPrefHeight(50);
+	// p.setPrefWidth(50);
+	//
+	// switch (pos) {
+	// case 1:
+	// p.setLayoutX(5);
+	// break;
+	// case 2:
+	// p.setLayoutX(60);
+	// break;
+	// case 3:
+	// p.setLayoutX(115);
+	// break;
+	// case 4:
+	// p.setLayoutX(170);
+	// break;
+	// case 5:
+	// p.setLayoutX(225);
+	// break;
+	//
+	// }
+	// p.setLayoutY(y);
+	// if (pos % 5 == 0) {
+	// y = y + 55;
+	// // se pone cero porque se aumenta abajo
+	// pos = 0;
+	// }
+	// p.setStyle("-fx-background-color: " + color + ";-fx-font-size:8px");
+	//
+	// p.setId(String.valueOf(i));
+	//
+	// String menuItemName = "";
+	// if (menuItemProduct.get(i).getRestProduct().getProductName().length() >
+	// 20) {
+	// menuItemName =
+	// menuItemProduct.get(i).getRestProduct().getProductName().substring(0, 19)
+	// + "..";
+	// } else {
+	// menuItemName = menuItemProduct.get(i).getRestProduct().getProductName();
+	//
+	// }
+	//
+	// p.setText(menuItemName);
+	// p.setWrapText(true);
+	// p.setTextAlignment(TextAlignment.CENTER);
+	// p.setOnMouseClicked(new EventHandler<MouseEvent>() {
+	//
+	// @Override
+	// public void handle(MouseEvent arg0) {
+	// // ap.getChildren().clear();
+	// // JOptionPane.showMessageDialog(null, "Alerta" +
+	// // listaObjeto.getClass());
+	// Button clickeado = (Button) arg0.getSource();
+	//
+	// RestOrderDetailLess rodl = new RestOrderDetailLess();
+	// rodl.setRestProduct(menuItemProduct.get(Integer.valueOf(clickeado.getId())).getRestProduct());
+	// rodl.setRestTableAccount(restTableAccount);
+	// rodl.setQuantity(menuItemProduct.get(Integer.valueOf(clickeado.getId())).getQuantity());
+	// ordenDetailLess.add(rodl);
+	// ap.getChildren().remove(clickeado);
+	//
+	// }
+	//
+	// });
+	//
+	// ap.getChildren().add(p);
+	// i++;
+	// pos++;
+	// }
+	// }
 
 	public void loadPanesForHowManyBills(List<String> bills, Pane ap, String color) {
 		int i = 0, pos = 1;
@@ -861,6 +867,7 @@ public class MainController {
 						tableAccount.setRestShift2(null);
 						tableAccount.setAccountStatus("Initial");
 						restTableAccount = manageRestTableAccount.insertRestTableAccount(tableAccount);
+						inProcess = 1;
 						while (i < Integer.valueOf(clickeado.getText())) {
 
 							RestBill bill = new RestBill();
@@ -1034,44 +1041,46 @@ public class MainController {
 
 				}
 				if (event.isSecondaryButtonDown() && event.getClickCount() == 1) {
-					if (rightSide.getChildren().size() == 4) {
-						rightSide.getChildren().remove(3);
-					}
-					Pane rec = new Pane();
-					rec.setStyle(
-							"-fx-background-color:#c1ebff;-fx-border-radius: 10.0px;-fx-border-color: aliceblue ;");
-					rec.setPrefWidth(400.0);
-					rec.setPrefHeight(400.0);
-					rec.setLayoutX(240.0);
-					rec.setId(String.valueOf(itemsOrderTable.getSelectionModel().getSelectedItem().getMenuItemId()));
-					rec.setLayoutY(20);
-					rightSide.getChildren().add(rec);
-					efe.applyFadeTransitionToRectangle(rec);
-					rec.requestFocus();
-
-					rec.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-						@Override
-						public void handle(KeyEvent event) {
-							if (event.getCode().equals(KeyCode.ENTER)) {
-								// aqui se tenria que gurdar las guarniciones
-								// del plato editddas
-								// si se crean mas objetos dentro de rightSide,
-								// este valor podria cambiar-OJO, podria ser que
-								// ya no seria el 2
-								rightSide.getChildren().remove(rec);
-							}
-							// para eliminar un comentario solo basta con abrir
-							// nuevmente el item y presionar escape
-							if (event.getCode().equals(KeyCode.ESCAPE)) {
-								// se cancela
-								rightSide.getChildren().remove(rec);
-							}
-
-						}
-					});
-					loadPanesForMenuItemProduct(manageRestMenuItemProduct
-							.findIngredientes(itemsOrderTable.getSelectionModel().getSelectedItem()), rec, "#f1eff1");
+					// if (rightSide.getChildren().size() == 4) {
+					// rightSide.getChildren().remove(3);
+					// }
+					// Pane rec = new Pane();
+					// rec.setStyle(
+					// "-fx-background-color:#c1ebff;-fx-border-radius:
+					// 10.0px;-fx-border-color: aliceblue ;");
+					// rec.setPrefWidth(400.0);
+					// rec.setPrefHeight(400.0);
+					// rec.setLayoutX(240.0);
+					// rec.setId(String.valueOf(itemsOrderTable.getSelectionModel().getSelectedItem().getMenuItemId()));
+					// rec.setLayoutY(20);
+					// rightSide.getChildren().add(rec);
+					// efe.applyFadeTransitionToRectangle(rec);
+					// rec.requestFocus();
+					//
+					// rec.setOnKeyPressed(new EventHandler<KeyEvent>() {
+					//
+					// @Override
+					// public void handle(KeyEvent event) {
+					// if (event.getCode().equals(KeyCode.ENTER)) {
+					// // aqui se tenria que gurdar las guarniciones
+					// // del plato editddas
+					// // si se crean mas objetos dentro de rightSide,
+					// // este valor podria cambiar-OJO, podria ser que
+					// // ya no seria el 2
+					// rightSide.getChildren().remove(rec);
+					// }
+					// // para eliminar un comentario solo basta con abrir
+					// // nuevmente el item y presionar escape
+					// if (event.getCode().equals(KeyCode.ESCAPE)) {
+					// // se cancela
+					// rightSide.getChildren().remove(rec);
+					// }
+					//
+					// }
+					// });
+					// loadPanesForMenuItemProduct(manageRestMenuItemProduct
+					// .findIngredientes(itemsOrderTable.getSelectionModel().getSelectedItem()),
+					// rec, "#f1eff1");
 
 					// refreshTable();
 				}
@@ -1204,16 +1213,15 @@ public class MainController {
 					}
 
 				}
-				processInsertsOfLessProducts();
-				itemsList.clear();
+
+				itemsListAddition.clear();
 				itemsListOrders.clear();
-				ordenDetailLess.clear();
-				// rightSide.getChildren().clear();
 				menuTypePane.getChildren().clear();
 				principal.getChildren().clear();
-				// rightSide.getChildren().add(refreshTable());
+				restTableAccount = new RestTableAccount();
 
 				JOptionPane.showMessageDialog(null, "La(s) Ordene(s) se creaon exitosamente");
+				inProcess = 0;
 			} else {
 				JOptionPane.showMessageDialog(null, "No hay ordenes por crear");
 			}
@@ -1253,32 +1261,33 @@ public class MainController {
 					}
 
 				}
-				processInsertsOfLessProducts();
-				ordenDetailLess.clear();
+
 				itemsList.clear();
 				itemsListOrders.clear();
-				// rightSide.getChildren().clear();
 				menuTypePane.getChildren().clear();
 				principal.getChildren().clear();
-				// rightSide.getChildren().add(refreshTable());
+				restTableAccount = new RestTableAccount();
+
 				JOptionPane.showMessageDialog(null, "La(s) Ordene(s) se creaon exitosamente");
+				inProcess = 0;
 			} else {
 				JOptionPane.showMessageDialog(null, "No hay ordenes por crear");
 			}
 		}
-	}
-
-	private void processInsertsOfLessProducts() {
-		int i = 0;
-		while (i < ordenDetailLess.size()) {
-			// System.out.println("pra ingresar quantity" +
-			// ordenDetailLess.get(i).getQuantity());
-			manageRestOrderDetailLess.insertRestOrderDetailLess(ordenDetailLess.get(i));
-			i++;
-
-		}
 
 	}
+
+	// private void processInsertsOfLessProducts() {
+	// int i = 0;
+	// while (i < ordenDetailLess.size()) {
+	// // System.out.println("pra ingresar quantity" +
+	// // ordenDetailLess.get(i).getQuantity());
+	// manageRestOrderDetailLess.insertRestOrderDetailLess(ordenDetailLess.get(i));
+	// i++;
+	//
+	// }
+	//
+	// }
 
 	@FXML
 	public void exitApp() {
@@ -1381,8 +1390,10 @@ public class MainController {
 								manageRestTableAccount.deleteRestTableAccount(restTableAccount);
 								restTable.setStatus("Desocupado");
 								manageRestTables.updateRestTable(restTable);
+								restTableAccount = new RestTableAccount();
+								inProcess = 0;
 								JOptionPane.showMessageDialog(null, "La(s) Ordene(s) se CANCELARON exitosamente");
-								loadPanesForTables(manageRestTables.findTablesByArea(restArea), principal, "#c4f195");
+								loadPanesForTables(manageRestTables.findTablesByArea(restArea), principal, "#f4efd8");
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -1482,6 +1493,34 @@ public class MainController {
 
 	public static List<RestBillDetail> getBillsDetailQuantity() {
 		return billsDetailQuantity;
+	}
+
+	public boolean verifyPendingOrderToComplete() {
+		System.out.println(restTableAccount.getTableAccountId());
+		if (inProcess != 0) {
+			int n = JOptionPane.showConfirmDialog(null, "¿No se ha terminado de procesar la orden, desea cancelarla?",
+					"Pregunta", JOptionPane.YES_NO_OPTION);
+			if (n == JOptionPane.YES_OPTION) {
+				try {
+					manageRestTableAccount.deleteRestTableAccount(restTableAccount);
+					restTable.setStatus("Desocupado");
+					manageRestTables.updateRestTable(restTable);
+					restTableAccount = new RestTableAccount();
+					inProcess = 0;
+					JOptionPane.showMessageDialog(null, "La(s) Ordene(s) se CANCELARON exitosamente");
+					loadPanesForTables(manageRestTables.findTablesByArea(restArea), principal, "#f4efd8");
+					return true;
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Error" + e.getMessage());
+					return false;
+				}
+			} else {
+
+				return false;
+			}
+		}
+		return true;
+
 	}
 
 	public static void setBillsDetailQuantity(List<RestBillDetail> billsDetailQuantity) {
