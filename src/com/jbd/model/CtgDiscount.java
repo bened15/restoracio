@@ -17,7 +17,6 @@ public class CtgDiscount implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="DISCOUNT_ID")
 	private int discountId;
 
@@ -27,6 +26,9 @@ public class CtgDiscount implements Serializable {
 	@Column(name="DISCOUNT_NAME")
 	private String discountName;
 
+	@Column(name="DISCOUNT_PERCENTAGE")
+	private int discountPercentage;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="DISCOUNT_VALID_SINCE")
 	private Date discountValidSince;
@@ -35,9 +37,21 @@ public class CtgDiscount implements Serializable {
 	@Column(name="DISCOUNT_VALID_UNTIL")
 	private Date discountValidUntil;
 
-	//bi-directional many-to-one association to RestBill
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="ENTRY_DATE")
+	private Date entryDate;
+
+	@Column(name="ENTRY_USER")
+	private String entryUser;
+
+	//bi-directional many-to-one association to CtgMenuType
+	@ManyToOne
+	@JoinColumn(name="MENU_TYPE_ID")
+	private CtgMenuType ctgMenuType;
+
+	//bi-directional many-to-one association to RestBillDetailXDiscount
 	@OneToMany(mappedBy="ctgDiscount")
-	private List<RestBill> restBills;
+	private List<RestBillDetailXDiscount> restBillDetailXDiscounts;
 
 	public CtgDiscount() {
 	}
@@ -66,6 +80,14 @@ public class CtgDiscount implements Serializable {
 		this.discountName = discountName;
 	}
 
+	public int getDiscountPercentage() {
+		return this.discountPercentage;
+	}
+
+	public void setDiscountPercentage(int discountPercentage) {
+		this.discountPercentage = discountPercentage;
+	}
+
 	public Date getDiscountValidSince() {
 		return this.discountValidSince;
 	}
@@ -82,26 +104,56 @@ public class CtgDiscount implements Serializable {
 		this.discountValidUntil = discountValidUntil;
 	}
 
-	public List<RestBill> getRestBills() {
-		return this.restBills;
+	public Date getEntryDate() {
+		return this.entryDate;
 	}
 
-	public void setRestBills(List<RestBill> restBills) {
-		this.restBills = restBills;
+	public void setEntryDate(Date entryDate) {
+		this.entryDate = entryDate;
 	}
 
-	public RestBill addRestBill(RestBill restBill) {
-		getRestBills().add(restBill);
-		restBill.setCtgDiscount(this);
-
-		return restBill;
+	public String getEntryUser() {
+		return this.entryUser;
 	}
 
-	public RestBill removeRestBill(RestBill restBill) {
-		getRestBills().remove(restBill);
-		restBill.setCtgDiscount(null);
-
-		return restBill;
+	public void setEntryUser(String entryUser) {
+		this.entryUser = entryUser;
 	}
 
+	public CtgMenuType getCtgMenuType() {
+		return this.ctgMenuType;
+	}
+
+	public void setCtgMenuType(CtgMenuType ctgMenuType) {
+		this.ctgMenuType = ctgMenuType;
+	}
+
+	public List<RestBillDetailXDiscount> getRestBillDetailXDiscounts() {
+		return this.restBillDetailXDiscounts;
+	}
+
+	public void setRestBillDetailXDiscounts(List<RestBillDetailXDiscount> restBillDetailXDiscounts) {
+		this.restBillDetailXDiscounts = restBillDetailXDiscounts;
+	}
+
+	public RestBillDetailXDiscount addRestBillDetailXDiscount(RestBillDetailXDiscount restBillDetailXDiscount) {
+		getRestBillDetailXDiscounts().add(restBillDetailXDiscount);
+		restBillDetailXDiscount.setCtgDiscount(this);
+
+		return restBillDetailXDiscount;
+	}
+
+	public RestBillDetailXDiscount removeRestBillDetailXDiscount(RestBillDetailXDiscount restBillDetailXDiscount) {
+		getRestBillDetailXDiscounts().remove(restBillDetailXDiscount);
+		restBillDetailXDiscount.setCtgDiscount(null);
+
+		return restBillDetailXDiscount;
+	}
+
+	@Override
+	public String toString(){
+		return this.discountId + " - " + this.discountName;
+	}
 }
+
+	

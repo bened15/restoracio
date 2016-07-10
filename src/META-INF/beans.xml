@@ -42,9 +42,6 @@
 	<bean id="manageRestTableAccount" class="com.jbd.hibernate.dao.RestTableAccountManagementDAO"
 		autowire="byType">
 	</bean>
-	<bean id="manageMenuType" class="com.jbd.hibernate.dao.CtgMenuTypeManagementDAO"
-		autowire="byType">
-	</bean>
 	<bean id="manageMenuItem" class="com.jbd.hibernate.dao.RestMenuItemManagementDAO"
 		autowire="byType">
 	</bean>
@@ -59,13 +56,9 @@
 	<bean id="restTable" class="com.jbd.model.RestTable" autowire="byType"></bean>
 	<bean id="restTableAccount" class="com.jbd.model.RestTableAccount"
 		autowire="byType"></bean>
-	<bean id="ctgPaymentMethod" class="com.jbd.model.CtgPaymentMethod"
-		autowire="byType"></bean>
 	<bean id="restBillDetail" class="com.jbd.model.RestBillDetail"
 		autowire="byType"></bean>
 	<bean id="manageRestBill" class="com.jbd.hibernate.dao.RestBillManagementDAO"
-		autowire="byType"></bean>
-	<bean id="manageCtgPaymentMethod" class="com.jbd.hibernate.dao.CtgPaymentMethodManagementDAO"
 		autowire="byType"></bean>
 	<bean id="manageRestBillPayment" class="com.jbd.hibernate.dao.RestBillPaymentManagementDAO"
 		autowire="byType"></bean>
@@ -77,6 +70,19 @@
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
+	<bean id="sysUser" class="com.jbd.hibernate.dao.SysUserManagementDAO" autowire="byType"></bean>
+	<bean id="sysRole" class="com.jbd.hibernate.dao.SysRoleManagementDAO" autowire="byType"></bean>
+	<bean id="sysUserRol" class="com.jbd.hibernate.dao.SysUserRolManagementDAO" autowire="byType"></bean>
+	<bean id="ctgSupplier" class="com.jbd.hibernate.dao.CtgSupplierManagementDAO" autowire="byType"></bean>
+	<bean id="restProduct" class="com.jbd.hibernate.dao.RestProductManagementDAO" autowire="byType"></bean>
+	<bean id="ctgDiscount" class="com.jbd.hibernate.dao.CtgDiscountManagementDAO" autowire="byType"></bean>
+	<bean id="ctgMeasureUnit" class="com.jbd.hibernate.dao.CtgMeasureUnitManagementDAO" autowire="byType"></bean>
+	<bean id="ctgPaymentMethod" class="com.jbd.hibernate.dao.CtgPaymentMethodManagementDAO" autowire="byType"></bean>
+	<bean id="ctgMenuType" class="com.jbd.hibernate.dao.CtgMenuTypeManagementDAO" autowire="byType"></bean>
+	<bean id="ctgProductType" class="com.jbd.hibernate.dao.CtgProductTypeManagementDAO" autowire="byType"></bean>
+
+	<bean id="invProductItem" class="com.jbd.hibernate.dao.InvProductItemManagementDAO" autowire="byType"></bean>
+	<bean id="ctgTransactionType" class="com.jbd.hibernate.dao.CtgTransactionTypeManagementDAO" autowire="byType"></bean>
 
 
 

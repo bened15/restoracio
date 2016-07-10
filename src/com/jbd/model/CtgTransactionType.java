@@ -19,14 +19,14 @@ public class CtgTransactionType implements Serializable {
 	@Column(name="TRANSACTION_TYPE_ID")
 	private String transactionTypeId;
 
-	@Column(name="TRANSACTION_")
-	private String transaction;
-
 	@Column(name="TRANSACTION_TYPE_DESC")
 	private String transactionTypeDesc;
 
 	@Column(name="TRANSACTION_TYPE_NAME")
 	private String transactionTypeName;
+
+	@Column(name="TRANSACTION_ADDITION")
+	private int transactionAddition;
 
 	public CtgTransactionType() {
 	}
@@ -37,14 +37,6 @@ public class CtgTransactionType implements Serializable {
 
 	public void setTransactionTypeId(String transactionTypeId) {
 		this.transactionTypeId = transactionTypeId;
-	}
-
-	public String getTransaction() {
-		return this.transaction;
-	}
-
-	public void setTransaction(String transaction) {
-		this.transaction = transaction;
 	}
 
 	public String getTransactionTypeDesc() {
@@ -62,5 +54,18 @@ public class CtgTransactionType implements Serializable {
 	public void setTransactionTypeName(String transactionTypeName) {
 		this.transactionTypeName = transactionTypeName;
 	}
+	
+	
+	public int getTransactionAddition() {
+		return transactionAddition;
+	}
 
+	public void setTransactionAddition(int transactionAddition) {
+		this.transactionAddition = transactionAddition;
+	}
+
+	@Override
+	public String toString(){
+		return this.transactionTypeId + " - " +this.transactionTypeName;
+	}
 }

@@ -3,6 +3,7 @@ package com.jbd.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -39,6 +40,10 @@ public class InvProductItem implements Serializable {
 
 	@Column(name="TRANSACTION_TYPE_ID")
 	private String transactionTypeId;
+
+	//bi-directional many-to-one association to InvInventoryWaste
+	@OneToMany(mappedBy="invProductItem")
+	private List<InvInventoryWaste> invInventoryWastes;
 
 	//bi-directional many-to-one association to RestProduct
 	@ManyToOne
@@ -112,6 +117,28 @@ public class InvProductItem implements Serializable {
 		this.transactionTypeId = transactionTypeId;
 	}
 
+	public List<InvInventoryWaste> getInvInventoryWastes() {
+		return this.invInventoryWastes;
+	}
+
+	public void setInvInventoryWastes(List<InvInventoryWaste> invInventoryWastes) {
+		this.invInventoryWastes = invInventoryWastes;
+	}
+
+	public InvInventoryWaste addInvInventoryWaste(InvInventoryWaste invInventoryWaste) {
+		getInvInventoryWastes().add(invInventoryWaste);
+		invInventoryWaste.setInvProductItem(this);
+
+		return invInventoryWaste;
+	}
+
+	public InvInventoryWaste removeInvInventoryWaste(InvInventoryWaste invInventoryWaste) {
+		getInvInventoryWastes().remove(invInventoryWaste);
+		invInventoryWaste.setInvProductItem(null);
+
+		return invInventoryWaste;
+	}
+
 	public RestProduct getRestProduct() {
 		return this.restProduct;
 	}
@@ -119,5 +146,28 @@ public class InvProductItem implements Serializable {
 	public void setRestProduct(RestProduct restProduct) {
 		this.restProduct = restProduct;
 	}
+	
+	@Transient
+	private String restProductNameText;
+	
+	@Transient
+	private String restProductTypeText;
+
+	public String getRestProductNameText() {
+		return restProductNameText;
+	}
+
+	public void setRestProductNameText(String restProductNameText) {
+		this.restProductNameText = restProductNameText;
+	}
+
+	public String getRestProductTypeText() {
+		return restProductTypeText;
+	}
+
+	public void setRestProductTypeText(String restProductTypeText) {
+		this.restProductTypeText = restProductTypeText;
+	}
+	
 
 }

@@ -32,8 +32,16 @@ public class SysUserRolManagementDAO implements ISysUserRolManagement {
 
 	}
 
+	@Transactional
 	@Override
-	public void updateSysUserRol(SysUserRol o) {
+	public SysUserRol updateSysUserRol(SysUserRol o) {
+		try {
+			em.merge(o);
+			return o;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 		// TODO Auto-generated method stub
 
 	}

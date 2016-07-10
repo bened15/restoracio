@@ -31,6 +31,9 @@ public class RestMenuItem implements Serializable {
 	@Column(name="MENU_ITEM_PRICE")
 	private float menuItemPrice;
 
+	@Column(name="MENU_IMAGE")
+	private byte[] menuImage;
+
 	//bi-directional many-to-one association to CtgMenuType
 	@ManyToOne
 	@JoinColumn(name="MENU_TYPE_ID")
@@ -87,6 +90,15 @@ public class RestMenuItem implements Serializable {
 		this.menuItemPrice = menuItemPrice;
 	}
 
+	
+	public byte[] getMenuImage() {
+		return menuImage;
+	}
+
+	public void setMenuImage(byte[] menuImage) {
+		this.menuImage = menuImage;
+	}
+
 	public CtgMenuType getCtgMenuType() {
 		return this.ctgMenuType;
 	}
@@ -139,4 +151,16 @@ public class RestMenuItem implements Serializable {
 		return restOrder;
 	}
 
+	@Transient
+	private String menuItemTypeText;
+
+	public String getMenuItemTypeText() {
+		return menuItemTypeText;
+	}
+
+	public void setMenuItemTypeText(String menuItemTypeName) {
+		this.menuItemTypeText = menuItemTypeName;
+	}
+	
+	
 }

@@ -176,5 +176,10 @@ public class CtgSupplier implements Serializable {
 
 		return restProduct;
 	}
+	
+	@Override
+	public String toString(){
+		return this.supplierId + " - " + this.supplierName;
+	}
 
 }

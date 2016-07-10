@@ -102,5 +102,10 @@ public class SysRole implements Serializable {
 
 		return sysUserRol;
 	}
+	
+	@Override
+	public String toString(){
+		return this.rolCode;
+	}
 
 }

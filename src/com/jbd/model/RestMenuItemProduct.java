@@ -77,5 +77,30 @@ public class RestMenuItemProduct implements Serializable {
 	public void setRestProduct(RestProduct restProduct) {
 		this.restProduct = restProduct;
 	}
+	
+	@Transient
+	private String restMenuItemProductTypeText;
+
+	@Transient
+	private String restMenuItemProductNameText;
+
+	public String getRestMenuItemProductTypeText() {
+		return restMenuItemProductTypeText;
+	}
+
+	public void setRestMenuItemProductTypeText(String restMenuItemProductTypeText) {
+		this.restMenuItemProductTypeText = restMenuItemProductTypeText;
+	}
+
+	public String getRestMenuItemProductNameText() {
+		return restMenuItemProductNameText;
+	}
+
+	public void setRestMenuItemProductNameText(String restMenuItemProductNameText) {
+		this.restMenuItemProductNameText = restMenuItemProductNameText;
+	}
+	
+
+	
 
 }

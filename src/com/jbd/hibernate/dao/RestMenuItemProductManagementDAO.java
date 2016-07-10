@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jbd.hibernate.interfaces.IRestMenuItemProductManagement;
 import com.jbd.model.RestMenuItem;
 import com.jbd.model.RestMenuItemProduct;
+import com.jbd.model.SysUser;
 
 public class RestMenuItemProductManagementDAO implements IRestMenuItemProductManagement {
 
@@ -33,23 +34,48 @@ public class RestMenuItemProductManagementDAO implements IRestMenuItemProductMan
 		}
 
 	}
-
+	@Transactional
 	@Override
-	public void updateRestMenuItemProduct(RestMenuItemProduct o) {
+	public RestMenuItemProduct updateRestMenuItemProduct(RestMenuItemProduct o) {
 		// TODO Auto-generated method stub
-
+		try {
+			em.merge(o);
+			return o;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
+	@Transactional
 	@Override
-	public void deleteRestMenuItemProduct(RestMenuItemProduct o) {
+	public boolean deleteRestMenuItemProduct(RestMenuItemProduct o) {
 		// TODO Auto-generated method stub
-
+		try {
+			em.remove(em.merge(o));
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Override
 	public RestMenuItemProduct findRestMenuItemProduct(Integer oId) {
-		return null;
-		// TODO Auto-generated method stub
+		try {
+			RestMenuItemProduct menuItemProduct;
+				TypedQuery<RestMenuItemProduct> tq = em.createQuery("select o from RestMenuItemProduct o where o.menuItemProductId=:prmMenuItemProductId",
+						RestMenuItemProduct.class);
+				tq.setParameter("prmMenuItemProductId", oId);
+
+				menuItemProduct = tq.getSingleResult();
+				return menuItemProduct;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+
+			}
 
 	}
 

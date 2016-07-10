@@ -102,4 +102,9 @@ public class CtgProductType implements Serializable {
 		return restProduct;
 	}
 
+	@Override
+	public String  toString(){
+		return this.productTypeId + " - " + this.typeName;
+	}
+	
 }

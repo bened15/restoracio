@@ -1,9 +1,22 @@
 package com.jbd.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.Cascade;
 
 /**
  * The persistent class for the rest_bill database table.
@@ -41,10 +54,6 @@ public class RestBill implements Serializable {
 	@Column(name = "SHIFT_ID")
 	private int shiftId;
 
-	// bi-directional many-to-one association to CtgDiscount
-	@ManyToOne
-	@JoinColumn(name = "BILL_DISCOUNT_ID")
-	private CtgDiscount ctgDiscount;
 
 	// bi-directional many-to-one association to CtgPaymentMethod
 	@ManyToOne
@@ -58,11 +67,18 @@ public class RestBill implements Serializable {
 
 	// bi-directional many-to-one association to RestBillDetail
 	@OneToMany(mappedBy = "restBill")
+	@Cascade({ org.hibernate.annotations.CascadeType.DELETE })
 	private List<RestBillDetail> restBillDetails;
 
 	// bi-directional many-to-one association to RestBillPayment
 	@OneToMany(mappedBy = "restBill")
+	@Cascade({ org.hibernate.annotations.CascadeType.DELETE })
 	private List<RestBillPayment> restBillPayments;
+
+	// bi-directional many-to-one association to RestBillDetailXDiscount
+	@OneToMany(mappedBy = "restBill")
+	@Cascade({ org.hibernate.annotations.CascadeType.DELETE })
+	private List<RestBillDetailXDiscount> restBillDetailXDiscounts;
 
 	public RestBill() {
 	}
@@ -135,14 +151,6 @@ public class RestBill implements Serializable {
 		this.shiftId = shiftId;
 	}
 
-	public CtgDiscount getCtgDiscount() {
-		return this.ctgDiscount;
-	}
-
-	public void setCtgDiscount(CtgDiscount ctgDiscount) {
-		this.ctgDiscount = ctgDiscount;
-	}
-
 	public CtgPaymentMethod getCtgPaymentMethod() {
 		return this.ctgPaymentMethod;
 	}
@@ -159,19 +167,27 @@ public class RestBill implements Serializable {
 		this.restTableAccount = restTableAccount;
 	}
 
-	public List<RestBillDetail> getRestBillDetails() {
-		return this.restBillDetails;
-	}
-
-	public void setRestBillDetails(List<RestBillDetail> restBillDetails) {
-		this.restBillDetails = restBillDetails;
-	}
+	// public List<RestBillDetail> getRestBillDetails() {
+	// return this.restBillDetails;
+	// }
+	//
+	// public void setRestBillDetails(List<RestBillDetail> restBillDetails) {
+	// this.restBillDetails = restBillDetails;
+	// }
 
 	public RestBillDetail addRestBillDetail(RestBillDetail restBillDetail) {
 		getRestBillDetails().add(restBillDetail);
 		restBillDetail.setRestBill(this);
 
 		return restBillDetail;
+	}
+
+	public List<RestBillDetail> getRestBillDetails() {
+		return restBillDetails;
+	}
+
+	public void setRestBillDetails(List<RestBillDetail> restBillDetails) {
+		this.restBillDetails = restBillDetails;
 	}
 
 	public RestBillDetail removeRestBillDetail(RestBillDetail restBillDetail) {
@@ -203,4 +219,25 @@ public class RestBill implements Serializable {
 		return restBillPayment;
 	}
 
+	public List<RestBillDetailXDiscount> getRestBillDetailXDiscounts() {
+		return this.restBillDetailXDiscounts;
+	}
+
+	public void setRestBillDetailXDiscounts(List<RestBillDetailXDiscount> restBillDetailXDiscounts) {
+		this.restBillDetailXDiscounts = restBillDetailXDiscounts;
+	}
+
+	public RestBillDetailXDiscount addRestBillDetailXDiscount(RestBillDetailXDiscount restBillDetailXDiscount) {
+		getRestBillDetailXDiscounts().add(restBillDetailXDiscount);
+		restBillDetailXDiscount.setRestBill(this);
+
+		return restBillDetailXDiscount;
+	}
+
+	public RestBillDetailXDiscount removeRestBillDetailXDiscount(RestBillDetailXDiscount restBillDetailXDiscount) {
+		getRestBillDetailXDiscounts().remove(restBillDetailXDiscount);
+		restBillDetailXDiscount.setRestBill(null);
+
+		return restBillDetailXDiscount;
+	}
 }

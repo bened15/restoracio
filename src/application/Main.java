@@ -11,6 +11,7 @@ import com.jbd.controller.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -43,7 +44,9 @@ public class Main extends Application {
 	public void initPrincipalLayout() {
 
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(Main.class.getResource("../com/jbd/view/W_MainWindow.fxml"));
+		/*
+		
+		loader.setLocation(Main.class.getResource("../com/jbd/view/W_MainWindow.fxml"));		
 		try {
 			rootLayout = (BorderPane) loader.load();
 			// Show the scene containing the root layout.
@@ -64,8 +67,45 @@ public class Main extends Application {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
+		
+		
+		//PRUEBAS DOUGLAS
+//		loader.setLocation(Main.class.getResource("../com/jbd/FormDiscount.fxml"));
+//		loader.setLocation(Main.class.getResource("../com/jbd/FormMeasure.fxml"));
+//		loader.setLocation(Main.class.getResource("../com/jbd/FormUser.fxml"));
+//		loader.setLocation(Main.class.getResource("../com/jbd/FormSupplier.fxml"));
+//		loader.setLocation(Main.class.getResource("../com/jbd/FormPaymentMethod.fxml"));
+//		loader.setLocation(Main.class.getResource("../com/jbd/FormMenuType.fxml"));
+//		loader.setLocation(Main.class.getResource("../com/jbd/FormRole.fxml"));
+//		loader.setLocation(Main.class.getResource("../com/jbd/FormProductType.fxml"));
+		
+//		loader.setLocation(Main.class.getResource("../com/jbd/FormProduct.fxml"));
+
+//		loader.setLocation(Main.class.getResource("../com/jbd/FormArea.fxml"));
+//		loader.setLocation(Main.class.getResource("../com/jbd/FormMenu.fxml"));
+//		loader.setLocation(Main.class.getResource("../com/jbd/FormInvProduct.fxml"));
+//		loader.setLocation(Main.class.getResource("../com/jbd/FormMenuProduct.fxml"));
+
+				loader.setLocation(Main.class.getResource("../com/jbd/FormTable.fxml"));
+			
+		try {
+			AnchorPane rootl;
+			rootl = loader.load();
+			
+			Scene scene = new Scene(rootl,400,400);
+			primaryStage.setScene(scene);
+			primaryStage.show();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
+	
+	
 	public BorderPane getRootLayout() {
 		return rootLayout;
 	}

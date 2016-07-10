@@ -12,6 +12,7 @@ import com.jbd.hibernate.interfaces.IRestTableManagement;
 import com.jbd.model.RestArea;
 import com.jbd.model.RestTable;
 
+
 public class RestTableManagementDAO implements IRestTableManagement {
 
 	@PersistenceContext
@@ -34,10 +35,17 @@ public class RestTableManagementDAO implements IRestTableManagement {
 
 	}
 
+	@Transactional
 	@Override
-	public void updateRestTable(RestTable o) {
+	public RestTable updateRestTable(RestTable o) {
 		// TODO Auto-generated method stub
-
+		try {
+			em.merge(o);
+			return o;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
@@ -48,8 +56,35 @@ public class RestTableManagementDAO implements IRestTableManagement {
 
 	@Override
 	public RestTable findRestTable(Integer oId) {
-		return null;
-		// TODO Auto-generated method stub
+		try {
+			RestTable table;
+				TypedQuery<RestTable> tq = em.createQuery("select o from RestTable o where o.tableId=:prmTableId",
+						RestTable.class);
+				tq.setParameter("prmTableId", oId);
+
+				table = tq.getSingleResult();
+				return table;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+
+			}
+
+	}
+
+	@Override
+	public List<RestTable> findAll() {
+		try {
+			TypedQuery<RestTable> tq = em.createQuery("select t from RestTable t",
+					RestTable.class);
+			List<RestTable> tables = tq.getResultList();
+			return tables;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+
+		}
 
 	}
 
@@ -66,6 +101,46 @@ public class RestTableManagementDAO implements IRestTableManagement {
 //				System.out.println("Resultados :" + t.getTableId());
 //
 //			}
+
+			return tables;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+
+		}
+
+	}
+
+	@Override
+	public List<RestTable> findTablesByExample(int areaId) {
+		// TODO Auto-generated method stub
+		StringBuilder sqlQuery = new StringBuilder(); 
+		Boolean isFirst = true;
+		Boolean useAreaId = false;
+		sqlQuery.append("select t from RestTable t where ");
+		try {
+			List<RestTable> tables ;
+			if( (areaId == 0 )    ){
+				tables = findAll();
+			}else{
+				if( areaId != 0 ){
+					useAreaId = true;
+					if(isFirst){
+						sqlQuery.append(" t.restArea.areaId = :prmAreaId  ");
+						isFirst= false;					
+						}else{
+							sqlQuery.append(" and t.restArea.areaId = :prmAreaId   ");						
+						}
+
+				}
+					TypedQuery<RestTable> tq = em.createQuery(sqlQuery.toString(),
+							RestTable.class);
+					if(useAreaId){
+						tq.setParameter("prmAreaId", areaId);
+						
+					}
+					tables = tq.getResultList();
+			}
 
 			return tables;
 		} catch (Exception e) {

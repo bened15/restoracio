@@ -89,5 +89,19 @@ public class RestTable implements Serializable {
 
 		return restTableAccount;
 	}
+	
+	@Transient
+	private String tableAreaName;
+
+	public String getTableAreaName() {
+		return tableAreaName;
+	}
+
+	public void setTableAreaName(String tableAreaName) {
+		this.tableAreaName = tableAreaName;
+	}
+	
+	
+	
 
 }

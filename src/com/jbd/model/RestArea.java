@@ -75,5 +75,21 @@ public class RestArea implements Serializable {
 	public void setIsSmokerArea(Integer isSmokerArea) {
 		this.isSmokerArea = isSmokerArea;
 	}
+	
 
+	@Transient
+	private String isSmokerAreaText;
+
+	public String getIsSmokerAreaText() {
+		return isSmokerAreaText;
+	}
+
+	public void setIsSmokerAreaText(String isSmokerAreaText) {
+		this.isSmokerAreaText = isSmokerAreaText;
+	}
+	
+	@Override
+	public String toString(){
+		return this.areaId + " - " + this.areaName;
+	}
 }

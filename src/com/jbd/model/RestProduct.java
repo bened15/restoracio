@@ -226,4 +226,20 @@ public class RestProduct implements Serializable {
 		this.ctgSupplier = ctgSupplier;
 	}
 
+	@Transient
+	public String productTypeText;
+
+	public String getProductTypeText() {
+		return productTypeText;
+	}
+
+	public void setProductTypeText(String productTypeText) {
+		this.productTypeText = productTypeText;
+	}
+
+	@Override
+	public String toString(){
+		return this.productId + " - " + this.productName;
+	}
+	
 }
