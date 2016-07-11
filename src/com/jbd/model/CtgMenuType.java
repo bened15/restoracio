@@ -128,4 +128,10 @@ public class CtgMenuType implements Serializable {
 		return restMenuItem;
 	}
 
+
+	@Override
+	public String toString(){
+		return this.menuTypeId + " - "+ this.menuTypeName;
+	}
+	
 }

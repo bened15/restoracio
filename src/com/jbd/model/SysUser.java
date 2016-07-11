@@ -17,7 +17,7 @@ public class SysUser implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="USER_CODE")
 	private String userCode;
 
@@ -26,8 +26,8 @@ public class SysUser implements Serializable {
 	private Date employmentBegin;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="EMPOLYMENT_END")
-	private Date empolymentEnd;
+	@Column(name="EMPLOYMENT_END")
+	private Date employmentEnd;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="ENTRY_DATE")
@@ -62,7 +62,7 @@ public class SysUser implements Serializable {
 	private String userPhone2;
 
 	//bi-directional many-to-one association to SysUserRol
-	@OneToMany(mappedBy="sysUser")
+	@OneToMany(mappedBy="sysUser",fetch = FetchType.EAGER)
 	private List<SysUserRol> sysUserRols;
 
 	public SysUser() {
@@ -84,12 +84,12 @@ public class SysUser implements Serializable {
 		this.employmentBegin = employmentBegin;
 	}
 
-	public Date getEmpolymentEnd() {
-		return this.empolymentEnd;
+	public Date getEmploymentEnd() {
+		return this.employmentEnd;
 	}
 
-	public void setEmpolymentEnd(Date empolymentEnd) {
-		this.empolymentEnd = empolymentEnd;
+	public void setEmploymentEnd(Date empolymentEnd) {
+		this.employmentEnd = empolymentEnd;
 	}
 
 	public Date getEntryDate() {

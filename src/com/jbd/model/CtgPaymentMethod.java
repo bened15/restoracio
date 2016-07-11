@@ -2,6 +2,8 @@ package com.jbd.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import java.util.Date;
 import java.util.List;
 
 
@@ -20,9 +22,18 @@ public class CtgPaymentMethod implements Serializable {
 	@Column(name="PAYMENT_METHOD_ID")
 	private int paymentMethodId;
 
+	@Column(name="DESCRIPTION")
 	private String description;
 
+	@Column(name="NAME")
 	private String name;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name="ENTRY_DATE")
+	private Date entryDate;
+
+	@Column(name="ENTRY_USER")
+	private String entryUser;
 
 	//bi-directional many-to-one association to RestBill
 	@OneToMany(mappedBy="ctgPaymentMethod")
@@ -57,6 +68,24 @@ public class CtgPaymentMethod implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	
+	
+	public Date getEntryDate() {
+		return entryDate;
+	}
+
+	public void setEntryDate(Date entryDate) {
+		this.entryDate = entryDate;
+	}
+
+	public String getEntryUser() {
+		return entryUser;
+	}
+
+	public void setEntryUser(String entryUser) {
+		this.entryUser = entryUser;
 	}
 
 	public List<RestBill> getRestBills() {

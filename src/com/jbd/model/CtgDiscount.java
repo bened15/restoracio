@@ -106,6 +106,50 @@ public class CtgDiscount implements Serializable {
 
 	public Date getEntryDate() {
 		return this.entryDate;
+<<<<<<< HEAD
+	}
+
+	public void setEntryDate(Date entryDate) {
+		this.entryDate = entryDate;
+	}
+
+	public String getEntryUser() {
+		return this.entryUser;
+	}
+
+	public void setEntryUser(String entryUser) {
+		this.entryUser = entryUser;
+	}
+
+	public CtgMenuType getCtgMenuType() {
+		return this.ctgMenuType;
+	}
+
+	public void setCtgMenuType(CtgMenuType ctgMenuType) {
+		this.ctgMenuType = ctgMenuType;
+	}
+
+	public List<RestBillDetailXDiscount> getRestBillDetailXDiscounts() {
+		return this.restBillDetailXDiscounts;
+	}
+
+	public void setRestBillDetailXDiscounts(List<RestBillDetailXDiscount> restBillDetailXDiscounts) {
+		this.restBillDetailXDiscounts = restBillDetailXDiscounts;
+	}
+
+	public RestBillDetailXDiscount addRestBillDetailXDiscount(RestBillDetailXDiscount restBillDetailXDiscount) {
+		getRestBillDetailXDiscounts().add(restBillDetailXDiscount);
+		restBillDetailXDiscount.setCtgDiscount(this);
+
+		return restBillDetailXDiscount;
+	}
+
+	public RestBillDetailXDiscount removeRestBillDetailXDiscount(RestBillDetailXDiscount restBillDetailXDiscount) {
+		getRestBillDetailXDiscounts().remove(restBillDetailXDiscount);
+		restBillDetailXDiscount.setCtgDiscount(null);
+
+		return restBillDetailXDiscount;
+=======
 	}
 
 	public void setEntryDate(Date entryDate) {
@@ -150,4 +194,11 @@ public class CtgDiscount implements Serializable {
 		return restBillDetailXDiscount;
 	}
 
+	@Override
+	public String toString(){
+		return this.discountId + " - " + this.discountName;
+>>>>>>> 980f17d13477260c4d2b155862ba4cf6d1b960f6
+	}
 }
+
+	

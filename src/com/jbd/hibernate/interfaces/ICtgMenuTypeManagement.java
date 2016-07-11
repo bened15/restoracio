@@ -8,12 +8,16 @@ public interface ICtgMenuTypeManagement {
 
 	public CtgMenuType insertCtgMenuType(CtgMenuType o);
 
-	public void updateCtgMenuType(CtgMenuType o);
+	public CtgMenuType updateCtgMenuType(CtgMenuType o);
 
 	public void deleteCtgMenuType(CtgMenuType o);
 
 	public CtgMenuType findCtgMenuType(Integer oId);
 
 	public List<CtgMenuType> loadMenuType();
+
+	public List<CtgMenuType> findAll();
+
+	public List<CtgMenuType> findMenyTypeByExample(String name);
 
 }

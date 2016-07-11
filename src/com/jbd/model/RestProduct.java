@@ -229,6 +229,7 @@ public class RestProduct implements Serializable {
 		this.ctgSupplier = ctgSupplier;
 	}
 
+<<<<<<< HEAD
 	public List<RestOrderDetailLess> getRestOrderDetailLesses() {
 		return this.restOrderDetailLesses;
 	}
@@ -250,4 +251,22 @@ public class RestProduct implements Serializable {
 
 		return restOrderDetailLess;
 	}
+=======
+	@Transient
+	public String productTypeText;
+
+	public String getProductTypeText() {
+		return productTypeText;
+	}
+
+	public void setProductTypeText(String productTypeText) {
+		this.productTypeText = productTypeText;
+	}
+
+	@Override
+	public String toString(){
+		return this.productId + " - " + this.productName;
+	}
+	
+>>>>>>> 980f17d13477260c4d2b155862ba4cf6d1b960f6
 }

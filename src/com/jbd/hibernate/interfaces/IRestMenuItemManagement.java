@@ -9,12 +9,16 @@ public interface IRestMenuItemManagement {
 
 	public RestMenuItem insertRestMenuItem(RestMenuItem o);
 
-	public void updateRestMenuItem(RestMenuItem o);
+	public RestMenuItem updateRestMenuItem(RestMenuItem o);
 
 	public void deleteRestMenuItem(RestMenuItem o);
 
 	public RestMenuItem findRestMenuItem(Integer oId);
 
 	public List<RestMenuItem> findMenuItemByTypeMenu(CtgMenuType typeMenu);
+
+	public List<RestMenuItem> findAll();
+
+	public List<RestMenuItem> findMenuItemByExample(String menuItemName, int menuItemTypeId);
 
 }

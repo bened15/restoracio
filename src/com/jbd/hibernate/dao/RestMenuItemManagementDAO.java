@@ -35,9 +35,17 @@ public class RestMenuItemManagementDAO implements IRestMenuItemManagement {
 
 	}
 
+	@Transactional
 	@Override
-	public void updateRestMenuItem(RestMenuItem o) {
+	public RestMenuItem updateRestMenuItem(RestMenuItem o) {
 		// TODO Auto-generated method stub
+		try {
+			em.merge(o);
+			return o;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
@@ -49,11 +57,40 @@ public class RestMenuItemManagementDAO implements IRestMenuItemManagement {
 
 	@Override
 	public RestMenuItem findRestMenuItem(Integer oId) {
-		return null;
+		try {
+			RestMenuItem user;
+			TypedQuery<RestMenuItem> tq = em.createQuery("select o from RestMenuItem o where o.menuItemId=:prmRestMenuItemId",
+					RestMenuItem.class);
+			tq.setParameter("prmRestMenuItemId", oId);
+
+			user = tq.getSingleResult();
+			return user;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+
+		}
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
+	public List<RestMenuItem> findAll() {
+		try {
+			
+			List<RestMenuItem> menuItemList;
+			TypedQuery<RestMenuItem> tq = em.createQuery("select o from RestMenuItem o ",
+					RestMenuItem.class);
+			menuItemList = tq.getResultList();
+			return menuItemList;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+
+		}
+	}
 	@Override
 	public List<RestMenuItem> findMenuItemByTypeMenu(CtgMenuType typeMenu) {
 		try {
@@ -75,5 +112,59 @@ public class RestMenuItemManagementDAO implements IRestMenuItemManagement {
 
 		}
 	}
+
+	@Override
+	public List<RestMenuItem> findMenuItemByExample(String menuItemName, int menuItemTypeId) {
+		// TODO Auto-generated method stub
+		StringBuilder sqlQuery = new StringBuilder(); 
+		Boolean isFirst = true;
+		Boolean useMenuItemName = false;
+		Boolean useMenuItemTypeId = false;
+		Boolean userProductSupplierId = false;
+		sqlQuery.append("select t from RestMenuItem t where ");
+		try {
+			List<RestMenuItem> products ;
+			if( (menuItemName == null || menuItemName.isEmpty()) && (menuItemTypeId == 0 )   ){
+				products = findAll();
+			}else{
+				if( (menuItemName != null || !menuItemName.isEmpty())){
+					useMenuItemName = true;
+					if(isFirst){
+						sqlQuery.append(" upper(t.menuItemName) like '%' ||:prmMenuItemName || '%'  ");
+						isFirst= false;					
+						}
+				}
+				if( menuItemTypeId != 0 ){
+					useMenuItemTypeId = true;
+					if(isFirst){
+						sqlQuery.append(" t.ctgMenuType.menuTypeId = :prmMenuItemTypeId  ");
+						isFirst= false;					
+						}else{
+							sqlQuery.append(" and t.ctgMenuType.menuTypeId = :prmMenuItemTypeId   ");						
+						}
+
+				}
+					TypedQuery<RestMenuItem> tq = em.createQuery(sqlQuery.toString(),
+							RestMenuItem.class);
+					if(useMenuItemName){
+						tq.setParameter("prmMenuItemName", menuItemName.toUpperCase());
+						
+					}
+					if(useMenuItemTypeId){
+						tq.setParameter("prmMenuItemTypeId", menuItemTypeId);
+						
+					}
+					products = tq.getResultList();
+			}
+
+			return products;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+
+		}
+
+	}
+	
 
 }
