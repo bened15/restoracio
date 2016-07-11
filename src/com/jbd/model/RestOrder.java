@@ -172,6 +172,9 @@ public class RestOrder implements Serializable {
 	@Transient
 	private double menuItemPrice;
 
+	@Transient
+	private String nombFactura;
+
 	public String getMenuItemName() {
 		return menuItemName;
 	}
@@ -187,5 +190,14 @@ public class RestOrder implements Serializable {
 	public void setMenuItemPrice(double menuItemPrice) {
 		this.menuItemPrice = menuItemPrice;
 	}
+
+	public String getNombFactura() {
+		return nombFactura;
+	}
+
+	public void setNombFactura(String nombFactura) {
+		this.nombFactura = nombFactura;
+	}
+
 
 }

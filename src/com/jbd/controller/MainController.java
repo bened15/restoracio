@@ -673,11 +673,10 @@ public class MainController {
 					// rightSide.getChildren().add(refreshTable());
 					// refreshTable();
 					if (editandoOrden) {
-
+						// si es editando orden no se sabe cuantas facturas hay,
+						// por eso se hace esta consulta
 						billsQuantity = manageRestBill.findBillsWithRestTableAccount(restTableAccount);
-						itemsListAddition.add(item);
-					} else {
-						itemsList.add(item);
+
 					}
 					if (billsQuantity.size() == 1) {
 
@@ -691,10 +690,15 @@ public class MainController {
 						billDetail.setRestBill(bill);
 						billDetail.setBillDetailSubtotal(item.getMenuItemPrice());
 						billDetail.setBillDetailTotal(item.getMenuItemPrice() * 1.10);
+
+						item.setNombFactura(bill.getBillName());
 						if (editandoOrden) {
+
+							itemsListAddition.add(item);
 							billsDetailQuantityAddition.add(billDetail);
 
 						} else {
+							itemsList.add(item);
 							billsDetailQuantity.add(billDetail);
 
 						}
@@ -948,11 +952,13 @@ public class MainController {
 		TableColumn id = new TableColumn("Id");
 		TableColumn elemento = new TableColumn("Elemento");
 		TableColumn precio = new TableColumn("Precio($)");
+		TableColumn facturaN = new TableColumn("Factura");
 		// TableColumn total = new TableColumn("Total");
 
 		id.setCellValueFactory(new PropertyValueFactory<RestMenuItem, String>("menuItemId"));
 		elemento.setCellValueFactory(new PropertyValueFactory<RestMenuItem, String>("menuItemName"));
 		precio.setCellValueFactory(new PropertyValueFactory<RestMenuItem, Integer>("menuItemPrice"));
+		facturaN.setCellValueFactory(new PropertyValueFactory<RestMenuItem, String>("nombFactura"));
 		// total.setCellValueFactory(new PropertyValueFactory<>("total"));
 
 		// itemsLocalList.setItems(itemsList);
@@ -963,7 +969,7 @@ public class MainController {
 		} else {
 			itemsOrderTable.setItems(itemsList);
 		}
-		itemsOrderTable.getColumns().addAll(id, elemento, precio);
+		itemsOrderTable.getColumns().addAll(id, elemento, precio, facturaN);
 
 		itemsOrderTable.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
@@ -1150,14 +1156,16 @@ public class MainController {
 						billDetail.setBillDetailSubtotal(item.getMenuItemPrice());
 						billDetail.setBillDetailTotal(
 								Double.parseDouble(decimFormat.format(item.getMenuItemPrice() * 1.10)));
-
+						item.setNombFactura(bill.getBillName());
 						if (editandoOrden) {
+							itemsListAddition.add(item);
+
 							MainController.billsDetailQuantityAddition.add(billDetail);
 						} else {
+							itemsList.add(item);
 							MainController.getBillsDetailQuantity().add(billDetail);
 
 						}
-						// itemsList.add(item);
 						refreshTable();
 						manageRestBill.updateRestBill(bill);
 						principal.getChildren().remove(ap);
@@ -1291,7 +1299,9 @@ public class MainController {
 
 	@FXML
 	public void exitApp() {
-		System.exit(0);
+		if (verifyPendingOrderToComplete()) {
+			System.exit(0);
+		}
 
 	}
 
@@ -1383,21 +1393,26 @@ public class MainController {
 
 					}
 					if (clickeado.getText().contains("Cancelar")) {
-						int n = JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea cancelar la orden?",
-								"Pregunta", JOptionPane.YES_NO_OPTION);
-						if (n == JOptionPane.YES_OPTION) {
-							try {
-								manageRestTableAccount.deleteRestTableAccount(restTableAccount);
-								restTable.setStatus("Desocupado");
-								manageRestTables.updateRestTable(restTable);
-								restTableAccount = new RestTableAccount();
-								inProcess = 0;
-								JOptionPane.showMessageDialog(null, "La(s) Ordene(s) se CANCELARON exitosamente");
-								loadPanesForTables(manageRestTables.findTablesByArea(restArea), principal, "#f4efd8");
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
 
+
+						if (UserSecurityController.verifyIsMgr(ap)) {
+							int n = JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea cancelar la orden?",
+									"Pregunta", JOptionPane.YES_NO_OPTION);
+							if (n == JOptionPane.YES_OPTION) {
+								try {
+									manageRestTableAccount.deleteRestTableAccount(restTableAccount);
+									restTable.setStatus("Desocupado");
+									manageRestTables.updateRestTable(restTable);
+									restTableAccount = new RestTableAccount();
+									inProcess = 0;
+									JOptionPane.showMessageDialog(null, "La(s) Ordene(s) se CANCELARON exitosamente");
+									loadPanesForTables(manageRestTables.findTablesByArea(restArea), principal,
+											"#f4efd8");
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+
+							}
 						}
 					}
 					if (clickeado.getText().contains("Dividir")) {
@@ -1452,7 +1467,9 @@ public class MainController {
 		itemsList.clear();
 		itemsListOrders.clear();
 		while (i < billsDetail.size()) {
-			itemsList.add(billsDetail.get(i).getRestOrder().getRestMenuItem());
+			RestMenuItem rmi = billsDetail.get(i).getRestOrder().getRestMenuItem();
+			rmi.setNombFactura(billsDetail.get(i).getRestBill().getBillName());
+			itemsList.add(rmi);
 			itemsListOrders.add(billsDetail.get(i).getRestOrder());
 			i++;
 		}
@@ -1496,7 +1513,7 @@ public class MainController {
 	}
 
 	public boolean verifyPendingOrderToComplete() {
-		System.out.println(restTableAccount.getTableAccountId());
+
 		if (inProcess != 0) {
 			int n = JOptionPane.showConfirmDialog(null, "¿No se ha terminado de procesar la orden, desea cancelarla?",
 					"Pregunta", JOptionPane.YES_NO_OPTION);

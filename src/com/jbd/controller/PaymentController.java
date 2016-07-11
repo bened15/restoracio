@@ -20,6 +20,8 @@ import com.jbd.model.CtgPaymentMethod;
 import com.jbd.model.RestBill;
 import com.jbd.model.RestBillDetail;
 import com.jbd.model.RestBillPayment;
+import com.jbd.model.RestMenuItem;
+import com.jbd.model.RestOrder;
 import com.jbd.model.RestTable;
 import com.jbd.model.RestTableAccount;
 import com.jbd.utils.Effect;
@@ -36,7 +38,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -65,6 +70,8 @@ public class PaymentController {
 	private Label totalPropina, totalRecibido, totalCuenta, totalCambio, totalDescuento;
 	@FXML
 	private AnchorPane headerAP;
+	@FXML
+	private TableView<RestOrder> ordersTable = new TableView<RestOrder>();
 	private static final ChoiceBox facturaAPagar = new ChoiceBox();
 	private DecimalFormat decimFormat = new DecimalFormat("#.00");
 	@Autowired
@@ -80,7 +87,8 @@ public class PaymentController {
 	@Autowired
 	private CtgPaymentMethod paymentMethod;
 	private static String RestBillN = "";
-	private List<RestBillDetail> bDetails = new ArrayList<RestBillDetail>();
+
+	private ObservableList<RestOrder> bDetailsOrders = FXCollections.observableArrayList();
 	private static double totalAccount = 0.0;
 	private int dotCounter = 0;
 	@Autowired
@@ -182,7 +190,13 @@ public class PaymentController {
 		String[] bills = RestBillN.split("--");
 		rbd = manageRestBillDetail.findAllRestBillDetailFromRestBill(new RestBill(Integer.parseInt(bills[1])));
 		if (rbd.size() > 0) {
+			bDetailsOrders.clear();
 			while (i < rbd.size()) {
+				RestOrder ro = rbd.get(i).getRestOrder();
+				ro.setMenuItemName(ro.getRestMenuItem().getMenuItemName());
+				ro.setMenuItemPrice(Double.parseDouble(decimFormat.format(ro.getRestMenuItem().getMenuItemPrice())));
+				ro.setNombFactura(rbd.get(i).getRestBill().getBillName());
+				bDetailsOrders.add(ro);
 
 				totalCuenta = totalCuenta + rbd.get(i).getBillDetailSubtotal();
 				i++;
@@ -207,6 +221,7 @@ public class PaymentController {
 			this.totalRecibido.setText("");
 			this.totalCambio.setText("");
 		}
+		refreshTable();
 
 	}
 
@@ -576,4 +591,39 @@ public class PaymentController {
 		}
 	}
 
+	private void refreshTable() {
+
+		ordersTable.getColumns().clear();
+
+		TableColumn id = new TableColumn("Id");
+		TableColumn elemento = new TableColumn("Elemento");
+		TableColumn precio = new TableColumn("Precio($)");
+		// TableColumn total = new TableColumn("Total");
+
+		id.setCellValueFactory(new PropertyValueFactory<RestOrder, String>("orderId"));
+		elemento.setCellValueFactory(new PropertyValueFactory<RestOrder, String>("menuItemName"));
+		precio.setCellValueFactory(new PropertyValueFactory<RestOrder, Double>("menuItemPrice"));
+		// total.setCellValueFactory(new PropertyValueFactory<>("total"));
+
+		// itemsLocalList.setItems(itemsList);
+		// itemsLocalList.getColumns().addAll(id,elemento, precio, total);
+		ordersTable.setItems(bDetailsOrders);
+		ordersTable.getColumns().addAll(id, elemento, precio);
+
+		ordersTable.setOnMousePressed(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
+
+				}
+				if (event.isPrimaryButtonDown() && event.getClickCount() == 1) {
+
+				}
+				if (event.isSecondaryButtonDown() && event.getClickCount() == 1) {
+
+				}
+			}
+		});
+
+	}
 }
