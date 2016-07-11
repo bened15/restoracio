@@ -9,6 +9,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.jbd.controller.MainController;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -87,8 +88,11 @@ public class Main extends Application {
 //		loader.setLocation(Main.class.getResource("../com/jbd/FormInvProduct.fxml"));
 //		loader.setLocation(Main.class.getResource("../com/jbd/FormMenuProduct.fxml"));
 
-				loader.setLocation(Main.class.getResource("../com/jbd/FormTable.fxml"));
-			
+//				loader.setLocation(Main.class.getResource("../com/jbd/FormTable.fxml"));
+
+		loader.setLocation(Main.class.getResource("../com/jbd/FormAdministration.fxml"));
+
+		
 		try {
 			AnchorPane rootl;
 			rootl = loader.load();
@@ -96,7 +100,7 @@ public class Main extends Application {
 			Scene scene = new Scene(rootl,400,400);
 			primaryStage.setScene(scene);
 			primaryStage.show();
-			
+			 primaryStage.setOnCloseRequest(e -> Platform.exit());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
