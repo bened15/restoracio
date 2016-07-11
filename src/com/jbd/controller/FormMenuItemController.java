@@ -118,7 +118,7 @@ public class FormMenuItemController {
 	public void onOpenfile(MouseEvent event) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Resource File");
-		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif","*.PNG", "*.JPG", "*.GIF"));
 		imageSelected = fileChooser.showOpenDialog(new Stage());
 		if (imageSelected != null) {
 			String imagepath = imageSelected.getPath();
@@ -390,9 +390,8 @@ public class FormMenuItemController {
 
 		menuItemName.setEditable(true);
 		menuItemDescription.setEditable(true);
-		menuItemDescription.setEditable(true);
 		menuItemType.setDisable(false);
-
+		menuItemPrice.setEditable(true);
 		searchBtn.setDisable(true);
 		newBtn.setDisable(true);
 		saveBtn.setDisable(false);
