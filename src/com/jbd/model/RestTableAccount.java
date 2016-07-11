@@ -1,61 +1,78 @@
 package com.jbd.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 /**
  * The persistent class for the rest_table_account database table.
  *
  */
 @Entity
-@Table(name="rest_table_account")
-@NamedQuery(name="RestTableAccount.findAll", query="SELECT r FROM RestTableAccount r")
+@Table(name = "rest_table_account")
+@NamedQuery(name = "RestTableAccount.findAll", query = "SELECT r FROM RestTableAccount r")
 public class RestTableAccount implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="TABLE_ACCOUNT_ID")
+	@Column(name = "TABLE_ACCOUNT_ID")
 	private int tableAccountId;
 
-	@Column(name="ACCOUNT_STATUS")
+	@Column(name = "ACCOUNT_STATUS")
 	private String accountStatus;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="CLOSED_DATETIME")
+	@Column(name = "CLOSED_DATETIME")
 	private Date closedDatetime;
 
-	@Column(name="CREATED_BY")
+	@Column(name = "CREATED_BY")
 	private String createdBy;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="CREATED_DATETIME")
+	@Column(name = "CREATED_DATETIME")
 	private Date createdDatetime;
 
-	//bi-directional many-to-one association to RestBill
-	@OneToMany(mappedBy="restTableAccount")
+	// bi-directional many-to-one association to RestBill
+	@OneToMany(mappedBy = "restTableAccount")
+	@Cascade({ CascadeType.DELETE })
 	private List<RestBill> restBills;
 
-	//bi-directional many-to-one association to RestOrder
-	@OneToMany(mappedBy="restTableAccount")
+	// bi-directional many-to-one association to RestOrder
+	@OneToMany(mappedBy = "restTableAccount")
+	@Cascade({ CascadeType.DELETE })
 	private List<RestOrder> restOrders;
 
-	//bi-directional many-to-one association to RestShift
+	
+	// bi-directional many-to-one association to RestShift
 	@ManyToOne
-	@JoinColumn(name="ID_SHIFT_CLOSED")
+	@JoinColumn(name = "ID_SHIFT_CLOSED")
 	private RestShift restShift1;
 
-	//bi-directional many-to-one association to RestShift
+	// bi-directional many-to-one association to RestShift
 	@ManyToOne
-	@JoinColumn(name="ID_SHIFT_OPENED")
+	@JoinColumn(name = "ID_SHIFT_OPENED")
 	private RestShift restShift2;
 
-	//bi-directional many-to-one association to RestTable
+	// bi-directional many-to-one association to RestTable
 	@ManyToOne
-	@JoinColumn(name="TABLE_ID")
+	@JoinColumn(name = "TABLE_ID")
 	private RestTable restTable;
 
 	public RestTableAccount() {
@@ -169,4 +186,7 @@ public class RestTableAccount implements Serializable {
 		this.restTable = restTable;
 	}
 
+
+
+	
 }

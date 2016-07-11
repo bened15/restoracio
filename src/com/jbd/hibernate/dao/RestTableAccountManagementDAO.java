@@ -39,14 +39,21 @@ public class RestTableAccountManagementDAO implements IRestTableAccountManagemen
 		try {
 			em.merge(o);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 
 	}
 
+	@Transactional
 	@Override
 	public void deleteRestTableAccount(RestTableAccount o) {
-		// TODO Auto-generated method stub
+		try {
+			RestTableAccount r = em.find(RestTableAccount.class, o.getTableAccountId());
+			em.remove(r);
+			em.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 

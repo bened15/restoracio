@@ -29,6 +29,16 @@ public class RestTable implements Serializable {
 	@Column(name = "TABLE_NAME")
 	private String tableName;
 
+	private String status;
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	// bi-directional many-to-one association to RestTableAccount
 	@OneToMany(mappedBy = "restTable")
 	private List<RestTableAccount> restTableAccounts;

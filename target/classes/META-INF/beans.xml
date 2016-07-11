@@ -65,11 +65,15 @@
 	<bean id="manageRestBillDetail" class="com.jbd.hibernate.dao.RestBillDetailManagementDAO"
 		autowire="byType"></bean>
 
+
+
 	<bean
 		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
-
+<bean id="ctgPaymentMethodId" class="com.jbd.model.CtgPaymentMethod"
+		autowire="byType"></bean>
+		
 	<bean id="sysUser" class="com.jbd.hibernate.dao.SysUserManagementDAO" autowire="byType"></bean>
 	<bean id="sysRole" class="com.jbd.hibernate.dao.SysRoleManagementDAO" autowire="byType"></bean>
 	<bean id="sysUserRol" class="com.jbd.hibernate.dao.SysUserRolManagementDAO" autowire="byType"></bean>
