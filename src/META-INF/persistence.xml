@@ -3,32 +3,7 @@
 	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 	<persistence-unit name="Modelos" transaction-type="RESOURCE_LOCAL">
-		<!-- <class>modeloCorrespondencia.Division</class> -->
-		<!-- <class>modeloCorrespondencia.Institucion</class> -->
-		<!-- <class>modeloCorrespondencia.Rol</class> -->
-		<!-- <class>modeloCorrespondencia.Usuario</class> -->
-		<!-- <class>modeloCorrespondencia.Dual</class> -->
-		<!-- <class>modeloCorrespondencia.Report</class> -->
-		<!-- <class>modeloCorrespondencia.CBitacora</class> -->
-		<!-- <class>modeloCorrespondencia.CBitacoraPK</class> -->
-		<!-- <class>modeloCorrespondencia.CDetaDocu</class> -->
-		<!-- <class>modeloCorrespondencia.CDetaDocuPK</class> -->
-		<!-- <class>modeloCorrespondencia.CDia</class> -->
-		<!-- <class>modeloCorrespondencia.CEncaDocu</class> -->
-		<!-- <class>modeloCorrespondencia.CEncaDocuPK</class> -->
-		<!-- <class>modeloCorrespondencia.CEtapaDocu</class> -->
-		<!-- <class>modeloCorrespondencia.CInstruccion</class> -->
-		<!-- <class>modeloCorrespondencia.CMvtoDocu</class> -->
-		<!-- <class>modeloCorrespondencia.CMvtoDocuPK</class> -->
-		<!-- <class>modeloCorrespondencia.CPersonalTipo</class> -->
-		<!-- <class>modeloCorrespondencia.CSubtipoDocu</class> -->
-		<!-- <class>modeloCorrespondencia.CSubtipoDocuPK</class> -->
-		<!-- <class>modeloCorrespondencia.CTipoDocu</class> -->
-		<!-- <class>modeloCorrespondencia.CTipoMovi</class> -->
-		<!-- <class>modeloCorrespondencia.CUserSegu</class> -->
-		<!-- <class>modeloCorrespondencia.CUserSeguPK</class> -->
-		<!-- <class>modeloCorrespondencia.VDocsPendiente</class> -->
-		<!-- <class>modeloCorrespondencia.VDocsFinalizado</class> -->
+
 
 		<properties>
 			<!-- Configuración de la BD -->
@@ -46,7 +21,7 @@
 
 
 
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/restaurant" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/restoracio" />
 			<property name="javax.persistence.jdbc.user" value="root" />
 			<property name="javax.persistence.jdbc.password" value="root" />
 

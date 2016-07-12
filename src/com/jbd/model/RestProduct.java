@@ -68,10 +68,6 @@ public class RestProduct implements Serializable {
 	@JoinColumn(name = "SUPPLIER_ID")
 	private CtgSupplier ctgSupplier;
 
-	// bi-directional many-to-one association to RestOrderDetailLess
-	@OneToMany(mappedBy = "restProduct")
-	private List<RestOrderDetailLess> restOrderDetailLesses;
-
 	public RestProduct() {
 	}
 
@@ -229,29 +225,6 @@ public class RestProduct implements Serializable {
 		this.ctgSupplier = ctgSupplier;
 	}
 
-<<<<<<< HEAD
-	public List<RestOrderDetailLess> getRestOrderDetailLesses() {
-		return this.restOrderDetailLesses;
-	}
-
-	public void setRestOrderDetailLesses(List<RestOrderDetailLess> restOrderDetailLesses) {
-		this.restOrderDetailLesses = restOrderDetailLesses;
-	}
-
-	public RestOrderDetailLess addRestOrderDetailLess(RestOrderDetailLess restOrderDetailLess) {
-		getRestOrderDetailLesses().add(restOrderDetailLess);
-		restOrderDetailLess.setRestProduct(this);
-
-		return restOrderDetailLess;
-	}
-
-	public RestOrderDetailLess removeRestOrderDetailLess(RestOrderDetailLess restOrderDetailLess) {
-		getRestOrderDetailLesses().remove(restOrderDetailLess);
-		restOrderDetailLess.setRestProduct(null);
-
-		return restOrderDetailLess;
-	}
-=======
 	@Transient
 	public String productTypeText;
 
@@ -264,9 +237,8 @@ public class RestProduct implements Serializable {
 	}
 
 	@Override
-	public String toString(){
+	public String toString() {
 		return this.productId + " - " + this.productName;
 	}
-	
->>>>>>> 980f17d13477260c4d2b155862ba4cf6d1b960f6
+
 }

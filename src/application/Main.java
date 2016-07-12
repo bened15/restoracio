@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 	public static Stage primaryStage;
-	private BorderPane rootLayout;
+	private AnchorPane rootLayout;
 	public static ApplicationContext context;
 
 	@Override
@@ -45,11 +45,11 @@ public class Main extends Application {
 	public void initPrincipalLayout() {
 
 		FXMLLoader loader = new FXMLLoader();
-		
-		
-		loader.setLocation(Main.class.getResource("../com/jbd/view/W_MainWindow.fxml"));		
+
+
+		loader.setLocation(Main.class.getResource("../com/jbd/view/W_MainWindow_2_1.fxml"));
 		try {
-			rootLayout = (BorderPane) loader.load();
+			rootLayout = (AnchorPane) loader.load();
 			// Show the scene containing the root layout.
 			Scene scene = new Scene(rootLayout);
 			// inyectar al controller la main app para cada una de las ventanas
@@ -68,9 +68,9 @@ public class Main extends Application {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
+
+
+
 		//PRUEBAS DOUGLAS
 //		loader.setLocation(Main.class.getResource("../com/jbd/FormDiscount.fxml"));
 //		loader.setLocation(Main.class.getResource("../com/jbd/FormMeasure.fxml"));
@@ -80,7 +80,7 @@ public class Main extends Application {
 //		loader.setLocation(Main.class.getResource("../com/jbd/FormMenuType.fxml"));
 //		loader.setLocation(Main.class.getResource("../com/jbd/FormRole.fxml"));
 //		loader.setLocation(Main.class.getResource("../com/jbd/FormProductType.fxml"));
-		
+
 //		loader.setLocation(Main.class.getResource("../com/jbd/FormProduct.fxml"));
 
 //		loader.setLocation(Main.class.getResource("../com/jbd/FormArea.fxml"));
@@ -91,30 +91,30 @@ public class Main extends Application {
 //				loader.setLocation(Main.class.getResource("../com/jbd/FormTable.fxml"));
 
 //		loader.setLocation(Main.class.getResource("../com/jbd/FormAdministration.fxml"));
-/*
-		
-		try {
-			AnchorPane rootl;
-			rootl = loader.load();
-			
-			Scene scene = new Scene(rootl,400,400);
-			primaryStage.setScene(scene);
-			primaryStage.show();
-			 primaryStage.setOnCloseRequest(e -> Platform.exit());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-*/
+
+
+//		try {
+//			AnchorPane rootl;
+//			rootl = loader.load();
+//
+//			Scene scene = new Scene(rootl,400,400);
+//			primaryStage.setScene(scene);
+//			primaryStage.show();
+//			 primaryStage.setOnCloseRequest(e -> Platform.exit());
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+
 	}
 
-	
-	
-	public BorderPane getRootLayout() {
+
+
+	public AnchorPane getRootLayout() {
 		return rootLayout;
 	}
 
-	public void setRootLayout(BorderPane rootLayout) {
+	public void setRootLayout(AnchorPane rootLayout) {
 		this.rootLayout = rootLayout;
 	}
 

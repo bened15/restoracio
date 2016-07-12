@@ -3,6 +3,7 @@ package com.jbd.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
+import com.jbd.hibernate.dao.SysUserRolManagementDAO;
 import com.jbd.hibernate.interfaces.ISysUserRolManagement;
 
 import application.Main;
