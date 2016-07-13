@@ -94,7 +94,7 @@ public class CtgSupplierManagementDAO implements ICtgSupplierManagement {
 	}
 	
 	@Override
-	public List<CtgSupplier> findByUserExample(String supplierName, String contactName, String contactLastName) {
+	public List<CtgSupplier> findBySupplierExample(String supplierName, String contactName, String contactLastName) {
 		// TODO Auto-generated method stub
 		StringBuilder sqlQuery = new StringBuilder(); 
 		Boolean isFirst = true;

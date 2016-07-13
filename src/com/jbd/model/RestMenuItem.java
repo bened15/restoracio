@@ -47,6 +47,11 @@ public class RestMenuItem implements Serializable {
 	@OneToMany(mappedBy="restMenuItem")
 	private List<RestOrder> restOrders;
 
+	//bi-directional many-to-one association to CtgMenuType
+	@ManyToOne
+	@JoinColumn(name="KITCHEN_ID")
+	private RestKitchen restKitchen;
+
 	public RestMenuItem() {
 	}
 
@@ -150,6 +155,20 @@ public class RestMenuItem implements Serializable {
 
 		return restOrder;
 	}
+
+	
+
+	
+	public RestKitchen getRestKitchen() {
+		return restKitchen;
+	}
+
+	public void setRestKitchen(RestKitchen restKitchen) {
+		this.restKitchen = restKitchen;
+	}
+
+
+
 
 	@Transient
 	private String menuItemTypeText;

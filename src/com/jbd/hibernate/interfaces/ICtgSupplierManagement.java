@@ -11,6 +11,6 @@ public interface ICtgSupplierManagement {
 	public void deleteCtgSupplier(CtgSupplier o);
 	public CtgSupplier findCtgSupplier(Integer oId);
 	public List<CtgSupplier> findAll();
-	public List<CtgSupplier> findByUserExample(String supplierName, String contactName, String contactLastName);
+	public List<CtgSupplier> findBySupplierExample(String supplierName, String contactName, String contactLastName);
 
 }

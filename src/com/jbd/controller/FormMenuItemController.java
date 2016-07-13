@@ -16,9 +16,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.jbd.general.GeneralFunctions;
 import com.jbd.hibernate.interfaces.ICtgMenuTypeManagement;
+import com.jbd.hibernate.interfaces.IRestKitchenManagement;
 import com.jbd.hibernate.interfaces.IRestMenuItemManagement;
 import com.jbd.model.CtgMenuType;
 import com.jbd.model.RestMenuItem;
+import com.jbd.model.RestKitchen;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -59,9 +61,11 @@ public class FormMenuItemController {
 	private IRestMenuItemManagement manageRestMenuItem;
 	@Autowired
 	private ICtgMenuTypeManagement manageMenuItemType;
+	@Autowired
+	private IRestKitchenManagement manageKitchen;
 	// Declaracion Labels
 	@FXML
-	private Label lblMenuItemName, lblMenuItemType, lblMenuItemPrice, lblMenuItemAvailable;
+	private Label lblMenuItemName, lblMenuItemType, lblMenuItemPrice, lblMenuItemAvailable, lblMenuKitchen;
 
 	// Declaracion Botones
 	@FXML
@@ -77,9 +81,11 @@ public class FormMenuItemController {
 	private ImageView menuItemImage;
 	// Declaracion ComboBox
 	@FXML
-	private ComboBox menuItemType, menuItemAvailable;
+	private ComboBox menuItemType, menuItemAvailable,menuKitchen;
 	@FXML
 	private ObservableList<CtgMenuType> menuItemTypeData = FXCollections.observableArrayList();
+	@FXML
+	private ObservableList<RestKitchen> kitchenData = FXCollections.observableArrayList();
 
 	// Declaracion Tablas
 	@FXML
@@ -163,7 +169,8 @@ public class FormMenuItemController {
 			}
 			menuItemSelected.setMenuItemName(menuItemName.getText());
 			menuItemSelected.setMenuItemDescription(menuItemDescription.getText());
-			menuItemSelected.setCtgMenuType((CtgMenuType) menuItemType.getValue());
+			menuItemSelected.setRestKitchen((RestKitchen) menuKitchen.getValue());
+			
 			if (imageSelected != null) {
 				menuItemSelected.setMenuImage(imageBytes);
 			}
@@ -236,6 +243,7 @@ public class FormMenuItemController {
 		menuItemPrice.setText("");
 		menuItemDescription.setText("");
 		menuItemType.getSelectionModel().select(null);
+		menuKitchen.getSelectionModel().select(null);
 		menuItemImage.setImage(null);
 
 	}
@@ -259,8 +267,13 @@ public class FormMenuItemController {
 			// return errorMessage;
 		}
 		if (menuItemType.getValue() == null) {
-			errorMessage = "El campo tipo es obligatorio.";
+			errorMessage = "El campo tipo de menu obligatorio.";
 			lblMenuItemType.setTextFill(Color.web("#ff0000"));
+
+		}
+		if (menuKitchen.getValue() == null) {
+			errorMessage = "El campo cocina es obligatorio.";
+			lblMenuKitchen.setTextFill(Color.web("#ff0000"));
 
 		}
 
@@ -329,6 +342,13 @@ public class FormMenuItemController {
 			menuItemType.getSelectionModel().select(null);
 
 		}
+		// menuKitchen
+		if (menuItemSelected.getRestKitchen() != null) {
+			menuKitchen.getSelectionModel().select(menuItemSelected.getRestKitchen());
+		} else {
+			menuKitchen.getSelectionModel().select(null);
+
+		}
 
 		if (menuItemSelected.getMenuImage() != null) {
 
@@ -354,6 +374,7 @@ public class FormMenuItemController {
 		menuItemDescription.setEditable(false);
 		menuItemPrice.setEditable(false);
 		menuItemType.setDisable(false);
+		menuKitchen.setDisable(true);
 		searchBtn.setDisable(false);
 		newBtn.setDisable(false);
 		clearBtn.setDisable(true);
@@ -366,6 +387,7 @@ public class FormMenuItemController {
 		menuItemDescription.setEditable(false);
 		menuItemPrice.setEditable(false);
 		menuItemType.setDisable(false);
+		menuKitchen.setDisable(true);
 		searchBtn.setDisable(false);
 		newBtn.setDisable(false);
 		saveBtn.setDisable(true);
@@ -379,6 +401,7 @@ public class FormMenuItemController {
 		menuItemPrice.setEditable(true);
 		menuItemDescription.setEditable(true);
 		menuItemType.setDisable(false);
+		menuKitchen.setDisable(false);
 		searchBtn.setDisable(false);
 		newBtn.setDisable(false);
 		saveBtn.setDisable(true);
@@ -392,6 +415,7 @@ public class FormMenuItemController {
 		menuItemDescription.setEditable(true);
 		menuItemType.setDisable(false);
 		menuItemPrice.setEditable(true);
+		menuKitchen.setDisable(false);
 		searchBtn.setDisable(true);
 		newBtn.setDisable(true);
 		saveBtn.setDisable(false);
@@ -405,6 +429,7 @@ public class FormMenuItemController {
 		menuItemPrice.setEditable(true);
 		menuItemDescription.setEditable(true);
 		menuItemType.setDisable(false);
+		menuKitchen.setDisable(false);
 		searchBtn.setDisable(true);
 		newBtn.setDisable(true);
 		saveBtn.setDisable(false);
@@ -416,7 +441,7 @@ public class FormMenuItemController {
 		lblMenuItemPrice.setTextFill(Color.web("#000000"));
 		lblMenuItemName.setTextFill(Color.web("#000000"));
 		lblMenuItemType.setTextFill(Color.web("#000000"));
-
+		lblMenuKitchen.setTextFill(Color.web("#000000"));
 	}
 
 	public void refreshComboBoxList() {
@@ -428,6 +453,14 @@ public class FormMenuItemController {
 		}
 
 		menuItemType.setItems(menuItemTypeData);
+
+		kitchenData.clear();
+		List<RestKitchen> kitchenList = manageKitchen.findAll();
+		for (RestKitchen r : kitchenList) {
+			kitchenData.add(r);
+		}
+
+		menuKitchen.setItems(kitchenData);
 
 	}
 
@@ -444,6 +477,29 @@ public class FormMenuItemController {
 
 						if (t != null) {
 							setText(t.getMenuTypeId() + " - " + t.getMenuTypeName());
+						} else {
+							setText(null);
+						}
+					}
+
+				};
+
+				return cell;
+			}
+		});
+
+		menuKitchen.setCellFactory(new Callback<ListView<RestKitchen>, ListCell<RestKitchen>>() {
+			@Override
+			public ListCell<RestKitchen> call(ListView<RestKitchen> p) {
+
+				final ListCell<RestKitchen> cell = new ListCell<RestKitchen>() {
+
+					@Override
+					protected void updateItem(RestKitchen t, boolean bln) {
+						super.updateItem(t, bln);
+
+						if (t != null) {
+							setText(t.getKitchenId() + " - " + t.getKitchenName());
 						} else {
 							setText(null);
 						}

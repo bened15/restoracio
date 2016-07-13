@@ -38,7 +38,11 @@ public class AdmReservation implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="CUSTOMER_ID")
 	private AdmCustomer admCustomer;
-
+	//bi-directional many-to-one association to CtgPaymentMethod
+		@ManyToOne
+		@JoinColumn(name="PAYMENT_METHOD_ID")
+		private CtgPaymentMethod ctgPaymentMethod;
+	
 	public AdmReservation() {
 	}
 
@@ -90,4 +94,13 @@ public class AdmReservation implements Serializable {
 		this.admCustomer = admCustomer;
 	}
 
+	public CtgPaymentMethod getCtgPaymentMethod() {
+		return ctgPaymentMethod;
+	}
+
+	public void setCtgPaymentMethod(CtgPaymentMethod ctgPaymentMethod) {
+		this.ctgPaymentMethod = ctgPaymentMethod;
+	}
+
+	
 }

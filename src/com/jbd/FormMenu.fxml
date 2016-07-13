@@ -42,9 +42,9 @@
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints maxHeight="20.0" minHeight="5.0" prefHeight="20.0" vgrow="ALWAYS" />
-                        <RowConstraints maxHeight="211.0" minHeight="10.0" prefHeight="179.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="134.0" minHeight="10.0" prefHeight="29.0" vgrow="ALWAYS" />
-                        <RowConstraints maxHeight="206.0" minHeight="5.0" prefHeight="206.0" vgrow="ALWAYS" />
+                        <RowConstraints maxHeight="211.0" minHeight="10.0" prefHeight="207.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="134.0" minHeight="10.0" prefHeight="20.0" vgrow="ALWAYS" />
+                        <RowConstraints maxHeight="206.0" minHeight="5.0" prefHeight="187.0" vgrow="ALWAYS" />
                       <RowConstraints maxHeight="79.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
@@ -61,6 +61,7 @@
                               <RowConstraints maxHeight="54.0" minHeight="10.0" prefHeight="54.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
                               <Label fx:id="lblMenuItemName" text="Nombre" />
@@ -70,10 +71,12 @@
                               <Label fx:id="lblMenuItemAvailable" text="Available" GridPane.rowIndex="4" />
                               <TextField fx:id="menuItemName" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" />
                               <TextField fx:id="menuItemPrice" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
-                              <ComboBox fx:id="menuItemType" prefHeight="25.0" prefWidth="329.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" />
+                              <ComboBox fx:id="menuItemType" prefHeight="25.0" prefWidth="194.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" />
                               <TextArea fx:id="menuItemDescription" prefHeight="54.0" prefWidth="497.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
                               <ComboBox fx:id="menuItemAvailable" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                               <Button mnemonicParsing="false" text="Add product" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                              <Label fx:id="lblMenuKitchen" text="Cocina" GridPane.rowIndex="5" />
+                              <ComboBox fx:id="menuKitchen" prefHeight="25.0" prefWidth="189.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="5" />
                            </children>
                         </GridPane>
                         <GridPane prefWidth="624.0" GridPane.rowIndex="4">

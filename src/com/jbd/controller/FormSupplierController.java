@@ -247,7 +247,7 @@ public class FormSupplierController {
 		supplierColumn.setCellValueFactory(new PropertyValueFactory<CtgSupplier, String>("supplierName"));
 		contactColumn.setCellValueFactory(new PropertyValueFactory<CtgSupplier, String>("contactName"));
 		supplierIdColumn.setCellValueFactory(new PropertyValueFactory<CtgSupplier, String>("supplierId"));
-		List<CtgSupplier> list = manageSupplier.findByUserExample(supplierName.getText(), supplierContactName.getText(), supplierContactLastname.getText());
+		List<CtgSupplier> list = manageSupplier.findBySupplierExample(supplierName.getText(), supplierContactName.getText(), supplierContactLastname.getText());
 		for(CtgSupplier u : list){
 			CtgSupplier u1 = new CtgSupplier();
 			u1.setSupplierId(u.getSupplierId());

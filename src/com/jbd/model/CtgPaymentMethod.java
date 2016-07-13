@@ -43,6 +43,10 @@ public class CtgPaymentMethod implements Serializable {
 	@OneToMany(mappedBy="ctgPaymentMethod")
 	private List<RestBillPayment> restBillPayments;
 
+	// bi-directional many-to-one association to AdmReservation
+		@OneToMany(mappedBy = "ctgPaymentMethod")
+		private List<AdmReservation> admReservations;
+		
 	public CtgPaymentMethod() {
 	}
 
@@ -132,4 +136,26 @@ public class CtgPaymentMethod implements Serializable {
 		return restBillPayment;
 	}
 
+	
+	public List<AdmReservation> getAdmReservations() {
+		return this.admReservations;
+	}
+
+	public void setAdmReservations(List<AdmReservation> admReservations) {
+		this.admReservations = admReservations;
+	}
+
+	public AdmReservation addRestBillPayment(AdmReservation admReservation) {
+		getAdmReservations().add(admReservation);
+		admReservation.setCtgPaymentMethod(this);
+
+		return admReservation;
+	}
+
+	public AdmReservation removeRestBillPayment(AdmReservation admReservation) {
+		getAdmReservations().remove(admReservation);
+		admReservation.setCtgPaymentMethod(null);
+
+		return admReservation;
+	}
 }
