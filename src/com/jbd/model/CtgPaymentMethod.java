@@ -158,4 +158,11 @@ public class CtgPaymentMethod implements Serializable {
 
 		return admReservation;
 	}
+	
+	
+	@Override
+	public String toString(){
+		return this.getPaymentMethodId() + " - " + this.getName();
+	}
+	
 }

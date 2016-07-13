@@ -34,7 +34,7 @@ public class GeneralFunctions {
 		return  value;
 	}
 	
-	public static Date asDate(LocalDate localDate) {
+	public  Date asDate(LocalDate localDate) {
 		try{
 			
 	    return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
@@ -42,7 +42,7 @@ public class GeneralFunctions {
 			return null;
 		}
 	  }
-	public static LocalDate asLocalDate(Date date) {
+	public  LocalDate asLocalDate(Date date) {
 		try{
 	    return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 

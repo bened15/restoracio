@@ -1,11 +1,16 @@
 package com.jbd.hibernate.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jbd.hibernate.interfaces.IAdmReservationManagement;
+import com.jbd.model.AdmReservation;
+import com.jbd.model.AdmReservation;
 import com.jbd.model.AdmReservation;
 
 
@@ -31,11 +36,17 @@ public class AdmReservationManagementDAO implements IAdmReservationManagement {
 		}
 
 	}
-
+	@Transactional
 	@Override
-	public void updateAdmReservation(AdmReservation o) {
+	public AdmReservation updateAdmReservation(AdmReservation o) {
 		// TODO Auto-generated method stub
-
+		try {
+			em.merge(o);
+			return o;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
@@ -46,9 +57,37 @@ public class AdmReservationManagementDAO implements IAdmReservationManagement {
 
 	@Override
 	public AdmReservation findAdmReservation(Integer oId) {
-		return null;
-		// TODO Auto-generated method stub
+		try {
+			AdmReservation reservation;
+				TypedQuery<AdmReservation> tq = em.createQuery("select o from AdmReservation o where o.reservationId=:prmReservationId",
+						AdmReservation.class);
+				tq.setParameter("prmReservationId", oId);
+
+				reservation = tq.getSingleResult();
+				return reservation;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+
+			}		// TODO Auto-generated method stub
 
 	}
 
+	@Override
+	public List<AdmReservation> findAll() {
+		try {
+			
+			List<AdmReservation> reservationList;
+			TypedQuery<AdmReservation> tq = em.createQuery("select o from AdmReservation o ",
+					AdmReservation.class);
+			reservationList = tq.getResultList();
+			return reservationList;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+
+		}
+	}
 }

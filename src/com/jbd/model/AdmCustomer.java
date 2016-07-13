@@ -157,4 +157,10 @@ public class AdmCustomer implements Serializable {
 		return admReservation;
 	}
 
+	
+	@Override
+	public String toString(){
+		return this.getCustomerLastname() + ", " + this.getCustomerName();
+	}
+
 }

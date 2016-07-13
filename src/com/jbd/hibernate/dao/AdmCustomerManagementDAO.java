@@ -60,9 +60,9 @@ public class AdmCustomerManagementDAO implements IAdmCustomerManagement {
 		// TODO Auto-generated method stub
 		try {
 			AdmCustomer supplier;
-				TypedQuery<AdmCustomer> tq = em.createQuery("select o from AdmCustomer o where o.supplierId=:prmSupplierId",
+				TypedQuery<AdmCustomer> tq = em.createQuery("select o from AdmCustomer o where o.customerId=:prmCustomerId",
 						AdmCustomer.class);
-				tq.setParameter("prmSupplierId", oId);
+				tq.setParameter("prmCustomerId", oId);
 
 				supplier = tq.getSingleResult();
 				return supplier;
@@ -77,11 +77,11 @@ public class AdmCustomerManagementDAO implements IAdmCustomerManagement {
 	public List<AdmCustomer> findAll() {
 		try {
 			
-			List<AdmCustomer> supplierList;
+			List<AdmCustomer> customerList;
 			TypedQuery<AdmCustomer> tq = em.createQuery("select o from AdmCustomer o ",
 					AdmCustomer.class);
-			supplierList = tq.getResultList();
-			return supplierList;
+			customerList = tq.getResultList();
+			return customerList;
 
 		} catch (Exception e) {
 			e.printStackTrace();

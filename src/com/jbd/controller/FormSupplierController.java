@@ -245,15 +245,14 @@ public class FormSupplierController {
 		supplierData.clear();
 		supplierList.getColumns().clear();
 		supplierColumn.setCellValueFactory(new PropertyValueFactory<CtgSupplier, String>("supplierName"));
-		contactColumn.setCellValueFactory(new PropertyValueFactory<CtgSupplier, String>("contactName"));
+		contactColumn.setCellValueFactory(new PropertyValueFactory<CtgSupplier, String>("contactNameText"));
 		supplierIdColumn.setCellValueFactory(new PropertyValueFactory<CtgSupplier, String>("supplierId"));
 		List<CtgSupplier> list = manageSupplier.findBySupplierExample(supplierName.getText(), supplierContactName.getText(), supplierContactLastname.getText());
 		for(CtgSupplier u : list){
+			
 			CtgSupplier u1 = new CtgSupplier();
-			u1.setSupplierId(u.getSupplierId());
-			u1.setContactName(u.getContactName() + " "+u.getContactLastname());
-			u1.setSupplierName(u.getSupplierName());
-			supplierData.add(u1);
+			u.setContactNameText(u.getContactName() + " "+u.getContactLastname());
+			supplierData.add(u);
 			//System.out.println(u1.getUserCode());
 			//System.out.println(u1.getUserName());
 		}

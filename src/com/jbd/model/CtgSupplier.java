@@ -182,4 +182,15 @@ public class CtgSupplier implements Serializable {
 		return this.supplierId + " - " + this.supplierName;
 	}
 
+	@Transient
+	public String contactNameText;
+
+	public String getContactNameText() {
+		return contactNameText;
+	}
+
+	public void setContactNameText(String contactNameText) {
+		this.contactNameText = contactNameText;
+	}
+	
 }

@@ -30,6 +30,9 @@ public class AdmReservation implements Serializable {
 	@Column(name="ENTRY_USER")
 	private String entryUser;
 
+	@Column(name="COMMENTS")
+	private String comments;
+
 	@Temporal(TemporalType.DATE)
 	@Column(name="RESERVATION_DATE")
 	private Date reservationDate;
@@ -102,5 +105,24 @@ public class AdmReservation implements Serializable {
 		this.ctgPaymentMethod = ctgPaymentMethod;
 	}
 
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	@Transient
+	public String customerNameText;
+
+	public String getCustomerNameText() {
+		return customerNameText;
+	}
+
+	public void setCustomerNameText(String customerNameText) {
+		this.customerNameText = customerNameText;
+	}
+	
 	
 }
