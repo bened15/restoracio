@@ -22,8 +22,8 @@ public class RestInformation implements Serializable {
 	@Column(name="INF_ACTIVE")
 	private int infActive;
 
-	@Column(name="RESET_NAME")
-	private String resetName;
+	@Column(name="REST_NAME")
+	private String restName;
 
 	@Column(name="REST_ADDRESS")
 	private String restAddress;
@@ -40,6 +40,9 @@ public class RestInformation implements Serializable {
 	@Column(name="REST_PHONE2")
 	private String restPhone2;
 
+	@Column(name="REST_NIT")
+	private String restNIT;
+	
 	public RestInformation() {
 	}
 
@@ -59,12 +62,12 @@ public class RestInformation implements Serializable {
 		this.infActive = infActive;
 	}
 
-	public String getResetName() {
-		return this.resetName;
+	public String getRestName() {
+		return this.restName;
 	}
 
-	public void setResetName(String resetName) {
-		this.resetName = resetName;
+	public void setRestName(String restName) {
+		this.restName = restName;
 	}
 
 	public String getRestAddress() {
@@ -107,4 +110,13 @@ public class RestInformation implements Serializable {
 		this.restPhone2 = restPhone2;
 	}
 
+	public String getRestNIT() {
+		return restNIT;
+	}
+
+	public void setRestNIT(String restNIT) {
+		this.restNIT = restNIT;
+	}
+
+	
 }

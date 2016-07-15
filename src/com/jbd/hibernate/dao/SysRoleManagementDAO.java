@@ -105,14 +105,14 @@ public class SysRoleManagementDAO implements ISysRoleManagement {
 			if( (roleCode == null || roleCode.isEmpty()) && (roleName == null || roleName.isEmpty())  ){
 				roles = findAll();
 			}else{
-				if( (roleCode != null || !roleCode.isEmpty())){
+				if( (roleCode != null && !roleCode.isEmpty())){
 					useRoleCode = true;
 					if(isFirst){
 						sqlQuery.append(" upper(t.rolCode) like '%' ||:prmRoleCode || '%'  ");
 						isFirst= false;					
 						}
 				}
-				if( (roleName != null || !roleName.isEmpty())){
+				if( (roleName != null && !roleName.isEmpty())){
 					userRoleName = true;
 					if(isFirst){
 						sqlQuery.append(" upper(t.rolName) like '%' ||:prmRoleName || '%' ");

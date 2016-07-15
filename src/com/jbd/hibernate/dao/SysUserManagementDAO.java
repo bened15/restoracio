@@ -107,14 +107,14 @@ public class SysUserManagementDAO implements ISysUserManagement {
 			if( (name == null || name.isEmpty()) && (lastName == null || lastName.isEmpty()) && (userCode == null || userCode.isEmpty()) ){
 				users = findAll();
 			}else{
-				if( (name != null || !name.isEmpty())){
+				if( (name != null && !name.isEmpty())){
 					useName = true;
 					if(isFirst){
 						sqlQuery.append(" upper(t.userName) like '%' ||:prmUserName || '%'  ");
 						isFirst= false;					
 						}
 				}
-				if( (lastName != null || !lastName.isEmpty())){
+				if( (lastName != null && !lastName.isEmpty())){
 					useLastName = true;
 					if(isFirst){
 						sqlQuery.append(" upper(t.userLastname) like '%' ||:prmUserLastName || '%' ");
@@ -124,7 +124,7 @@ public class SysUserManagementDAO implements ISysUserManagement {
 						}
 
 				}
-				if( (userCode != null || !userCode.isEmpty())){
+				if( (userCode != null && !userCode.isEmpty())){
 					useCode = true;
 					if(isFirst){
 						sqlQuery.append(" upper(t.userCode) like '%' ||:prmUserCode || '%' ");

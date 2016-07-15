@@ -15,5 +15,6 @@ public interface ICtgDiscountManagement {
 	public List<CtgDiscount> findDiscountByExample(String discountName);
 	public List<CtgDiscount> findDiscountByExample(String discountName, Date discountDate);
 	public List<CtgDiscount> findDiscountByExample(Date discountDate);
+	public Date convertToDate(Date dateValue, String timeValue);
 
 }

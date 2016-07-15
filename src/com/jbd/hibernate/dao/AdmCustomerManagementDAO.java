@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jbd.hibernate.interfaces.IAdmCustomerManagement;
 import com.jbd.model.AdmCustomer;
-import com.jbd.model.AdmCustomer;
 
 
 public class AdmCustomerManagementDAO implements IAdmCustomerManagement {
@@ -99,11 +98,11 @@ public class AdmCustomerManagementDAO implements IAdmCustomerManagement {
 		Boolean useContactName = false;
 		sqlQuery.append("select t from AdmCustomer t where ");
 		try {
-			List<AdmCustomer> suppliers ;
+			List<AdmCustomer> customers ;
 			if( (customerName == null || customerName.isEmpty()) && (customerLastName == null || customerLastName.isEmpty()) ){
-				suppliers = findAll();
+				customers = findAll();
 			}else{
-				if( (customerName != null || !customerName.isEmpty())){
+				if( (customerName != null && !customerName.isEmpty())){
 					useContactName = true;
 					if(isFirst){
 						sqlQuery.append(" upper(t.customerName) like '%' ||:prmCustomerName || '%'  ");
@@ -112,7 +111,7 @@ public class AdmCustomerManagementDAO implements IAdmCustomerManagement {
 				}
 				
 				
-				if( (customerLastName != null || !customerLastName.isEmpty())){
+				if( (customerLastName != null && !customerLastName.isEmpty())){
 					useContactLastName = true;
 					if(isFirst){
 						sqlQuery.append(" upper(t.customerLastname) like '%' ||:prmCustomerLastName || '%' ");
@@ -132,10 +131,10 @@ public class AdmCustomerManagementDAO implements IAdmCustomerManagement {
 						
 					}
 					
-					suppliers = tq.getResultList();
+					customers = tq.getResultList();
 			}
 
-			return suppliers;
+			return customers;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

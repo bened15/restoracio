@@ -107,14 +107,14 @@ public class CtgSupplierManagementDAO implements ICtgSupplierManagement {
 			if( (supplierName == null || supplierName.isEmpty()) && (contactName == null || contactName.isEmpty()) && (contactLastName == null || contactLastName.isEmpty()) ){
 				suppliers = findAll();
 			}else{
-				if( (supplierName != null || !supplierName.isEmpty())){
+				if( (supplierName != null && !supplierName.isEmpty())){
 					useSupplierName = true;
 					if(isFirst){
 						sqlQuery.append(" upper(t.supplierName) like '%' ||:prmSupplierName || '%'  ");
 						isFirst= false;					
 						}
 				}
-				if( (contactName != null || !contactName.isEmpty())){
+				if( (contactName != null && !contactName.isEmpty())){
 					userContactName = true;
 					if(isFirst){
 						sqlQuery.append(" upper(t.contactName) like '%' ||:prmContactName || '%' ");
@@ -124,7 +124,7 @@ public class CtgSupplierManagementDAO implements ICtgSupplierManagement {
 						}
 
 				}
-				if( (contactLastName != null || !contactLastName.isEmpty())){
+				if( (contactLastName != null && !contactLastName.isEmpty())){
 					useContactLastName = true;
 					if(isFirst){
 						sqlQuery.append(" upper(t.contactLastname) like '%' ||:prmContactLastname || '%' ");

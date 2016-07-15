@@ -88,8 +88,21 @@ public class FormReservationController {
 	//Declaracion de acciones
 
 	@FXML
-	public void onSearch(MouseEvent event) {				
+	public void onSearch(MouseEvent event) {	
+		System.out.println("Buscando");
 			refreshListOnSearch();		
+	}
+
+	@FXML
+	public void onSearchClient(MouseEvent event) {				
+		customerData.clear();
+		List<AdmCustomer> customerList = manageCustomer.findByCustomerExample(customerName.getText(), customerLastname.getText());
+		for (AdmCustomer r : customerList) {
+			customerData.add(r);
+		}
+		reservationCustomer.setItems(customerData);
+		
+
 	}
 
 	@FXML
@@ -105,11 +118,13 @@ public class FormReservationController {
 	public void onNew(MouseEvent event) {				
 			resetValues();
 			newModeEnabled();
+			refreshComboBoxList();
 	}
 	@FXML
 	public void onClear(MouseEvent event) {				
 			initModeEnabled();
 			resetValues();
+			refreshComboBoxList();
 	}
 		@FXML
 		public void onSave(MouseEvent event) {
@@ -265,8 +280,8 @@ public class FormReservationController {
 		reservationDateColumn.setCellValueFactory(new PropertyValueFactory<AdmReservation, String>("reservationDate"));
 		reservationCustomerColumn.setCellValueFactory(new PropertyValueFactory<AdmReservation, String>("customerNameText"));
 		reservationAdvancePaymentColumn.setCellValueFactory(new PropertyValueFactory<AdmReservation, String>("advancePaymentAmmount"));
-		List<AdmReservation> list = manageReservation.findAll();
-//		List<AdmReservation> list = manageReservation.findByReservationExample();
+//		List<AdmReservation> list = manageReservation.findAll();
+		List<AdmReservation> list = manageReservation.findByReservationExample(customerName.getText(), customerLastname.getText(), gf.asDate(reservationDate.getValue()));
 		for(AdmReservation u : list){
 			u.setCustomerNameText(u.getAdmCustomer().getCustomerLastname()+", " +u.getAdmCustomer().getCustomerName());
 			reservationData.add(u);
@@ -315,6 +330,7 @@ public class FormReservationController {
 		reservationAdvancePayment.setEditable(false);
 		reservationPaymentMethod.setDisable(true);
 		reservationComments.setEditable(false);
+		searchCustomerBtn.setDisable(true);
 		 searchBtn.setDisable(false);
 		 newBtn.setDisable(false);
 		 editBtn.setDisable(true);
@@ -330,6 +346,7 @@ public class FormReservationController {
 		reservationAdvancePayment.setEditable(false);
 		reservationPaymentMethod.setDisable(true);
 		reservationComments.setEditable(false);
+		searchCustomerBtn.setDisable(true);
 		 searchBtn.setDisable(false);
 		 newBtn.setDisable(false);
 		 editBtn.setDisable(true);
@@ -348,6 +365,7 @@ public class FormReservationController {
 		reservationPaymentMethod.setDisable(false);
 		reservationComments.setEditable(true);
 	
+		searchCustomerBtn.setDisable(false);
 		 searchBtn.setDisable(false);
 		 newBtn.setDisable(false);
 		 editBtn.setDisable(false);
@@ -366,6 +384,7 @@ public class FormReservationController {
 		reservationPaymentMethod.setDisable(false);
 		reservationComments.setEditable(true);
 		
+		searchCustomerBtn.setDisable(false);
 		 searchBtn.setDisable(true);
 		 newBtn.setDisable(true);
 		 editBtn.setDisable(true);
@@ -384,6 +403,7 @@ public class FormReservationController {
 		reservationPaymentMethod.setDisable(false);
 		reservationComments.setEditable(true);
 	
+		searchCustomerBtn.setDisable(false);
 		 searchBtn.setDisable(true);
 		 newBtn.setDisable(true);
 		 editBtn.setDisable(true);

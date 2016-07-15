@@ -5,14 +5,13 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jbd.hibernate.interfaces.ICtgDiscountManagement;
 import com.jbd.model.CtgDiscount;
-import com.jbd.model.RestTable;
-import com.jbd.model.SysUser;
 
 
 public class CtgDiscountManagementDAO implements ICtgDiscountManagement {
@@ -172,4 +171,19 @@ try {
 
 	}
 
+		@Override
+		public Date convertToDate(Date dateValue, String timeValue) {
+			// TODO Auto-generated method stub
+			try {
+				Query query = em.createNativeQuery(  "SELECT STR_TO_DATE(CONCAT(SUBSTRING(DATE_FORMAT(?, '%Y-%m-%d'),1), lpad(?,4,'0')),'%Y-%m-%d%H%i') from dual");  
+				   query.setParameter(1, dateValue);  
+				   query.setParameter(2, timeValue);  
+				   Date val = (Date) query.getSingleResult(); 
+				return val;
+				} catch (Exception e) {
+					e.printStackTrace();
+					return null;
+
+				}
+		}
 }

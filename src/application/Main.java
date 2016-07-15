@@ -46,7 +46,7 @@ public class Main extends Application {
 
 		FXMLLoader loader = new FXMLLoader();
 		
-		
+		/*
 		loader.setLocation(Main.class.getResource("../com/jbd/view/W_MainWindow.fxml"));		
 		try {
 			rootLayout = (BorderPane) loader.load();
@@ -69,7 +69,7 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 		
-		
+		*/
 		
 		//PRUEBAS DOUGLAS
 //		loader.setLocation(Main.class.getResource("../com/jbd/FormDiscount.fxml"));
@@ -90,8 +90,14 @@ public class Main extends Application {
 
 //				loader.setLocation(Main.class.getResource("../com/jbd/FormTable.fxml"));
 
-//		loader.setLocation(Main.class.getResource("../com/jbd/FormAdministration.fxml"));
-/*
+//	loader.setLocation(Main.class.getResource("../com/jbd/FormKitchen.fxml"));
+//		loader.setLocation(Main.class.getResource("../com/jbd/FormCustomer.fxml"));
+//		loader.setLocation(Main.class.getResource("../com/jbd/FormReservation.fxml"));
+//		loader.setLocation(Main.class.getResource("../com/jbd/FormRestaurant.fxml"));
+
+	//	loader.setLocation(Main.class.getResource("../com/jbd/FormInvProductWaste.fxml"));
+		loader.setLocation(Main.class.getResource("../com/jbd/FormAdministration.fxml"));
+
 		
 		try {
 			AnchorPane rootl;
@@ -105,7 +111,7 @@ public class Main extends Application {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-*/
+
 	}
 
 	

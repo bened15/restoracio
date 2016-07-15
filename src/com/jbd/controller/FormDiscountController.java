@@ -47,14 +47,14 @@ public class FormDiscountController {
 	private ICtgMenuTypeManagement manageMenuItemType;
 	// Declaracion Labels
 	@FXML
-	private Label lblDiscountName, lblDiscountPercentage, lblDiscountBeginDate, lblDiscountEndDate, lblDiscountMenuType;
+	private Label lblDiscountName, lblDiscountPercentage, lblDiscountBeginDate, lblDiscountBeginTime, lblDiscountEndDate,lblDiscountEndTime, lblDiscountMenuType;
 
 	// Declaracion Botones
 	@FXML
 	private Button newBtn, saveBtn, searchBtn, editBtn, clearBtn;
 	// Declaracion Campos
 	@FXML
-	private TextField discountName, discountPercentage;
+	private TextField discountName, discountPercentage,discountBeginTime,discountEndTime;
 	@FXML
 	private TextArea discountDescription;
 	@FXML
@@ -118,16 +118,22 @@ public class FormDiscountController {
 			if (discountRecordSelected.getDiscountId() == 0) {
 				newRecord = true;
 			}
+			System.out.println("Inicia");
 			discountRecordSelected.setDiscountDescription(discountDescription.getText());
-			;
 			discountRecordSelected.setDiscountName(discountName.getText());
 			discountRecordSelected.setDiscountPercentage(Integer.parseInt(discountPercentage.getText()));
 			discountRecordSelected.setEntryDate(new Date());
 			discountRecordSelected.setEntryUser(userEntry);
-			discountRecordSelected.setDiscountValidSince(gf.asDate(discountBeginDate.getValue()));
-			discountRecordSelected.setDiscountValidUntil(gf.asDate(discountEndDate.getValue()));
+//			discountRecordSelected.setDiscountValidSince(gf.asDate(discountBeginDate.getValue()));
+			discountRecordSelected.setDiscountValidSince(manageDiscount.convertToDate(gf.asDate(discountBeginDate.getValue()),gf.leftPadZero(discountBeginTime.getText())));
+			discountRecordSelected.setDiscountValidSinceTime(gf.leftPadZero(discountBeginTime.getText()));
+//			discountRecordSelected.setDiscountValidUntil(gf.asDate(discountEndDate.getValue()));
+			discountRecordSelected.setDiscountValidUntil(manageDiscount.convertToDate(gf.asDate(discountEndDate.getValue()),gf.leftPadZero(discountEndTime.getText())));
+			discountRecordSelected.setDiscountValidUntilTime(gf.leftPadZero(discountEndTime.getText()));
 			discountRecordSelected.setCtgMenuType((CtgMenuType) discountMenuType.getValue());
 			discountRecord = new CtgDiscount();
+			System.out.println(gf.asDate(discountBeginDate.getValue()));
+			System.out.println(manageDiscount.convertToDate(gf.asDate(discountBeginDate.getValue()),"1200"));
 			if (newRecord) {
 				System.out.println("NUEVO");
 				discountRecord = manageDiscount.insertCtgDiscount(discountRecordSelected);
@@ -192,13 +198,19 @@ public class FormDiscountController {
 		discountDescription.setText("");
 		discountPercentage.setText("");
 		discountBeginDate.setValue(null);
+		discountBeginTime.setText("");
 		discountEndDate.setValue(null);
+		discountEndTime.setText("");
 	}
 
 	public String validateRecord() {
 		defaultLabel();
 		String errorMessage = null;
-
+		int begin_time =0;
+		int end_time =0;
+		Date begin_date = null;
+		Date end_date = null;
+		
 		if (discountName.getText() == null || discountName.getText().isEmpty()) {
 			errorMessage = "El campo nombre es obligatorio.";
 			lblDiscountName.setTextFill(Color.web("#ff0000"));
@@ -217,9 +229,67 @@ public class FormDiscountController {
 			errorMessage = "El campo de fecha de inicio es obligatorio.";
 			lblDiscountBeginDate.setTextFill(Color.web("#ff0000"));
 		}
+		if (discountBeginTime.getText() == null || discountBeginTime.getText().isEmpty()) {
+			errorMessage = "El campo hora inicio es obligatorio.";
+			lblDiscountBeginTime.setTextFill(Color.web("#ff0000"));
+		} else {
+			if (!gf.validNumber(discountBeginTime.getText())) {
+				errorMessage = "El campo hora inicio debe ser un numero";
+				lblDiscountBeginTime.setTextFill(Color.web("#ff0000"));
+			}else{
+				begin_time = gf.asInteger(discountBeginTime.getText());
+				if ( begin_time < 0 || begin_time >2359){
+					errorMessage = "El campo hora inicio no es una hora valida (Formato HH24Mi).";
+					lblDiscountBeginTime.setTextFill(Color.web("#ff0000"));					
+				}else{
+					if (discountBeginDate.getValue() != null){
+						begin_date = manageDiscount.convertToDate(gf.asDate(discountBeginDate.getValue()), discountBeginTime.getText());
+						if (begin_date == null){
+							errorMessage = "El campo hora inicio no es una hora valida (Formato HH24Mi).";
+							lblDiscountBeginTime.setTextFill(Color.web("#ff0000"));												
+						}
+					}
+				}
+			}
+		}
+
+
 		if (discountEndDate.getValue() == null) {
 			errorMessage = "El campo de fecha fin es obligatorio.";
 			lblDiscountEndDate.setTextFill(Color.web("#ff0000"));
+		}
+		if (discountEndTime.getText() == null || discountEndTime.getText().isEmpty()) {
+			errorMessage = "El campo hora inicio es obligatorio.";
+			lblDiscountEndTime.setTextFill(Color.web("#ff0000"));
+		} else {
+			if (!gf.validNumber(discountEndTime.getText())) {
+				errorMessage = "El campo hora inicio debe ser un numero";
+				lblDiscountEndTime.setTextFill(Color.web("#ff0000"));
+			}else{
+				end_time = gf.asInteger(discountEndTime.getText());
+				if ( end_time < 0 || end_time >2359){
+					errorMessage = "El campo hora fin no es una hora valida (Formato HH24Mi).";
+					lblDiscountEndTime.setTextFill(Color.web("#ff0000"));					
+				}else{
+					if (discountEndDate.getValue() != null){
+						end_date = manageDiscount.convertToDate(gf.asDate(discountEndDate.getValue()), discountEndTime.getText());
+						if (end_date == null){
+							errorMessage = "El campo hora fin no es una hora valida (Formato HH24Mi).";
+							lblDiscountEndTime.setTextFill(Color.web("#ff0000"));												
+						}
+					}
+
+				}
+			}
+		}
+		if (begin_date != null && end_date != null){
+			if(begin_date.after(end_date)) {
+				errorMessage = "La fecha y hora de fin del descuento debe ser mayor que la fecha y hora de inicio del descuento";
+				lblDiscountEndDate.setTextFill(Color.web("#ff0000"));
+				lblDiscountEndTime.setTextFill(Color.web("#ff0000"));												
+				
+			}
+			
 		}
 
 		return errorMessage;
@@ -287,7 +357,8 @@ public class FormDiscountController {
 		discountPercentage.setText(discountRecordSelected.getDiscountPercentage() + "");
 		discountBeginDate.setValue(gf.asLocalDate(discountRecordSelected.getDiscountValidSince()));
 		discountEndDate.setValue(gf.asLocalDate(discountRecordSelected.getDiscountValidUntil()));
-		
+		discountBeginTime.setText(discountRecordSelected.getDiscountValidSinceTime());
+		discountEndTime.setText(discountRecordSelected.getDiscountValidUntilTime());
 		// menuItemSelected
 				if (discountRecordSelected.getCtgMenuType() != null) {
 					discountMenuType.getSelectionModel().select(discountRecordSelected.getCtgMenuType());
@@ -303,7 +374,9 @@ public class FormDiscountController {
 		discountDescription.setEditable(false);
 		discountPercentage.setEditable(false);
 		discountBeginDate.setDisable(false);
+		discountBeginTime.setEditable(false);
 		discountEndDate.setDisable(true);
+		discountEndTime.setEditable(false);
 		discountMenuType.setDisable(false);
 		searchBtn.setDisable(false);
 		newBtn.setDisable(false);
@@ -317,7 +390,9 @@ public class FormDiscountController {
 		discountDescription.setEditable(false);
 		discountPercentage.setEditable(false);
 		discountBeginDate.setDisable(false);
+		discountBeginTime.setEditable(false);
 		discountEndDate.setDisable(true);
+		discountEndTime.setEditable(false);
 		discountMenuType.setDisable(false);
 		searchBtn.setDisable(false);
 		newBtn.setDisable(false);
@@ -334,7 +409,9 @@ public class FormDiscountController {
 		discountDescription.setEditable(true);
 		discountPercentage.setEditable(true);
 		discountBeginDate.setDisable(false);
+		discountBeginTime.setEditable(true);
 		discountEndDate.setDisable(false);
+		discountEndTime.setEditable(true);
 		discountMenuType.setDisable(false);
 		searchBtn.setDisable(false);
 		newBtn.setDisable(false);
@@ -350,7 +427,9 @@ public class FormDiscountController {
 		discountDescription.setEditable(true);
 		discountPercentage.setEditable(true);
 		discountBeginDate.setDisable(false);
+		discountBeginTime.setEditable(true);
 		discountEndDate.setDisable(false);
+		discountEndTime.setEditable(true);
 		discountMenuType.setDisable(false);
 		searchBtn.setDisable(true);
 		newBtn.setDisable(true);
@@ -366,7 +445,9 @@ public class FormDiscountController {
 		discountDescription.setEditable(true);
 		discountPercentage.setEditable(true);
 		discountBeginDate.setDisable(false);
+		discountBeginTime.setEditable(true);
 		discountEndDate.setDisable(false);
+		discountEndTime.setEditable(true);
 		discountMenuType.setDisable(false);
 		searchBtn.setDisable(true);
 		newBtn.setDisable(true);
@@ -381,6 +462,9 @@ public class FormDiscountController {
 		lblDiscountPercentage.setTextFill(Color.web("#000000"));
 		lblDiscountBeginDate.setTextFill(Color.web("#000000"));
 		lblDiscountEndDate.setTextFill(Color.web("#000000"));
+		lblDiscountBeginTime.setTextFill(Color.web("#000000"));
+		lblDiscountEndTime.setTextFill(Color.web("#000000"));
+		
 		//lblDiscountMenuType.setTextFill(Color.web("#000000"));
 
 	}

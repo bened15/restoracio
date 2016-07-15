@@ -10,9 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jbd.hibernate.interfaces.ICtgMenuTypeManagement;
 import com.jbd.model.CtgMenuType;
-import com.jbd.model.CtgPaymentMethod;
-import com.jbd.model.RestTable;
-import com.jbd.model.SysUser;
+
 
 public class CtgMenuTypeManagementDAO implements ICtgMenuTypeManagement {
 

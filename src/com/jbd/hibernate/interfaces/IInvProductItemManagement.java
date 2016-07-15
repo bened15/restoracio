@@ -12,5 +12,7 @@ public interface IInvProductItemManagement {
 	public InvProductItem findInvProductItem(Integer oId);
 	public List<InvProductItem> findAll();
 	public List<InvProductItem> findInvProductItemByExample(int productTypeId, int productId);
+	public List<InvProductItem> findInvProductItemByExampleOpen(int productTypeId, int productId);
+	public List<InvProductItem> findAllOpen();
 
 }

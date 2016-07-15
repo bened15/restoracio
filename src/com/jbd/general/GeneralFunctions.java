@@ -5,7 +5,13 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 public class GeneralFunctions {
+	@PersistenceContext
+	public EntityManager em;
 
 	public boolean validNumber(String valueStr){
 		if (valueStr.matches("[-+]?[0-9]*\\.?[0-9]+")) {
@@ -19,7 +25,7 @@ public class GeneralFunctions {
 		try {
 			value = Integer.parseInt(valueStr);
 		} catch (NumberFormatException e) {
-		    value = 0;
+		    value = -1;
 		}
 		return  value;
 	}
@@ -61,5 +67,14 @@ public class GeneralFunctions {
 		}
 		
 		return id;
+	}
+	
+	
+	
+	
+	public String leftPadZero(String value){
+		String newValue;
+		newValue = String.format("%4s", value).replace(' ', '0');
+		return newValue;
 	}
 }

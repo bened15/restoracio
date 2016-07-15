@@ -67,12 +67,12 @@
                               <Label fx:id="lblReservationDate" text="Fecha" GridPane.rowIndex="3" />
                               <Label fx:id="lblReservationAdvancePayment" text="Adelanto" GridPane.rowIndex="4" />
                               <TextField fx:id="customerName" prefHeight="25.0" prefWidth="120.0" GridPane.columnIndex="1" />
-                              <TextField fx:id="customerLastname"  GridPane.columnIndex="3" />
+                              <TextField fx:id="customerLastname" GridPane.columnIndex="3" />
                               <TextField fx:id="reservationAdvancePayment" prefHeight="25.0" prefWidth="42.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                               <Label fx:id="lblRservationComments" text="Comentarios" GridPane.rowIndex="6" />
                               <TextArea fx:id="reservationComments" prefHeight="106.0" prefWidth="257.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="6" />
                               <Label fx:id="lblReservationCustomer" text="Cliente" GridPane.rowIndex="2" />
-                              <Button fx:id="searchCustomerBtn" mnemonicParsing="false" text="Buscar cliente" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                              <Button fx:id="searchCustomerBtn" mnemonicParsing="false" onMouseClicked="#onSearchClient" text="Buscar cliente" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
                               <ComboBox fx:id="reservationCustomer" prefHeight="25.0" prefWidth="274.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
                               <DatePicker fx:id="reservationDate" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
                               <Label fx:id="lblReservationPaymentMethod" text="Tipo de pago" GridPane.rowIndex="5" />

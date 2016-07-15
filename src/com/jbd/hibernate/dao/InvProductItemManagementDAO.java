@@ -146,4 +146,67 @@ public class InvProductItemManagementDAO implements IInvProductItemManagement {
 
 	}
 
+	@Override
+	public List<InvProductItem> findAllOpen() {
+		// TODO Auto-generated method stub
+	try {
+			
+			List<InvProductItem> userList;
+			TypedQuery<InvProductItem> tq = em.createQuery("select o from InvProductItem o where o.state = 'OPEN' order by entryDate asc ",
+					InvProductItem.class);
+			userList = tq.getResultList();
+			return userList;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+
+		}
+	}
+
+	@Override
+	public List<InvProductItem> findInvProductItemByExampleOpen(int productTypeId, int productId) {
+		// TODO Auto-generated method stub
+		StringBuilder sqlQuery = new StringBuilder(); 
+		Boolean isFirst = false;
+		Boolean useProductTypeId = false;
+		Boolean useProductId = false;
+		sqlQuery.append("select t from InvProductItem t where t.state = 'OPEN' ");
+		try {
+			List<InvProductItem> products ;
+			if( (productTypeId == 0 ) && (productId==0)   ){
+				products = findAllOpen();
+			}else{
+				if( productTypeId != 0 ){
+					useProductTypeId = true;
+							sqlQuery.append(" and t.restProduct.ctgProductType.productTypeId = :prmProductTypeId   ");						
+
+				}
+				if( productId != 0 ){
+					useProductId = true;
+							sqlQuery.append(" and t.restProduct.productId = :prmProductId   ");						
+
+				}
+				sqlQuery.append("order by entryDate asc ");
+					TypedQuery<InvProductItem> tq = em.createQuery(sqlQuery.toString(),
+							InvProductItem.class);
+					if(useProductTypeId){
+						tq.setParameter("prmProductTypeId", productTypeId);
+						
+					}
+					if(useProductId){
+						tq.setParameter("prmProductId", productTypeId);
+						
+					}
+					products = tq.getResultList();
+			}
+
+			return products;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+
+		}
+	}
+
 }

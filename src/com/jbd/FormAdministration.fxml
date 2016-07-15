@@ -30,6 +30,7 @@
                       </Menu>
                       <Menu mnemonicParsing="false" text="Catalogos">
                            <items>
+                              <MenuItem fx:id="menuItemCustomer" mnemonicParsing="false" onAction="#onMenuItemCustomer" text="Clientes" />
                           <MenuItem fx:id="menuItemProduct" mnemonicParsing="false" onAction="#onMenuItemProduct" text="Productos" />
                               <MenuItem fx:id="menuItemSupplier" mnemonicParsing="false" onAction="#onMenuItemSupplier" text="Proveedor" />
                               <MenuItem fx:id="menuItemMeasure" mnemonicParsing="false" onAction="#onMenuItemMeasure" text="Unidad de medida" />
@@ -38,7 +39,9 @@
                       </Menu>
                       <Menu mnemonicParsing="false" text="Restaurante">
                         <items>
+                              <MenuItem fx:id="menuItemRestaurant" mnemonicParsing="false" onAction="#onMenuItemRestaurant" text="Datos generales" />
                           <MenuItem fx:id="menuItemArea" mnemonicParsing="false" onAction="#onMenuItemArea" text="Area" />
+                              <MenuItem fx:id="menuItemKitchen" mnemonicParsing="false" onAction="#onMenuItemKitchen" text="Cocina" />
                               <MenuItem fx:id="menuItemTable" mnemonicParsing="false" onAction="#onMenuItemTable" text="Mesa" />
                               <Menu mnemonicParsing="false" text="Menu">
                                  <items>
@@ -48,6 +51,7 @@
                                  </items>
                               </Menu>
                               <MenuItem fx:id="menuItemDiscount" mnemonicParsing="false" onAction="#onMenuItemDiscount" text="Descuentos" />
+                              <MenuItem fx:id="menuItemReservation" mnemonicParsing="false" onAction="#onMenuItemReservation" text="Reservaciones" />
                         </items>
                       </Menu>
                         <Menu mnemonicParsing="false" text="Inventario">
@@ -56,9 +60,16 @@
                               <MenuItem fx:id="menuItemInvProductWaste" mnemonicParsing="false" onAction="#onMenuItemInvProductWaste" text="Desperdicios" />
                            </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="Help">
+                        <Menu mnemonicParsing="false" text="Reportes">
                            <items>
-                              <MenuItem mnemonicParsing="false" text="About" />
+                              <MenuItem mnemonicParsing="false" text="Reporte 1" />
+                              <MenuItem mnemonicParsing="false" text="Reporte ..." />
+                           </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Ayuda">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Manual" />
+                              <MenuItem mnemonicParsing="false" text="Acerca de JBD" />
                            </items>
                         </Menu>
                     </menus>

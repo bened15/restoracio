@@ -102,7 +102,7 @@ try {
 			if( (measureName == null || measureName.isEmpty()) && (measureUnit == null || measureUnit.isEmpty()) ){
 				measures = findAll();
 			}else{
-				if( (measureName != null && !measureName.isEmpty())  && (measureUnit == null || measureUnit.isEmpty()) ){
+				if( (measureName != null && !measureName.isEmpty())  && (measureUnit != null && !measureUnit.isEmpty()) ){
 					TypedQuery<CtgMeasureUnit> tq = em.createQuery("select t from CtgMeasureUnit t where upper(t.measureUni) like '%' ||:prmMeasureUni || '%' "
 							+ "and upper(t.measureName) like '%' ||:prmMeasureName || '%' ",
 							CtgMeasureUnit.class);

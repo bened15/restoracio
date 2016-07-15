@@ -127,7 +127,7 @@ public class RestMenuItemManagementDAO implements IRestMenuItemManagement {
 			if( (menuItemName == null || menuItemName.isEmpty()) && (menuItemTypeId == 0 )   ){
 				products = findAll();
 			}else{
-				if( (menuItemName != null || !menuItemName.isEmpty())){
+				if( (menuItemName != null && !menuItemName.isEmpty())){
 					useMenuItemName = true;
 					if(isFirst){
 						sqlQuery.append(" upper(t.menuItemName) like '%' ||:prmMenuItemName || '%'  ");

@@ -48,10 +48,10 @@ public class FormAdministrationController {
 	private MenuItem  menuItemUsuario , menuItemRol;
 	//Declaracion Botones Catalogos
 	@FXML
-	private MenuItem  menuItemSupplier , menuItemMeasure, menuItemPaymentMethod, menuItemProduct,menuItemProductType   ;
+	private MenuItem  menuItemCustomer, menuItemSupplier , menuItemMeasure, menuItemPaymentMethod, menuItemProduct,menuItemProductType   ;
 	//Declaracion Botones Restaurante
 	@FXML
-	private MenuItem  menuItemArea , menuItemTable, menuItemMenu, menuItemMenuType, menuItemMenuProduct, menuItemDiscount   ;
+	private MenuItem  menuItemRestaurant , menuItemArea , menuItemKitchen, menuItemTable, menuItemMenu, menuItemMenuType, menuItemMenuProduct, menuItemDiscount , menuItemReservation  ;
 	//Declaracion Botones Inventario
 	@FXML
 	private MenuItem  menuItemInvProduct , menuItemInvProductWaste   ;
@@ -78,6 +78,23 @@ public class FormAdministrationController {
 		          }
 	}
 
+
+	@FXML
+	public void onMenuItemCustomer() {
+		 try {
+		        FXMLLoader fxmlLoader = new FXMLLoader();
+		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormCustomer.fxml"));
+		                Parent root1 = (Parent) fxmlLoader.load();
+		                Stage stage = new Stage();
+		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                //stage.initStyle(StageStyle.UNDECORATED);
+		                stage.setTitle("Registro de clientes");
+		                stage.setScene(new Scene(root1));  
+		                stage.show();
+		        } catch(Exception e) {
+		           e.printStackTrace();
+		          }
+	}
 	@FXML
 	public void onMenuItemDiscount() {
 		 try {
@@ -123,6 +140,23 @@ public class FormAdministrationController {
 		                //stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                stage.setTitle("Registro de desperdicios");
+		                stage.setScene(new Scene(root1));  
+		                stage.show();
+		        } catch(Exception e) {
+		           e.printStackTrace();
+		          }
+	}
+
+	@FXML
+	public void onMenuItemKitchen() {
+		 try {
+		        FXMLLoader fxmlLoader = new FXMLLoader();
+		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormKitchen.fxml"));
+		                Parent root1 = (Parent) fxmlLoader.load();
+		                Stage stage = new Stage();
+		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                //stage.initStyle(StageStyle.UNDECORATED);
+		                stage.setTitle("Registro de cocinas");
 		                stage.setScene(new Scene(root1));  
 		                stage.show();
 		        } catch(Exception e) {
@@ -181,6 +215,41 @@ public class FormAdministrationController {
 		          }
 	}
 
+	@FXML
+	public void onMenuItemReservation() {
+		 try {
+		        FXMLLoader fxmlLoader = new FXMLLoader();
+		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormReservation.fxml"));
+		                Parent root1 = (Parent) fxmlLoader.load();
+		                Stage stage = new Stage();
+		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                //stage.initStyle(StageStyle.UNDECORATED);
+		                stage.setTitle("Registro de reservaciones");
+		                stage.setScene(new Scene(root1));  
+		                stage.show();
+		        } catch(Exception e) {
+		           e.printStackTrace();
+		          }
+	}
+
+	@FXML
+	public void onMenuItemRestaurant() {
+		 try {
+		        FXMLLoader fxmlLoader = new FXMLLoader();
+		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormRestaurant.fxml"));
+		                Parent root1 = (Parent) fxmlLoader.load();
+		                Stage stage = new Stage();
+		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                //stage.initStyle(StageStyle.UNDECORATED);
+		                stage.setTitle("Datos generales del restaurante");
+		                stage.setScene(new Scene(root1));  
+		                stage.show();
+		        } catch(Exception e) {
+		           e.printStackTrace();
+		          }
+	}
+
+	
 	@FXML
 	public void onMenuItemMenuType() {
 		 try {

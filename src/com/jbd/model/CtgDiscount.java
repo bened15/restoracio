@@ -44,6 +44,12 @@ public class CtgDiscount implements Serializable {
 	@Column(name="ENTRY_USER")
 	private String entryUser;
 
+	@Column(name="DISCOUNT_VALID_SINCE_TIME")
+	private String discountValidSinceTime;
+
+	@Column(name="DISCOUNT_VALID_UNTIL_TIME")
+	private String discountValidUntilTime;
+
 	//bi-directional many-to-one association to CtgMenuType
 	@ManyToOne
 	@JoinColumn(name="MENU_TYPE_ID")
@@ -102,6 +108,24 @@ public class CtgDiscount implements Serializable {
 
 	public void setDiscountValidUntil(Date discountValidUntil) {
 		this.discountValidUntil = discountValidUntil;
+	}
+
+	
+	
+	public String getDiscountValidSinceTime() {
+		return discountValidSinceTime;
+	}
+
+	public void setDiscountValidSinceTime(String discountValidSinceTime) {
+		this.discountValidSinceTime = discountValidSinceTime;
+	}
+
+	public String getDiscountValidUntilTime() {
+		return discountValidUntilTime;
+	}
+
+	public void setDiscountValidUntilTime(String discountValidUntilTime) {
+		this.discountValidUntilTime = discountValidUntilTime;
 	}
 
 	public Date getEntryDate() {
