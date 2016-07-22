@@ -53,21 +53,38 @@ public class SysUserRolManagementDAO implements ISysUserRolManagement {
 
 	@Override
 	public boolean findSysUserRol(String uName, String uPass) {
-
-		Query q = em.createQuery(
-				"SELECT ur from SysUserRol ur where ur.sysUser.userName=:uName and ur.sysUser.userPassword=:uPass",
-				SysUserRol.class);
-
-		q.setParameter("uName", uName);
-		q.setParameter("uPass", uPass);
+		// System.out.println("Entre-finduserrole");
 		try {
+			Query q = em.createQuery(
+					"SELECT ur from SysUserRol ur where ur.sysUser.userCode=:uName and ur.sysUser.userPassword=:uPass",
+					SysUserRol.class);
+
+			q.setParameter("uName", uName);
+			q.setParameter("uPass", uPass);
+
 			q.getSingleResult();
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			return false;
 		}
 
+	}
+
+	@Override
+	public boolean findWaitress(String uName) {
+		try {
+			Query q = em.createQuery("SELECT ur from SysUserRol ur where ur.sysUser.userCode=:uName ",
+					SysUserRol.class);
+
+			q.setParameter("uName", uName);
+
+			q.getSingleResult();
+			return true;
+		} catch (Exception e) {
+			// e.printStackTrace();
+			return false;
+		}
 	}
 
 }

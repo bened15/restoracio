@@ -234,10 +234,11 @@
 						<Button fx:id="btnPagoExacto" layoutX="410.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#pagoExactoSelected" onTouchPressed="#pagoExactoSelected" prefHeight="54.0" prefWidth="168.0" text="Pago Exacto" />
 						<Button fx:id="btnTarjeta" layoutX="410.0" layoutY="144.0" mnemonicParsing="false" onMouseClicked="#tarjetaSelected" onTouchPressed="#tarjetaSelected" prefHeight="54.0" prefWidth="168.0" text="Tarjeta" />
 						<Button layoutX="410.0" layoutY="384.0" mnemonicParsing="false" onMouseClicked="#salirSelected" onTouchPressed="#salirSelected" prefHeight="54.0" prefWidth="168.0" text="Salir" />
-						<Button fx:id="btnPagoNormal" layoutX="8.0" layoutY="384.0" mnemonicParsing="false" onMouseClicked="#generarPagoSelected" onTouchPressed="#generarPagoSelected" prefHeight="54.0" prefWidth="168.0" text="Generar Pago" />
+						<Button fx:id="btnPagoNormal" layoutX="8.0" layoutY="384.0" mnemonicParsing="false" onMouseClicked="#generarPagoSelected" onTouchPressed="#generarPagoSelected" prefHeight="54.0" prefWidth="123.0" text="Generar Pago" />
 						<Button fx:id="btnDescuento" layoutX="410.0" layoutY="276.0" mnemonicParsing="false" onMouseClicked="#descuentoSelected" onTouchPressed="#descuentoSelected" prefHeight="54.0" prefWidth="168.0" text="Aplicar Descuento" />
 						<Button fx:id="btnCupon" layoutX="410.0" layoutY="209.0" mnemonicParsing="false" onMouseClicked="#cuponSelected" onTouchPressed="#cuponSelected" prefHeight="54.0" prefWidth="168.0" text="Cupon" />
-						<Button fx:id="btnPagoParcial" layoutX="215.0" layoutY="384.0" mnemonicParsing="false" onMouseClicked="#generarPagoParcialSelected" onTouchPressed="#generarPagoParcialSelected" prefHeight="54.0" prefWidth="168.0" text="Generar Pago Parcial" />
+						<Button fx:id="btnPagoParcial" layoutX="137.0" layoutY="384.0" mnemonicParsing="false" onMouseClicked="#generarPagoParcialSelected" onTouchPressed="#generarPagoParcialSelected" prefHeight="54.0" prefWidth="149.0" text="Generar Pago Parcial" />
+                  <Button layoutX="292.0" layoutY="384.0" mnemonicParsing="false" onMouseClicked="#prefacturaSelected" onTouchPressed="#prefacturaSelected" prefHeight="54.0" prefWidth="113.0" text="Pref-actura" />
 					</children>
 				</AnchorPane>
 			</items>

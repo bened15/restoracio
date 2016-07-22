@@ -1,5 +1,7 @@
 package com.jbd.controller;
 
+import javax.swing.JOptionPane;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
@@ -8,7 +10,9 @@ import com.jbd.hibernate.interfaces.ISysUserRolManagement;
 
 import application.Main;
 import javafx.event.EventHandler;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -17,55 +21,43 @@ import javafx.scene.layout.Pane;
 public class UserSecurityController {
 
 	@Autowired
-	private static ISysUserRolManagement manageUserRol;
-	private static boolean isMgr = false;
+	private ISysUserRolManagement manageSysUserRol;
 
 	public UserSecurityController() {
 		AutowireCapableBeanFactory acbFactory = Main.context.getAutowireCapableBeanFactory();
 		acbFactory.autowireBean(this);
 	}
 
-	public static boolean verifyIsMgr(AnchorPane ap) {
+	public boolean verifyIsAuto() {
 
-		Pane p = new Pane();
+		String usA = JOptionPane.showInputDialog("Ingrese un usuario autorizado");
+		String passA = JOptionPane.showInputDialog("Ingrese su password");
+		if (manageSysUserRol.findSysUserRol(usA, passA)) {
 
-		TextField txtUserCode = new TextField();
-		TextField txtPassCode = new TextField();
+			return true;
+		} else {
+			return false;
+		}
 
-		p.setOnKeyPressed(new EventHandler<KeyEvent>() {
+	}
 
-			@Override
-			public void handle(KeyEvent event) {
-				if (event.getCode().equals(KeyCode.ENTER)) {
-					AutowireCapableBeanFactory acbFactory = Main.context.getAutowireCapableBeanFactory();
-					acbFactory.autowireBean(UserSecurityController.class);
+	public String verifyWaitress() {
 
-					if (manageUserRol.findSysUserRol(txtUserCode.getText(), txtPassCode.getText())) {
-						isMgr = true;
-						ap.getChildren().remove(p);
-						return;
+		String usA = JOptionPane.showInputDialog("Ingrese su codigo de empleado");
 
-					} else {
+		if (manageSysUserRol.findWaitress(usA)) {
 
-						isMgr = false;
-						return;
-					}
+			return usA;
+		} else {
+			return "";
+		}
 
-				}
+	}
 
-				if (event.getCode().equals(KeyCode.ESCAPE)) {
-					isMgr = false;
-					return;
-				}
+	public void loadConfig() {
 
-			}
-		});
-
-		p.getChildren().add(txtUserCode);
-		p.getChildren().add(txtPassCode);
-
-		ap.getChildren().add(p);
-		return isMgr;
+		AutowireCapableBeanFactory acbFactory = Main.context.getAutowireCapableBeanFactory();
+		acbFactory.autowireBean(this);
 
 	}
 

@@ -43,9 +43,9 @@
 		autowire="byType">
 	</bean>
 
-	<bean id="manageSysRolUser" class="com.jbd.hibernate.dao.SysUserRolManagementDAO"
-		autowire="byType">
-	</bean>
+<!-- 	<bean id="manageSysRolUser" class="com.jbd.hibernate.dao.SysUserRolManagementDAO" -->
+<!-- 		autowire="byType"> -->
+<!-- 	</bean> -->
 	<bean id="manageMenuType" class="com.jbd.hibernate.dao.CtgMenuTypeManagementDAO"
 		autowire="byType">
 	</bean>

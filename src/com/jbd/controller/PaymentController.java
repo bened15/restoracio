@@ -499,6 +499,11 @@ public class PaymentController {
 	}
 
 	@FXML
+	public void prefacturaSelected() {
+		System.out.println("Aqui va el codigo de benji para imprimir pre factura");
+	}
+
+	@FXML
 	public void salirSelected() {
 		this.secondaryStage.close();
 	}
