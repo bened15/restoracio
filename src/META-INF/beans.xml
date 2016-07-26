@@ -91,6 +91,8 @@
 	<bean id="admCustomer" class="com.jbd.hibernate.dao.AdmCustomerManagementDAO" autowire="byType"></bean>
 	<bean id="admReservation" class="com.jbd.hibernate.dao.AdmReservationManagementDAO" autowire="byType"></bean>
 	<bean id="restInformation" class="com.jbd.hibernate.dao.RestInformationManagementDAO" autowire="byType"></bean>
+	<bean id="restMenuItemComment" class="com.jbd.hibernate.dao.RestMenuItemCommentManagementDAO" autowire="byType"></bean>
+	<bean id="invProductWaste" class="com.jbd.hibernate.dao.InvInventoryWasteManagementDAO" autowire="byType"></bean>
 
 
 

@@ -43,6 +43,10 @@ public class RestMenuItem implements Serializable {
 	@OneToMany(mappedBy="restMenuItem")
 	private List<RestMenuItemProduct> restMenuItemProducts;
 
+	//bi-directional many-to-one association to RestMenuItemProduct
+	@OneToMany(mappedBy="restMenuItem")
+	private List<RestMenuItemComment> restMenuItemComments;
+
 	//bi-directional many-to-one association to RestOrder
 	@OneToMany(mappedBy="restMenuItem")
 	private List<RestOrder> restOrders;
@@ -168,7 +172,29 @@ public class RestMenuItem implements Serializable {
 	}
 
 
+	public List<RestMenuItemComment> getRestMenuItemComments() {
+		return this.restMenuItemComments;
+	}
 
+	public void setRestMenuItemComments(List<RestMenuItemComment> restMenuItemComments) {
+		this.restMenuItemComments = restMenuItemComments;
+	}
+
+	public RestMenuItemComment addRestMenuItemProduct(RestMenuItemComment restMenuItemComment) {
+		getRestMenuItemComments().add(restMenuItemComment);
+		restMenuItemComment.setRestMenuItem(this);
+
+		return restMenuItemComment;
+	}
+
+	public RestMenuItemComment removeRestMenuItemComment(RestMenuItemComment restMenuItemComment) {
+		getRestMenuItemComments().remove(restMenuItemComment);
+		restMenuItemComment.setRestMenuItem(null);
+
+		return restMenuItemComment;
+	}
+
+	
 
 	@Transient
 	private String menuItemTypeText;

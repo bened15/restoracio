@@ -3,6 +3,8 @@ package com.jbd.controller;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -169,11 +171,25 @@ public class FormUserController {
 					if (userRecord==null){
 						System.out.println("ERROR AL GUARDAR");
 					}else{
+						if (newRecord) {	
+							JOptionPane.showMessageDialog(null,
+								"Registro almacenado exitosamente");
+						}else{
+							JOptionPane.showMessageDialog(null,
+									"Registro actualizado exitosamente");
+								
+						}
+
 						System.out.println("EXITO AL GUARDAR");
 						resetValues();
 						refreshList();
 						initModeEnabled();
 					}
+				}else{
+					JOptionPane.showMessageDialog(null,
+							"Los campos marcados en rojo son obligatorios y presentan errores.\n "
+							+ "A continuacion se muestra el detalle de errores:\n" + error);
+
 				}
 			
 		}
@@ -239,39 +255,47 @@ public class FormUserController {
 	
 	public String validateRecord() {
 		 defaultLabel();
-		String errorMessage = null;	
+		 String errorString = null;
+			StringBuilder errorMessage = new StringBuilder();
+			int messageErrorNumber = 1;	
 
 		if (userCode.getText() == null || userCode.getText().isEmpty()){
-			errorMessage = "El campo de usuario es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo de usuario es obligatorio.\n");
+			messageErrorNumber++;
 			lblUsercode.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 		if (userPassword.getText()== null ||userPassword.getText().isEmpty()){
-			errorMessage =  "El campo de contraseña es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+ "El campo de contraseña es obligatorio.\n");
+			messageErrorNumber++;
 			lblUserPassword.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 		if (userName.getText()==null || userName.getText().isEmpty()){
-			errorMessage = "El campo nombre es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo nombre es obligatorio.\n");
+			messageErrorNumber++;
 			lblName.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 		if (userLastname.getText()==null || userLastname.getText().isEmpty()){
-			errorMessage = "El campo apellido es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo apellido es obligatorio.\n");
+			messageErrorNumber++;
 			lblLastname.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 		if (userEmploymentBeginDate.getValue() == null){
-			errorMessage = "El campo fecha de contratacion es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo fecha de contratacion es obligatorio.\n");
+			messageErrorNumber++;
 			lblBegindate.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 		if (userRole.getValue()== null){
-			errorMessage = "El campo rol es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo rol es obligatorio.\n");
+			messageErrorNumber++;
 			lblUserRole.setTextFill(Color.web("#ff0000"));
 			
 		}
-		return errorMessage;			
+		return errorString;			
 	}
 	
 	public void refreshList(){

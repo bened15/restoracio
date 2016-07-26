@@ -4,7 +4,7 @@ package com.jbd.controller;
 import java.util.Date;
 import java.util.List;
 
-
+import javax.swing.JOptionPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -90,7 +90,20 @@ public class FormRestaurantController {
 						System.out.println("ERROR AL GUARDAR");
 					}else{
 						System.out.println("EXITO AL GUARDAR");
+						if (newRecord) {	
+							JOptionPane.showMessageDialog(null,
+								"Registro almacenado exitosamente");
+						}else{
+							JOptionPane.showMessageDialog(null,
+									"Registro actualizado exitosamente");
+								
+						}
 					}
+				}else{
+					JOptionPane.showMessageDialog(null,
+							"Los campos marcados en rojo son obligatorios y presentan errores.\n "
+							+ "A continuacion se muestra el detalle de errores:\n" + error);
+
 				}
 			
 		}
@@ -137,20 +150,24 @@ public class FormRestaurantController {
 	
 	public String validateRecord() {
 		 defaultLabel();
-		String errorMessage = null;	
+		 String errorString = null;
+			StringBuilder errorMessage = new StringBuilder();
+			int messageErrorNumber = 1;	
 
 		if (restaurantName.getText() == null || restaurantName.getText().isEmpty()){
-			errorMessage = "El campo nombre de proveedor es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo nombre de proveedor es obligatorio.\n");
+			messageErrorNumber++;
 			lblRestaurantName.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 		if (restaurantNIT.getText()==null || restaurantNIT.getText().isEmpty()){
-			errorMessage = "El campo apellido del contacto es obligatorio.";
+			errorMessage = errorMessage.append(messageErrorNumber+"-"+"El campo apellido del contacto es obligatorio.\n");
+			messageErrorNumber++;
 			lblRestaurantNIT.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 		
-		return errorMessage;			
+		return errorString;			
 	}
 	
 

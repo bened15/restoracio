@@ -36,17 +36,18 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import application.Main;
 
-public class FormMenuItemProductController {
+public class FormMenuItemProductController2 {
 
 	private Main mainApp;
 	private ApplicationContext context;
 	private RestMenuItemProduct menuItemProduct;
 	private RestMenuItemProduct menuItemProductSelected = new RestMenuItemProduct();
 	private RestMenuItem menuItemSelected = new RestMenuItem();
-	private String userEntry = "Douglas";
+	private String userEntry;
 	private GeneralFunctions gf = new GeneralFunctions();
 	
 	@Autowired
@@ -63,7 +64,7 @@ public class FormMenuItemProductController {
 
 	//Declaracion Botones
 	@FXML
-	private Button newBtn  ,saveBtn,searchBtn   , clearBtn , deleteBtn  ;
+	private Button newBtn  ,saveBtn,searchBtn   , clearBtn , deleteBtn  , closeBtn;
 	//Declaracion Campos
 	@FXML
 	private TextField menuItemProductMeasure,menuItemProductQty;
@@ -105,10 +106,8 @@ public class FormMenuItemProductController {
 			refreshList();		
 	}
 
-	@FXML
-	public void getSelectedRow(MouseEvent event) {	
-		menuItemSelected = menuItemList.getSelectionModel().getSelectedItem();
-		System.out.println("SELECTED ROW MENU "+menuItemSelected.getMenuItemId());
+	public void setSelectedMenuItem(RestMenuItem item) {	
+		menuItemSelected = item;
 		//menuItemProductSelected = manageSupplier.findRestMenuItemProduct(supplierCodeSelected);
     	loadRecordInformationIngredients(menuItemSelected);
 //		editModeEnabled();
@@ -132,6 +131,14 @@ public class FormMenuItemProductController {
 			newModeEnabled();
 	}
 
+	@FXML
+	public void onClose(MouseEvent event) {	
+		// get a handle to the stage
+	    Stage stage = (Stage) closeBtn.getScene().getWindow();
+	    // do what you have to do
+	    stage.close();
+	    }
+
 	
 	@FXML
 	public void onDelete(MouseEvent event) {	
@@ -141,9 +148,6 @@ public class FormMenuItemProductController {
 		if (!withOutError){
 			System.out.println("ERROR AL ELIMINAR");
 		}else{
-			JOptionPane.showMessageDialog(null,
-					"Registro eliminado exitosamente");
-
 			System.out.println("EXITO AL ELIMINAR");
 			resetValues();
 			refreshList();
@@ -175,7 +179,6 @@ public class FormMenuItemProductController {
 					if (newRecord){
 						System.out.println("NUEVO");
 						menuItemProduct = manageRestMenuItemProduct.insertRestMenuItemProduct(menuItemProductSelected);						
-
 					}else{
 						System.out.println("UPDATE");
 						menuItemProduct =  manageRestMenuItemProduct.updateRestMenuItemProduct(menuItemProductSelected);						
@@ -207,7 +210,7 @@ public class FormMenuItemProductController {
 
 		
 
-		public FormMenuItemProductController() {
+		public FormMenuItemProductController2() {
 		try {
 			context = new ClassPathXmlApplicationContext("META-INF/beans.xml");
 		AutowireCapableBeanFactory acbFactory = context.getAutowireCapableBeanFactory();
@@ -264,11 +267,11 @@ public class FormMenuItemProductController {
 		 defaultLabel();
 		 String errorString = null;
 			StringBuilder errorMessage = new StringBuilder();
-			int messageErrorNumber = 1;		
+			int messageErrorNumber = 1;	
 
 		if (menuItemProductQty.getText() == null || menuItemProductQty.getText().isEmpty()){
 			errorMessage.append(messageErrorNumber+"-"+"El campo cantidad es obligatorio.\n");
-			messageErrorNumber++;								
+			messageErrorNumber++;
 			lblMenuItemProductQty.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}else{
@@ -516,6 +519,15 @@ public class FormMenuItemProductController {
 		    });
 		}
 
+		public String getUserEntry() {
+			return userEntry;
+		}
+
+		public void setUserEntry(String userEntry) {
+			this.userEntry = userEntry;
+		}
+
 	
+		
 
 }

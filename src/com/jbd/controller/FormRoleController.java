@@ -4,7 +4,7 @@ package com.jbd.controller;
 import java.util.Date;
 import java.util.List;
 
-
+import javax.swing.JOptionPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -121,11 +121,24 @@ public class FormRoleController {
 					if (sysRoleRecord==null){
 						System.out.println("ERROR AL GUARDAR");
 					}else{
+						if (newRecord) {	
+							JOptionPane.showMessageDialog(null,
+								"Registro almacenado exitosamente");
+						}else{
+							JOptionPane.showMessageDialog(null,
+									"Registro actualizado exitosamente");
+								
+						}
 						System.out.println("EXITO AL GUARDAR");
 						resetValues();
 						refreshList();
 						initModeEnabled();
 					}
+				}else{
+					JOptionPane.showMessageDialog(null,
+							"Los campos marcados en rojo son obligatorios y presentan errores.\n "
+							+ "A continuacion se muestra el detalle de errores:\n" + error);
+
 				}
 			
 		}
@@ -181,20 +194,24 @@ public class FormRoleController {
 	
 	public String validateRecord() {
 		 defaultLabel();
-		String errorMessage = null;	
+		 String errorString = null;
+			StringBuilder errorMessage = new StringBuilder();
+			int messageErrorNumber = 1;	
 
 		if (roleCode.getText() == null || roleCode.getText().isEmpty()){
-			errorMessage = "El campo codigo es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo codigo es obligatorio.\n");
+			messageErrorNumber++;
 			lblRoleCode.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 		if (roleName.getText() == null || roleName.getText().isEmpty()){
-			errorMessage = "El campo nombre es obligatorio. ";
+			errorMessage.append(messageErrorNumber+"-"+"El campo nombre es obligatorio.\n");
+			messageErrorNumber++;
 			lblRoleName.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 		
-		return errorMessage;			
+		return errorString;			
 	}
 	
 	public void refreshList(){

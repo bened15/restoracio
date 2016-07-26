@@ -3,6 +3,8 @@ package com.jbd.controller;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -120,11 +122,24 @@ public class FormAreaController {
 			if (restAreaRecord == null) {
 				System.out.println("ERROR AL GUARDAR");
 			} else {
+				if (newRecord) {	
+					JOptionPane.showMessageDialog(null,
+						"Registro almacenado exitosamente");
+				}else{
+					JOptionPane.showMessageDialog(null,
+							"Registro actualizado exitosamente");
+						
+				}
 				System.out.println("EXITO AL GUARDAR");
 				resetValues();
 				refreshList();
 				initModeEnabled();
 			}
+		}else{
+			JOptionPane.showMessageDialog(null,
+					"Los campos marcados en rojo son obligatorios y presentan errores.\n "
+					+ "A continuacion se muestra el detalle de errores:\n" + error);
+
 		}
 
 	}
@@ -174,24 +189,25 @@ public class FormAreaController {
 
 	public String validateRecord() {
 		defaultLabel();
-		String errorMessage = null;
-
+		String errorString = null;
+		StringBuilder errorMessage = new StringBuilder();
+		int messageErrorNumber = 1;
+		
 		if (isSmokingArea.getValue() == null) {
-			errorMessage = "El campo area de fumadores es obligatorio";
+			errorMessage.append(messageErrorNumber+"-"+ "El campo area de fumadores es obligatorio.\n");
+			messageErrorNumber++;
 			lblRestAreaIsSmoker.setTextFill(Color.web("#ff0000"));
 			// return errorMessage;
 		}
 		if (areaName.getText() == null || areaName.getText().isEmpty()) {
-			errorMessage = "El campo nombre es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo nombre es obligatorio..\n");
+			messageErrorNumber++;
 			lblRestArea.setTextFill(Color.web("#ff0000"));
 			// return errorMessage;
 		}
 
-		if (errorMessage != null) {
-			lblError.setText("Los campos marcados en rojo son obligatorios.");
-			lblError.setTextFill(Color.web("#ff0000"));
-		}
-		return errorMessage;
+		
+		return errorString;
 	}
 
 	public void refreshList() {

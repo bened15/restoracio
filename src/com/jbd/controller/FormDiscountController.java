@@ -3,6 +3,8 @@ package com.jbd.controller;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -145,11 +147,24 @@ public class FormDiscountController {
 			if (discountRecord == null) {
 				System.out.println("ERROR AL GUARDAR");
 			} else {
+				if (newRecord) {	
+					JOptionPane.showMessageDialog(null,
+						"Registro almacenado exitosamente");
+				}else{
+					JOptionPane.showMessageDialog(null,
+							"Registro actualizado exitosamente");
+						
+				}
 				System.out.println("EXITO AL GUARDAR");
 				resetValues();
 				refreshList();
 				initModeEnabled();
 			}
+		}else{
+			JOptionPane.showMessageDialog(null,
+					"Los campos marcados en rojo son obligatorios y presentan errores.\n "
+					+ "A continuacion se muestra el detalle de errores:\n" + error);
+
 		}
 
 	}
@@ -205,47 +220,57 @@ public class FormDiscountController {
 
 	public String validateRecord() {
 		defaultLabel();
-		String errorMessage = null;
+		String errorString = null;
+		StringBuilder errorMessage = new StringBuilder();
+		int messageErrorNumber = 1;		
 		int begin_time =0;
 		int end_time =0;
 		Date begin_date = null;
 		Date end_date = null;
 		
 		if (discountName.getText() == null || discountName.getText().isEmpty()) {
-			errorMessage = "El campo nombre es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo nombre es obligatorio.\n");
+			messageErrorNumber++;
 			lblDiscountName.setTextFill(Color.web("#ff0000"));
 		}
 		if (discountPercentage.getText() == null || discountPercentage.getText().isEmpty()) {
-			errorMessage = "El campo porcentaje es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo porcentaje es obligatorio.\n");
+			messageErrorNumber++;
 			lblDiscountPercentage.setTextFill(Color.web("#ff0000"));
 		} else {
 			if (!gf.validNumber(discountPercentage.getText())) {
-				errorMessage = "El campo porcentaje debe ser un numero";
+				errorMessage.append(messageErrorNumber+"-"+"El campo porcentaje debe ser un numero.\n");
+			messageErrorNumber++;
 				lblDiscountPercentage.setTextFill(Color.web("#ff0000"));
 			}
 		}
 
 		if (discountBeginDate.getValue() == null) {
-			errorMessage = "El campo de fecha de inicio es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo de fecha de inicio es obligatorio.\n");
+			messageErrorNumber++;
 			lblDiscountBeginDate.setTextFill(Color.web("#ff0000"));
 		}
 		if (discountBeginTime.getText() == null || discountBeginTime.getText().isEmpty()) {
-			errorMessage = "El campo hora inicio es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo hora inicio es obligatorio.\n");
+			messageErrorNumber++;
 			lblDiscountBeginTime.setTextFill(Color.web("#ff0000"));
 		} else {
 			if (!gf.validNumber(discountBeginTime.getText())) {
-				errorMessage = "El campo hora inicio debe ser un numero";
+				errorMessage.append(messageErrorNumber+"-"+"El campo hora inicio debe ser un numero.\n");
+			messageErrorNumber++;
 				lblDiscountBeginTime.setTextFill(Color.web("#ff0000"));
 			}else{
 				begin_time = gf.asInteger(discountBeginTime.getText());
 				if ( begin_time < 0 || begin_time >2359){
-					errorMessage = "El campo hora inicio no es una hora valida (Formato HH24Mi).";
+					errorMessage.append(messageErrorNumber+"-"+"El campo hora inicio no es una hora valida (Formato HH24Mi).\n");
+			messageErrorNumber++;
 					lblDiscountBeginTime.setTextFill(Color.web("#ff0000"));					
 				}else{
 					if (discountBeginDate.getValue() != null){
 						begin_date = manageDiscount.convertToDate(gf.asDate(discountBeginDate.getValue()), discountBeginTime.getText());
 						if (begin_date == null){
-							errorMessage = "El campo hora inicio no es una hora valida (Formato HH24Mi).";
+							errorMessage.append(messageErrorNumber+"-"+"El campo hora inicio no es una hora valida (Formato HH24Mi).\n");
+			messageErrorNumber++;
 							lblDiscountBeginTime.setTextFill(Color.web("#ff0000"));												
 						}
 					}
@@ -255,26 +280,31 @@ public class FormDiscountController {
 
 
 		if (discountEndDate.getValue() == null) {
-			errorMessage = "El campo de fecha fin es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo de fecha fin es obligatorio.\n");
+			messageErrorNumber++;
 			lblDiscountEndDate.setTextFill(Color.web("#ff0000"));
 		}
 		if (discountEndTime.getText() == null || discountEndTime.getText().isEmpty()) {
-			errorMessage = "El campo hora inicio es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo hora inicio es obligatorio.\n");
+			messageErrorNumber++;
 			lblDiscountEndTime.setTextFill(Color.web("#ff0000"));
 		} else {
 			if (!gf.validNumber(discountEndTime.getText())) {
-				errorMessage = "El campo hora inicio debe ser un numero";
+				errorMessage.append(messageErrorNumber+"-"+"El campo hora inicio debe ser un numero.\n");
+			messageErrorNumber++;
 				lblDiscountEndTime.setTextFill(Color.web("#ff0000"));
 			}else{
 				end_time = gf.asInteger(discountEndTime.getText());
 				if ( end_time < 0 || end_time >2359){
-					errorMessage = "El campo hora fin no es una hora valida (Formato HH24Mi).";
+					errorMessage.append(messageErrorNumber+"-"+"El campo hora fin no es una hora valida (Formato HH24Mi).\n");
+			messageErrorNumber++;
 					lblDiscountEndTime.setTextFill(Color.web("#ff0000"));					
 				}else{
 					if (discountEndDate.getValue() != null){
 						end_date = manageDiscount.convertToDate(gf.asDate(discountEndDate.getValue()), discountEndTime.getText());
 						if (end_date == null){
-							errorMessage = "El campo hora fin no es una hora valida (Formato HH24Mi).";
+							errorMessage.append(messageErrorNumber+"-"+"El campo hora fin no es una hora valida (Formato HH24Mi).\n");
+			messageErrorNumber++;
 							lblDiscountEndTime.setTextFill(Color.web("#ff0000"));												
 						}
 					}
@@ -284,7 +314,8 @@ public class FormDiscountController {
 		}
 		if (begin_date != null && end_date != null){
 			if(begin_date.after(end_date)) {
-				errorMessage = "La fecha y hora de fin del descuento debe ser mayor que la fecha y hora de inicio del descuento";
+				errorMessage.append(messageErrorNumber+"-"+"La fecha y hora de fin del descuento debe ser mayor que la fecha y hora de inicio del descuento.\n");
+			messageErrorNumber++;
 				lblDiscountEndDate.setTextFill(Color.web("#ff0000"));
 				lblDiscountEndTime.setTextFill(Color.web("#ff0000"));												
 				
@@ -292,7 +323,7 @@ public class FormDiscountController {
 			
 		}
 
-		return errorMessage;
+		return errorString;
 	}
 
 	public void refreshList() {

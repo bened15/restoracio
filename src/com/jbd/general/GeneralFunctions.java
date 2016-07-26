@@ -25,11 +25,21 @@ public class GeneralFunctions {
 		try {
 			value = Integer.parseInt(valueStr);
 		} catch (NumberFormatException e) {
+		    value = 0;
+		}
+		return  value;
+	}
+
+	public int asPositiveInteger(String valueStr){
+		int value;
+		try {
+			value = Integer.parseInt(valueStr);
+		} catch (NumberFormatException e) {
 		    value = -1;
 		}
 		return  value;
 	}
-	
+
 	public float asFloat(String valueStr){
 		float value;
 		try {

@@ -4,6 +4,8 @@ package com.jbd.controller;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -157,11 +159,24 @@ public class FormReservationController {
 					if (reservationRecord==null){
 						System.out.println("ERROR AL GUARDAR");
 					}else{
+						if (newRecord) {	
+							JOptionPane.showMessageDialog(null,
+								"Registro almacenado exitosamente");
+						}else{
+							JOptionPane.showMessageDialog(null,
+									"Registro actualizado exitosamente");
+								
+						}
 						System.out.println("EXITO AL GUARDAR");
 						resetValues();
 						refreshList();
 						initModeEnabled();
 					}
+				}else{
+					JOptionPane.showMessageDialog(null,
+							"Los campos marcados en rojo son obligatorios y presentan errores.\n "
+							+ "A continuacion se muestra el detalle de errores:\n" + error);
+
 				}
 			
 		}
@@ -224,30 +239,36 @@ public class FormReservationController {
 	
 	public String validateRecord() {
 		 defaultLabel();
-		String errorMessage = null;	
+		 String errorString = null;
+			StringBuilder errorMessage = new StringBuilder();
+			int messageErrorNumber = 1;		
 
 		if (reservationCustomer.getValue()==null){
-			errorMessage = "El campo cliente  es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo cliente  es obligatorio.\n");
+			messageErrorNumber++;
 			lblReservationCustomer.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 		if (reservationDate.getValue()==null){
-			errorMessage = "El campo fecha  es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo fecha  es obligatorio.\n");
+			messageErrorNumber++;
 			lblReservationDate.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 		if (reservationPaymentMethod.getValue()==null){
-			errorMessage = "El campo tipo de pago  es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo tipo de pago  es obligatorio.\n");
+			messageErrorNumber++;
 			lblReservationPaymentMethod.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 		if (reservationAdvancePayment.getText()==null || reservationAdvancePayment.getText().isEmpty()){
-			errorMessage = "El campo adelanto es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo adelanto es obligatorio.\n");
+			messageErrorNumber++;
 			lblReservationAdvancePayment.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 		
-		return errorMessage;			
+		return errorString;			
 	}
 	
 	public void refreshList(){

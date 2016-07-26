@@ -1,38 +1,18 @@
 package com.jbd.controller;
 
 
-import java.util.Date;
-import java.util.List;
-
-
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.jbd.hibernate.interfaces.ISysRoleManagement;
-import com.jbd.model.SysRole;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import application.Main;
 
 public class FormAdministrationController {
@@ -117,11 +97,13 @@ public class FormAdministrationController {
 	public void onMenuItemInvProduct() {
 		 try {
 		        FXMLLoader fxmlLoader = new FXMLLoader();
-		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormInvProduct.fxml"));
+		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormInvProduct3.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
 		                //stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
+		                FormInvProductController controller = fxmlLoader.<FormInvProductController>getController();
+		                controller.setUserEntry("Douglas");
 		                stage.setTitle("Registro de compras");
 		                stage.setScene(new Scene(root1));  
 		                stage.show();
@@ -185,11 +167,13 @@ public class FormAdministrationController {
 	public void onMenuItemMenu() {
 		 try {
 		        FXMLLoader fxmlLoader = new FXMLLoader();
-		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormMenu.fxml"));
+		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormMenu2.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
 		                //stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
+		                FormMenuItemController2 controller = fxmlLoader.<FormMenuItemController2>getController();
+		                controller.setUserEntry("Douglas");
 		                stage.setTitle("Registro de platos");
 		                stage.setScene(new Scene(root1));  
 		                stage.show();
@@ -293,6 +277,8 @@ public class FormAdministrationController {
 		                Stage stage = new Stage();
 		                //stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
+		                FormProductController controller = fxmlLoader.<FormProductController>getController();
+		                controller.setUserEntry("Douglas");
 		                stage.setTitle("Registro de productos");
 		                stage.setScene(new Scene(root1));  
 		                stage.show();

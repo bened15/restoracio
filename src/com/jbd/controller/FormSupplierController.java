@@ -4,7 +4,7 @@ package com.jbd.controller;
 import java.util.Date;
 import java.util.List;
 
-
+import javax.swing.JOptionPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -125,11 +125,25 @@ public class FormSupplierController {
 					if (supplierRecord==null){
 						System.out.println("ERROR AL GUARDAR");
 					}else{
+						if (newRecord) {	
+							JOptionPane.showMessageDialog(null,
+								"Registro almacenado exitosamente");
+						}else{
+							JOptionPane.showMessageDialog(null,
+									"Registro actualizado exitosamente");
+								
+						}
+
 						System.out.println("EXITO AL GUARDAR");
 						resetValues();
 						refreshList();
 						initModeEnabled();
 					}
+				}else{
+					JOptionPane.showMessageDialog(null,
+							"Los campos marcados en rojo son obligatorios y presentan errores.\n "
+							+ "A continuacion se muestra el detalle de errores:\n" + error);
+
 				}
 			
 		}
@@ -192,25 +206,30 @@ public class FormSupplierController {
 	
 	public String validateRecord() {
 		 defaultLabel();
-		String errorMessage = null;	
-
+		 String errorString = null;
+			StringBuilder errorMessage = new StringBuilder();
+			int messageErrorNumber = 1;	
+			
 		if (supplierName.getText() == null || supplierName.getText().isEmpty()){
-			errorMessage = "El campo nombre de proveedor es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo nombre de proveedor es obligatorio.\n");
+			messageErrorNumber++;
 			lblSupplierName.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 		if (supplierContactName.getText()== null ||supplierContactName.getText().isEmpty()){
-			errorMessage =  "El campo nombre del contacto es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo nombre del contacto es obligatorio.\n");
+			messageErrorNumber++;
 			lblSupplierContactName.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 		if (supplierContactLastname.getText()==null || supplierContactLastname.getText().isEmpty()){
-			errorMessage = "El campo apellido del contacto es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo apellido del contacto es obligatorio.\n");
+			messageErrorNumber++;
 			lblSupplierContactLastname.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 		
-		return errorMessage;			
+		return errorString;			
 	}
 	
 	public void refreshList(){

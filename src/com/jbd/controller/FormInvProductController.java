@@ -3,6 +3,8 @@ package com.jbd.controller;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -25,6 +27,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -65,6 +68,9 @@ public class FormInvProductController {
 	@FXML
 	private TextField productPrice, productQty, productAvailable;
 
+	@FXML
+	private DatePicker productExpirationDate = new DatePicker();
+
 	// Declaracion ComboBox
 	@FXML
 	private ComboBox productType, productName, transactionType;
@@ -103,7 +109,12 @@ public class FormInvProductController {
 		int productCodeSelected = invProductList.getSelectionModel().getSelectedItem().getInvProductId();
 		System.out.println("SELECTED ROW " + productCodeSelected);
 		loadRecordInformation(productCodeSelected);
-		editModeEnabled();
+		System.out.println("SELECTED ROW " + invProductItemSelected.getState());
+		if (("CLOSED").equals(invProductItemSelected.getState())){
+			initModeEnabled();
+		}else{
+			editModeEnabled();			
+		}
 	}
 
 	@FXML
@@ -135,7 +146,8 @@ public class FormInvProductController {
 			invProductItemSelected.setProductPrice(Float.parseFloat(productPrice.getText()));
 			invProductItemSelected.setProductQty(Integer.parseInt(productQty.getText()));
 			invProductItemSelected.setRestProduct((RestProduct) productName.getValue());
-			invProductItemSelected.setTransactionTypeId((String) transactionType.getValue());
+			invProductItemSelected.setTransactionTypeId((String) transactionType.getValue());			
+			invProductItemSelected.setExpirationDate(gf.asDate(productExpirationDate.getValue()));
 
 			invProductItem = new InvProductItem();
 			if (newRecord) {
@@ -149,11 +161,24 @@ public class FormInvProductController {
 			if (invProductItem == null) {
 				System.out.println("ERROR AL GUARDAR");
 			} else {
+				if (newRecord) {	
+					JOptionPane.showMessageDialog(null,
+						"Registro almacenado exitosamente");
+				}else{
+					JOptionPane.showMessageDialog(null,
+							"Registro actualizado exitosamente");
+						
+				}
 				System.out.println("EXITO AL GUARDAR");
 				resetValues();
 				refreshList();
 				initModeEnabled();
 			}
+		}else{
+			JOptionPane.showMessageDialog(null,
+					"Los campos marcados en rojo son obligatorios y presentan errores.\n "
+					+ "A continuacion se muestra el detalle de errores:\n" + error);
+
 		}
 
 	}
@@ -203,36 +228,43 @@ public class FormInvProductController {
 		productType.getSelectionModel().select(null);
 		productName.getSelectionModel().select(null);
 		transactionType.getSelectionModel().select(null);
+		 productExpirationDate.setValue(null);
 
 	}
 
 	public String validateRecord() {
 		defaultLabel();
-		String errorMessage = null;
+		String errorString = null;
+		StringBuilder errorMessage = new StringBuilder();
+		int messageErrorNumber = 1;	
 
 		if (productPrice.getText() == null || productPrice.getText().isEmpty()) {
-			errorMessage = "El campo precio es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo precio es obligatorio.\n");
+			messageErrorNumber++;
 			lblProductPrice.setTextFill(Color.web("#ff0000"));
 			// return errorMessage;
 		} else {
 			if (!gf.validNumber(productPrice.getText())) {
-				errorMessage = "El campo precio debe ser un numero.";
+				errorMessage.append(messageErrorNumber+"-"+"El campo precio debe ser un numero.\n");
+			messageErrorNumber++;
 				lblProductPrice.setTextFill(Color.web("#ff0000"));
 
 			}
 		}
 		if (productName.getValue() == null) {
-			errorMessage = "El campo product es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo product es obligatorio.\n");
+			messageErrorNumber++;
 			lblProduct.setTextFill(Color.web("#ff0000"));
 
 		}
 		if (transactionType.getValue() == null) {
-			errorMessage = "El campo Transaccion es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo Transaccion es obligatorio.\n");
+			messageErrorNumber++;
 			lblTransactionType.setTextFill(Color.web("#ff0000"));
 
 		}
 
-		return errorMessage;
+		return errorString;
 	}
 
 	public void refreshList() {
@@ -286,6 +318,7 @@ public class FormInvProductController {
 		productPrice.setText(invProductItemSelected.getProductPrice() + "");
 		productQty.setText(invProductItemSelected.getProductQty() + "");
 		productAvailable.setText(invProductItemSelected.getProductQtyAvailability() + "");
+		productExpirationDate.setValue(gf.asLocalDate(invProductItemSelected.getExpirationDate()));
 
 		// invProductItemSelected
 		if (invProductItemSelected.getRestProduct() != null) {
@@ -315,6 +348,7 @@ public class FormInvProductController {
 		productAvailable.setEditable(false);
 		productType.setDisable(false);
 		productName.setDisable(false);
+		productExpirationDate.setDisable(false);
 		transactionType.setDisable(true);
 		productQty.setEditable(false);
 		searchBtn.setDisable(false);
@@ -330,6 +364,7 @@ public class FormInvProductController {
 		productAvailable.setEditable(false);
 		productType.setDisable(false);
 		productName.setDisable(false);
+		productExpirationDate.setDisable(false);
 		transactionType.setDisable(true);
 		productQty.setEditable(false);
 		searchBtn.setDisable(false);
@@ -345,6 +380,7 @@ public class FormInvProductController {
 		productAvailable.setEditable(true);
 		productType.setDisable(false);
 		productName.setDisable(false);
+		productExpirationDate.setDisable(false);
 		transactionType.setDisable(false);
 		productQty.setEditable(true);
 		searchBtn.setDisable(false);
@@ -360,6 +396,7 @@ public class FormInvProductController {
 		productAvailable.setEditable(true);
 		productType.setDisable(false);
 		productName.setDisable(false);
+		productExpirationDate.setDisable(false);
 		transactionType.setDisable(false);
 		productQty.setEditable(true);
 
@@ -376,6 +413,7 @@ public class FormInvProductController {
 		productAvailable.setEditable(true);
 		productType.setDisable(false);
 		productName.setDisable(false);
+		productExpirationDate.setDisable(false);
 		transactionType.setDisable(false);
 		productQty.setEditable(true);
 		searchBtn.setDisable(true);
@@ -489,4 +527,13 @@ public class FormInvProductController {
 
 	}
 
+	public String getUserEntry() {
+		return userEntry;
+	}
+
+	public void setUserEntry(String userEntry) {
+		this.userEntry = userEntry;
+	}
+
+	
 }

@@ -24,6 +24,10 @@ public class InvProductItem implements Serializable {
 	@Column(name="ENTRY_DATE")
 	private Date entryDate;
 
+	@Temporal(TemporalType.DATE)
+	@Column(name="EXPIRATION_DATE")
+	private Date expirationDate;
+
 	@Column(name="ENTRY_USER")
 	private String entryUser;
 
@@ -168,6 +172,16 @@ public class InvProductItem implements Serializable {
 	public void setRestProductTypeText(String restProductTypeText) {
 		this.restProductTypeText = restProductTypeText;
 	}
+
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+	
+	
 	
 
 }

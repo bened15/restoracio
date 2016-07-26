@@ -3,6 +3,8 @@ package com.jbd.controller;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -42,7 +44,7 @@ public class FormProductController {
 	private ApplicationContext context;
 	private RestProduct productRecord;
 	private RestProduct productRecordSelected = new RestProduct();
-	private String userEntry = "Douglas";
+	private String userEntry ;
 	private GeneralFunctions gf = new GeneralFunctions();
 
 	@Autowired
@@ -149,11 +151,24 @@ public class FormProductController {
 			if (productRecord == null) {
 				System.out.println("ERROR AL GUARDAR");
 			} else {
+				if (newRecord) {	
+					JOptionPane.showMessageDialog(null,
+						"Registro almacenado exitosamente");
+				}else{
+					JOptionPane.showMessageDialog(null,
+							"Registro actualizado exitosamente");
+						
+				}
 				System.out.println("EXITO AL GUARDAR");
 				resetValues();
 				refreshList();
 				initModeEnabled();
 			}
+		}else{
+			JOptionPane.showMessageDialog(null,
+					"Los campos marcados en rojo son obligatorios y presentan errores.\n "
+					+ "A continuacion se muestra el detalle de errores:\n" + error);
+
 		}
 
 	}
@@ -211,25 +226,31 @@ public class FormProductController {
 
 	public String validateRecord() {
 		defaultLabel();
-		String errorMessage = null;
+		 String errorString = null;
+			StringBuilder errorMessage = new StringBuilder();
+			int messageErrorNumber = 1;	
+
 
 		if (productName.getText() == null || productName.getText().isEmpty()) {
-			errorMessage = "El campo nombre es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo nombre es obligatorio.\n");
+			messageErrorNumber++;
 			lblProductName.setTextFill(Color.web("#ff0000"));
 			// return errorMessage;
 		}
 		if (productType.getValue() == null) {
-			errorMessage = "El campo tipo es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo tipo es obligatorio.\n");
+			messageErrorNumber++;
 			lblProductType.setTextFill(Color.web("#ff0000"));
 
 		}
 		if (productMeasure.getValue() == null) {
-			errorMessage = "El campo unidad de medida es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo unidad de medida es obligatorio.\n");
+			messageErrorNumber++;
 			lblProductMeasure.setTextFill(Color.web("#ff0000"));
 
 		}
 
-		return errorMessage;
+		return errorString;
 	}
 
 	public void refreshList() {
@@ -507,4 +528,13 @@ public class FormProductController {
 
 	}
 
+	public String getUserEntry() {
+		return userEntry;
+	}
+
+	public void setUserEntry(String userEntry) {
+		this.userEntry = userEntry;
+	}
+
+		
 }

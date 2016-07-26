@@ -27,6 +27,9 @@ public class InvInventoryWaste implements Serializable {
 	@Column(name="ENTRY_USER")
 	private String entryUser;
 
+	@Column(name="STATE")
+	private String state;
+
 	@Column(name="PRODUCT_QTY_WASTE")
 	private int productQtyWaste;
 
@@ -78,4 +81,13 @@ public class InvInventoryWaste implements Serializable {
 		this.invProductItem = invProductItem;
 	}
 
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	
 }

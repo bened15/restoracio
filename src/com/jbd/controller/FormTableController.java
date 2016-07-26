@@ -3,6 +3,7 @@ package com.jbd.controller;
 
 import java.util.List;
 
+import javax.swing.JOptionPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -128,12 +129,25 @@ public class FormTableController {
 					if (restTableRecord==null){
 						System.out.println("ERROR AL GUARDAR");
 					}else{
+						if (newRecord) {	
+							JOptionPane.showMessageDialog(null,
+								"Registro almacenado exitosamente");
+						}else{
+							JOptionPane.showMessageDialog(null,
+									"Registro actualizado exitosamente");
+								
+						}
+
 						System.out.println("EXITO AL GUARDAR");
 						resetValues();
 						refreshList();
 						initModeEnabled();
 					}
 				} else{
+					JOptionPane.showMessageDialog(null,
+							"Los campos marcados en rojo son obligatorios y presentan errores.\n "
+							+ "A continuacion se muestra el detalle de errores:\n" + error);
+
 				}
 			
 		}
@@ -190,30 +204,36 @@ public class FormTableController {
 	
 	public String validateRecord() {
 		 defaultLabel();
-		String errorMessage = null;	
-
+		 String errorString = null;
+			StringBuilder errorMessage = new StringBuilder();
+			int messageErrorNumber = 1;	
+			
 		if (tableArea.getValue() == null ){
-			errorMessage = "El campo area es obligatorio";
+			errorMessage.append(messageErrorNumber+"-"+"El campo area es obligatorio.\n");
+			messageErrorNumber++;
 			lblRestTableArea.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 		if (tableName.getText() == null || tableName.getText().isEmpty()){
-			errorMessage = "El campo nombre es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El campo nombre es obligatorio.\n");
+			messageErrorNumber++;
 			lblRestTable.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 
 		if (tableSeatsAvailable.getText() == null || tableSeatsAvailable.getText().isEmpty()){
-			errorMessage = "El numero de sillas disponible es obligatorio.";
+			errorMessage.append(messageErrorNumber+"-"+"El numero de sillas disponible es obligatorio.\n");
+			messageErrorNumber++;
 			if (!gf.validNumber(tableSeatsAvailable.getText()) || gf.asInteger(tableSeatsAvailable.getText())==0){
-				errorMessage = "El numero de sillas debe ser un numero valido";
+				errorMessage.append(messageErrorNumber+"-"+"El numero de sillas debe ser un numero valido.\n");
+			messageErrorNumber++;
 				
 			}
 			lblRestTableSeats.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
 
-		return errorMessage;			
+		return errorString;			
 	}
 	
 	public void refreshList(){

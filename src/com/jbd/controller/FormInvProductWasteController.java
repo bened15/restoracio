@@ -3,6 +3,8 @@ package com.jbd.controller;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -11,11 +13,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.jbd.hibernate.interfaces.IRestProductManagement;
 import com.jbd.general.GeneralFunctions;
 import com.jbd.hibernate.interfaces.ICtgProductTypeManagement;
-import com.jbd.hibernate.interfaces.ICtgTransactionTypeManagement;
+import com.jbd.hibernate.interfaces.IInvInventoryWasteManagement;
 import com.jbd.hibernate.interfaces.IInvProductItemManagement;
 import com.jbd.model.RestProduct;
 import com.jbd.model.CtgProductType;
-import com.jbd.model.CtgTransactionType;
+import com.jbd.model.InvInventoryWaste;
 import com.jbd.model.InvProductItem;
 
 import javafx.beans.value.ChangeListener;
@@ -41,39 +43,38 @@ public class FormInvProductWasteController {
 
 	private Main mainApp;
 	private ApplicationContext context;
-	private InvProductItem invProductItem;
-	private InvProductItem invProductItemSelected = new InvProductItem();
+	private InvProductItem invProductItemRecord;
+	private InvProductItem invProductItemRecordSelected = new InvProductItem();
+	private InvInventoryWaste invProductWasteRecord,invProductWasteNewRecord;
 	private String userEntry = "Douglas";
 	private GeneralFunctions gf = new GeneralFunctions();
 
 	@Autowired
 	private IInvProductItemManagement manageInvProductItem;
 	@Autowired
+	private IInvInventoryWasteManagement manageInvProductWaste;
+	@Autowired
 	private IRestProductManagement manageProduct;
 	@Autowired
 	private ICtgProductTypeManagement manageProductType;
-	@Autowired
-	private ICtgTransactionTypeManagement manageTransactionType;
 	// Declaracion Labels
 	@FXML
-	private Label lblProduct, lblProductPrice, lblProductQty, lblTransactionType;
+	private Label lblProductWaste;
 
 	// Declaracion Botones
 	@FXML
 	private Button newBtn, saveBtn, searchBtn, clearBtn;
 	// Declaracion Campos
 	@FXML
-	private TextField productPrice, productQty, productAvailable;
+	private TextField productPrice, productQty, productAvailable, productPurchaseDate, transactionType,productWaste;
 
 	// Declaracion ComboBox
 	@FXML
-	private ComboBox productType, productName, transactionType;
+	private ComboBox productType, productName;
 	@FXML
 	private ObservableList<CtgProductType> productTypeData = FXCollections.observableArrayList();
 	@FXML
 	private ObservableList<RestProduct> productNameData = FXCollections.observableArrayList();
-	@FXML
-	private ObservableList<CtgTransactionType> transactionTypeData = FXCollections.observableArrayList();
 
 	// Declaracion Tablas
 	@FXML
@@ -103,7 +104,7 @@ public class FormInvProductWasteController {
 		int productCodeSelected = invProductList.getSelectionModel().getSelectedItem().getInvProductId();
 		System.out.println("SELECTED ROW " + productCodeSelected);
 		loadRecordInformation(productCodeSelected);
-		//editModeEnabled();
+		editModeEnabled();
 	}
 
 	@FXML
@@ -124,29 +125,19 @@ public class FormInvProductWasteController {
 		String error = validateRecord();
 		System.out.println(error);
 		if (error == null) {
-			boolean newRecord = false;
-			if (invProductItemSelected.getInvProductId() == 0) {
-				newRecord = true;
-			}
-			invProductItemSelected.setEntryDate(new Date());
-			invProductItemSelected.setEntryUser(userEntry);
-			invProductItemSelected.setRestProduct((RestProduct) productName.getValue());
-			invProductItemSelected.setState("OPEN");
-			invProductItemSelected.setProductPrice(Float.parseFloat(productPrice.getText()));
-			invProductItemSelected.setProductQty(Integer.parseInt(productQty.getText()));
-			invProductItemSelected.setRestProduct((RestProduct) productName.getValue());
-			invProductItemSelected.setTransactionTypeId((String) transactionType.getValue());
-
-			invProductItem = new InvProductItem();
-			if (newRecord) {
+			invProductWasteNewRecord = new InvInventoryWaste();
+			invProductWasteNewRecord.setEntryDate(new Date());
+			invProductWasteNewRecord.setEntryUser(userEntry);
+			invProductWasteNewRecord.setInvProductItem(invProductItemRecordSelected);
+			invProductWasteNewRecord.setProductQtyWaste(Integer.parseInt(productWaste.getText()));
+			
+			invProductWasteRecord = new InvInventoryWaste();
 				System.out.println("NUEVO");
-				invProductItem = manageInvProductItem.insertInvProductItem(invProductItemSelected);
+				invProductWasteRecord = manageInvProductWaste.insertInvInventoryWaste(invProductWasteNewRecord);
+				JOptionPane.showMessageDialog(null,
+						"Registro almacenado exitosamente");
 
-			} else {
-				System.out.println("UPDATE");
-				invProductItem = manageInvProductItem.updateInvProductItem(invProductItemSelected);
-			}
-			if (invProductItem == null) {
+			if (invProductWasteRecord == null) {
 				System.out.println("ERROR AL GUARDAR");
 			} else {
 				System.out.println("EXITO AL GUARDAR");
@@ -154,6 +145,11 @@ public class FormInvProductWasteController {
 				refreshList();
 				initModeEnabled();
 			}
+		}else{
+			JOptionPane.showMessageDialog(null,
+					"Los campos marcados en rojo son obligatorios y presentan errores.\n "
+					+ "A continuacion se muestra el detalle de errores:\n" + error);
+
 		}
 
 	}
@@ -195,44 +191,56 @@ public class FormInvProductWasteController {
 	}
 
 	public void resetValues() {
-		invProductItemSelected = new InvProductItem();
+		invProductItemRecordSelected = new InvProductItem();
 
 		productPrice.setText("");
 		productQty.setText("");
 		productAvailable.setText("");
 		productType.getSelectionModel().select(null);
 		productName.getSelectionModel().select(null);
-		transactionType.getSelectionModel().select(null);
-
+		transactionType.setText("");
+		productPurchaseDate.setText("");
 	}
 
 	public String validateRecord() {
 		defaultLabel();
-		String errorMessage = null;
+		String errorString = null;
+		StringBuilder errorMessage = new StringBuilder();
+		int messageErrorNumber = 1;
 
-		if (productPrice.getText() == null || productPrice.getText().isEmpty()) {
-			errorMessage = "El campo precio es obligatorio.";
-			lblProductPrice.setTextFill(Color.web("#ff0000"));
+		if (productWaste.getText() == null || productWaste.getText().isEmpty()) {
+			
+			errorMessage.append(messageErrorNumber+"-"+"El campo desperdicio es obligatorio.\n");
+			messageErrorNumber++;
+			lblProductWaste.setTextFill(Color.web("#ff0000"));
 			// return errorMessage;
 		} else {
-			if (!gf.validNumber(productPrice.getText())) {
-				errorMessage = "El campo precio debe ser un numero.";
-				lblProductPrice.setTextFill(Color.web("#ff0000"));
+			if (!gf.validNumber(productWaste.getText())) {
+				errorMessage.append(messageErrorNumber+"-"+"El campo desperdicio debe ser un numero.\n");
+				messageErrorNumber++;
+				lblProductWaste.setTextFill(Color.web("#ff0000"));
 
+			}else{
+				int waste = gf.asPositiveInteger(productWaste.getText());
+				if (waste>0){
+					if (waste> invProductItemRecordSelected.getProductQty()){						
+						errorMessage.append(messageErrorNumber+"-"+"El campo desperdicio supera la cantidad disponible del producto.\n");
+						messageErrorNumber++;
+						lblProductWaste.setTextFill(Color.web("#ff0000"));					
+					}
+				}else{
+					errorMessage.append(messageErrorNumber+"-"+"El campo desperdicio debe ser un numero positivo sin decimales.\n");
+					messageErrorNumber++;
+					lblProductWaste.setTextFill(Color.web("#ff0000"));					
+				}
 			}
+			
 		}
-		if (productName.getValue() == null) {
-			errorMessage = "El campo product es obligatorio.";
-			lblProduct.setTextFill(Color.web("#ff0000"));
-
-		}
-		if (transactionType.getValue() == null) {
-			errorMessage = "El campo Transaccion es obligatorio.";
-			lblTransactionType.setTextFill(Color.web("#ff0000"));
-
+		if (errorMessage!= null){
+			errorString = errorMessage.toString();
 		}
 
-		return errorMessage;
+		return errorString;
 	}
 
 	public void refreshList() {
@@ -282,29 +290,24 @@ public class FormInvProductWasteController {
 	}
 
 	public void loadRecordInformation(int productCodePrm) {
-		invProductItemSelected = manageInvProductItem.findInvProductItem(productCodePrm);
-		productPrice.setText(invProductItemSelected.getProductPrice() + "");
-		//productQty.setText(invProductItemSelected.getProductQty() + "");
-		productAvailable.setText(invProductItemSelected.getProductQtyAvailability() + "");
-
-		// invProductItemSelected
-		if (invProductItemSelected.getRestProduct() != null) {
-			productType.setValue(invProductItemSelected.getRestProduct().getCtgProductType());
+		invProductItemRecordSelected = manageInvProductItem.findInvProductItem(productCodePrm);
+		productPrice.setText(invProductItemRecordSelected.getProductPrice() + "");
+		productQty.setText(invProductItemRecordSelected.getProductQty() + "");
+		productAvailable.setText(invProductItemRecordSelected.getProductQtyAvailability() + "");
+		transactionType.setText(invProductItemRecordSelected.getTransactionTypeId());
+		productPurchaseDate.setText(invProductItemRecordSelected.getEntryDate().toString());
+		// invProductItemRecordSelected
+		if (invProductItemRecordSelected.getRestProduct() != null) {
+			productType.setValue(invProductItemRecordSelected.getRestProduct().getCtgProductType());
 		} else {
 			productType.getSelectionModel().select(null);
 
 		}
 
-		if (invProductItemSelected.getRestProduct() != null) {
-			productName.setValue(invProductItemSelected.getRestProduct());
+		if (invProductItemRecordSelected.getRestProduct() != null) {
+			productName.setValue(invProductItemRecordSelected.getRestProduct());
 		} else {
 			productName.getSelectionModel().select(null);
-
-		}
-		if (invProductItemSelected.getTransactionTypeId() != null) {
-			transactionType.setValue(invProductItemSelected.getTransactionTypeId());
-		} else {
-			transactionType.getSelectionModel().select(null);
 
 		}
 
@@ -313,12 +316,14 @@ public class FormInvProductWasteController {
 	public void defaultModeEnabled() {
 		productPrice.setEditable(false);
 		productAvailable.setEditable(false);
+		transactionType.setEditable(false);
+		productQty.setEditable(false);
+		productPurchaseDate.setEditable(false);
+		productWaste.setEditable(false);
+
 		productType.setDisable(false);
 		productName.setDisable(false);
-		transactionType.setDisable(true);
-		productQty.setEditable(false);
 		searchBtn.setDisable(false);
-		newBtn.setDisable(false);
 		clearBtn.setDisable(false);
 		clearBtn.setText("Limpiar");
 		saveBtn.setDisable(true);
@@ -328,12 +333,14 @@ public class FormInvProductWasteController {
 	public void initModeEnabled() {
 		productPrice.setEditable(false);
 		productAvailable.setEditable(false);
+		transactionType.setEditable(false);
+		productQty.setEditable(false);
+		productPurchaseDate.setEditable(false);
+		productWaste.setEditable(false);
+
 		productType.setDisable(false);
 		productName.setDisable(false);
-		transactionType.setDisable(true);
-		productQty.setEditable(false);
 		searchBtn.setDisable(false);
-		newBtn.setDisable(false);
 		saveBtn.setDisable(true);
 		clearBtn.setDisable(false);
 		clearBtn.setText("Limpiar");
@@ -341,14 +348,16 @@ public class FormInvProductWasteController {
 	}
 
 	public void rowSelectedModeEnabled() {
-		productPrice.setEditable(true);
-		productAvailable.setEditable(true);
-		productType.setDisable(false);
-		productName.setDisable(false);
-		transactionType.setDisable(false);
-		productQty.setEditable(true);
+		productPrice.setEditable(false);
+		productAvailable.setEditable(false);
+		transactionType.setEditable(false);
+		productQty.setEditable(false);
+		productPurchaseDate.setEditable(false);
+		productWaste.setEditable(true);
+
+		productType.setDisable(true);
+		productName.setDisable(true);
 		searchBtn.setDisable(false);
-		newBtn.setDisable(false);
 		saveBtn.setDisable(true);
 		clearBtn.setDisable(false);
 		clearBtn.setText("Limpiar");
@@ -356,15 +365,16 @@ public class FormInvProductWasteController {
 
 	public void editModeEnabled() {
 
-		productPrice.setEditable(true);
-		productAvailable.setEditable(true);
-		productType.setDisable(false);
-		productName.setDisable(false);
-		transactionType.setDisable(false);
-		productQty.setEditable(true);
+		productPrice.setEditable(false);
+		productAvailable.setEditable(false);
+		transactionType.setEditable(false);
+		productQty.setEditable(false);
+		productPurchaseDate.setEditable(false);
+		productWaste.setEditable(true);
 
+		productType.setDisable(true);
+		productName.setDisable(true);
 		searchBtn.setDisable(true);
-		newBtn.setDisable(true);
 		saveBtn.setDisable(false);
 		clearBtn.setDisable(false);
 		clearBtn.setText("Cancelar");
@@ -386,9 +396,7 @@ public class FormInvProductWasteController {
 	}
 
 	public void defaultLabel() {
-		lblProductQty.setTextFill(Color.web("#000000"));
-		lblProduct.setTextFill(Color.web("#000000"));
-		lblProductPrice.setTextFill(Color.web("#000000"));
+		lblProductWaste.setTextFill(Color.web("#000000"));
 
 	}
 
@@ -404,13 +412,6 @@ public class FormInvProductWasteController {
 
 		productNameData.clear();
 		productName.setItems(productNameData);
-		transactionTypeData.clear();
-		List<CtgTransactionType> transactionList = manageTransactionType.findbyAdittion(1);
-		for (CtgTransactionType r : transactionList) {
-			transactionTypeData.add(r);
-		}
-		transactionType.setItems(transactionTypeData);
-
 	}
 
 	public void alterComboBoxProperties() {
@@ -471,23 +472,7 @@ public class FormInvProductWasteController {
 			}
 		});
 
-		transactionType.setCellFactory(new Callback<ListView<CtgTransactionType>, ListCell<CtgTransactionType>>() {
-			@Override
-			public ListCell<CtgTransactionType> call(ListView<CtgTransactionType> p) {
-				final ListCell<CtgTransactionType> cell = new ListCell<CtgTransactionType>() {
-					@Override
-					protected void updateItem(CtgTransactionType t, boolean bln) {
-						super.updateItem(t, bln);
-						if (t != null) {
-							setText(t.getTransactionTypeId() + " - " + t.getTransactionTypeName());
-						} else {
-							setText(null);
-						}
-					}
-				};
-				return cell;
-			}
-		});
+		
 
 	}
 

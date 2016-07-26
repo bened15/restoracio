@@ -32,9 +32,17 @@ public class InvInventoryWasteManagementDAO implements IInvInventoryWasteManagem
 
 	}
 
+	@Transactional
 	@Override
-	public void updateInvInventoryWaste(InvInventoryWaste o) {
+	public InvInventoryWaste updateInvInventoryWaste(InvInventoryWaste o) {
 		// TODO Auto-generated method stub
+		try {
+			em.merge(o);
+			return o;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
