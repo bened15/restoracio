@@ -1,10 +1,12 @@
 package com.jbd.controller;
 
+import java.io.ByteArrayInputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +72,8 @@ public class PaymentController {
 	private Label totalPropina, totalRecibido, totalCuenta, totalCambio, totalDescuento;
 	@FXML
 	private AnchorPane headerAP;
+	@FXML
+	private AnchorPane principal;
 	@FXML
 	private TableView<RestOrder> ordersTable = new TableView<RestOrder>();
 	private static final ChoiceBox facturaAPagar = new ChoiceBox();
@@ -325,19 +329,27 @@ public class PaymentController {
 	}
 
 	private void askForCardNumber() {
+		Label l = new Label();
+		l.setLayoutY(10);
+		l.setLayoutX(10.0);
+		l.setText("Seleccione primero la tarjeta y luego ingresa la informacion correspondiente");
+		Stage st = new Stage();
+		st.initModality(Modality.WINDOW_MODAL);
+		st.initOwner(secondaryStage);
 
-		Pane p = new Pane();
+		AnchorPane p = new AnchorPane();
+
 		p.setStyle("-fx-background-color:#9fb9b9");
-		p.setLayoutX(218.0);
+		// p.setLayoutX(218.0);
 
-		p.setLayoutY(-9.0);
+		// p.setLayoutY(40.0);
 		p.setPrefHeight(200.0);
-		p.setPrefWidth(381.0);
+		p.setPrefWidth(450.0);
 
 		TextField txtComment = new TextField();
 		txtComment.setLayoutX(10.0);
 
-		txtComment.setLayoutY(80.0);
+		txtComment.setLayoutY(110.0);
 		txtComment.setPrefWidth(375.0);
 		txtComment.setDisable(true);
 
@@ -347,29 +359,33 @@ public class PaymentController {
 		Button other = new Button();
 
 		visa.setLayoutX(10);
-		visa.setLayoutY(10);
+		visa.setLayoutY(35);
 		visa.setPrefHeight(50);
 		visa.setPrefWidth(90);
+		visa.setMaxSize(90.0, 50.0);
 
-		mCard.setLayoutX(110);
-		mCard.setLayoutY(10);
+		mCard.setLayoutX(120);
+		mCard.setLayoutY(35);
 		mCard.setPrefHeight(50);
 		mCard.setPrefWidth(90);
+		mCard.setMaxSize(90.0, 50.0);
 
-		aExpress.setLayoutX(200);
-		aExpress.setLayoutY(10);
+		aExpress.setLayoutX(230);
+		aExpress.setLayoutY(35);
 		aExpress.setPrefHeight(50);
 		aExpress.setPrefWidth(90);
+		aExpress.setMaxSize(90.0, 50.0);
 
-		other.setLayoutX(300);
-		other.setLayoutY(10);
+		other.setLayoutX(340);
+		other.setLayoutY(35);
 		other.setPrefHeight(50);
 		other.setPrefWidth(90);
+		other.setMaxSize(90.0, 50.0);
+		other.setText("Otro");
 
-		visa.setStyle(
-				"-fx-background-image:url('/com/jbd/images/visa.png');-fx-background-repeat: stretch;-fx-background-position: top left;");
-		mCard.setStyle("-fx-background-image:url('/com/jbd/images/master_card.jpg');");
-		aExpress.setStyle("-fx-background-image:url('/com/jbd/images/aex.png');");
+		visa.setStyle("-fx-graphic:url('/com/jbd/images/visa2.png');");
+		mCard.setStyle("-fx-graphic:url('/com/jbd/images/master_card.jpg');");
+		aExpress.setStyle("-fx-graphic:url('/com/jbd/images/aex.png');");
 
 		txtComment.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
@@ -378,7 +394,8 @@ public class PaymentController {
 				if (event.getCode().equals(KeyCode.ENTER)) {
 					commentForPaymentMethod = commentForPaymentMethod + txtComment.getText();
 					disableButtons(false);
-					headerAP.getChildren().remove(p);
+					// headerAP.getChildren().remove(p);
+					st.close();
 
 				}
 
@@ -386,6 +403,7 @@ public class PaymentController {
 					commentForPaymentMethod = "";
 					disableButtons(false);
 					headerAP.getChildren().remove(p);
+					st.close();
 				}
 
 			}
@@ -422,62 +440,30 @@ public class PaymentController {
 			@Override
 			public void handle(MouseEvent arg0) {
 				txtComment.setDisable(false);
-				commentForPaymentMethod = "American Express ";
+				commentForPaymentMethod = "Other ";
 			}
 
 		});
 
+		p.getChildren().add(l);
 		p.getChildren().add(txtComment);
 		p.getChildren().add(visa);
 		p.getChildren().add(mCard);
 		p.getChildren().add(aExpress);
-		headerAP.getChildren().add(p);
-		efe.applyFadeTransitionToTextField(txtComment);
-		txtComment.requestFocus();
+		p.getChildren().add(other);
+		Scene scene = new Scene(p);
+		st.setScene(scene);
+		st.show();
+		// principal.getChildren().add(p);
+		// efe.applyFadeTransitionToTextField(txtComment);
+		// txtComment.requestFocus();
 
 	}
 
 	private void askForCuponNumber() {
-
-		Pane p = new Pane();
-		p.setStyle("-fx-background-color:#9fb9b9");
-		p.setLayoutX(218.0);
-
-		p.setLayoutY(-9.0);
-		p.setPrefHeight(200.0);
-		p.setPrefWidth(381.0);
-
-		TextField txtComment = new TextField();
-		txtComment.setLayoutX(10.0);
-
-		txtComment.setLayoutY(80.0);
-		txtComment.setPrefWidth(375.0);
-
-		txtComment.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-			@Override
-			public void handle(KeyEvent event) {
-				if (event.getCode().equals(KeyCode.ENTER)) {
-					commentForPaymentMethod = "Cupon # " + txtComment.getText();
-					disableButtons(false);
-					headerAP.getChildren().remove(p);
-
-				}
-
-				if (event.getCode().equals(KeyCode.ESCAPE)) {
-					commentForPaymentMethod = "";
-					disableButtons(false);
-					headerAP.getChildren().remove(p);
-				}
-
-			}
-		});
-
-		p.getChildren().add(txtComment);
-
-		headerAP.getChildren().add(p);
-		efe.applyFadeTransitionToTextField(txtComment);
-		txtComment.requestFocus();
+		String cuponNum = JOptionPane.showInputDialog("Ingrese el numero de cupon");
+		commentForPaymentMethod = "Cupon # " + cuponNum;
+		disableButtons(false);
 
 	}
 
@@ -595,6 +581,22 @@ public class PaymentController {
 
 		}
 	}
+
+	// private void loadImg() {
+	//
+	// ByteArrayInputStream bais = new
+	// ByteArrayInputStream(menuItemSelected.getMenuImage());
+	// BufferedImage imageBuffer;
+	// try {
+	// imageBuffer = ImageIO.read(bais);
+	// Image imageLoad = SwingFXUtils.toFXImage(imageBuffer, null);
+	// menuItemImage.setImage(imageLoad);
+	// } catch (IOException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	//
+	// }
 
 	private void refreshTable() {
 

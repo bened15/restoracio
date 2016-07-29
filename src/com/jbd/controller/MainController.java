@@ -465,6 +465,7 @@ public class MainController {
 							billsNo.add("7");
 							billsNo.add("8");
 							billsNo.add("9");
+							billsNo.add("Otra");
 
 							Pane p = new Pane();
 
@@ -884,7 +885,7 @@ public class MainController {
 
 								RestBill bill = new RestBill();
 
-								bill.setBillName("Bill-" + i);
+								bill.setBillName("Cuenta-" + i);
 								bill.setEntryDate(new Date());
 								bill.setEntryUser(codeWaitress);
 								bill.setBillTip(0);
@@ -1538,6 +1539,7 @@ public class MainController {
 						billsNo.add("7");
 						billsNo.add("8");
 						billsNo.add("9");
+						billsNo.add("Otra");
 						Pane p = new Pane();
 
 						p.setStyle(
