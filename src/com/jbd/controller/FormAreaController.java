@@ -206,7 +206,10 @@ public class FormAreaController {
 			// return errorMessage;
 		}
 
-		
+		if (errorMessage!= null){
+			errorString = errorMessage.toString();
+		}
+
 		return errorString;
 	}
 

@@ -93,6 +93,7 @@
 	<bean id="restInformation" class="com.jbd.hibernate.dao.RestInformationManagementDAO" autowire="byType"></bean>
 	<bean id="restMenuItemComment" class="com.jbd.hibernate.dao.RestMenuItemCommentManagementDAO" autowire="byType"></bean>
 	<bean id="invProductWaste" class="com.jbd.hibernate.dao.InvInventoryWasteManagementDAO" autowire="byType"></bean>
+	<bean id="ctgDiscountMenu" class="com.jbd.hibernate.dao.CtgDiscountMenuManagementDAO" autowire="byType"></bean>
 
 
 

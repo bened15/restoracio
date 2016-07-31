@@ -55,6 +55,10 @@ public class CtgDiscount implements Serializable {
 	@JoinColumn(name="MENU_TYPE_ID")
 	private CtgMenuType ctgMenuType;
 
+	@Column(name="TOTAL_PRODUCTS")
+	private int totalProducts;
+
+	
 	//bi-directional many-to-one association to RestBillDetailXDiscount
 	@OneToMany(mappedBy="ctgDiscount")
 	private List<RestBillDetailXDiscount> restBillDetailXDiscounts;
@@ -172,6 +176,16 @@ public class CtgDiscount implements Serializable {
 		restBillDetailXDiscount.setCtgDiscount(null);
 
 		return restBillDetailXDiscount;
+	}
+	
+	
+
+	public int getTotalProducts() {
+		return totalProducts;
+	}
+
+	public void setTotalProducts(int totalProducts) {
+		this.totalProducts = totalProducts;
 	}
 
 	@Override

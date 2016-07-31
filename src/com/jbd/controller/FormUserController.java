@@ -295,6 +295,10 @@ public class FormUserController {
 			lblUserRole.setTextFill(Color.web("#ff0000"));
 			
 		}
+		if (errorMessage!= null){
+			errorString = errorMessage.toString();
+		}
+
 		return errorString;			
 	}
 	

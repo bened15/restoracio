@@ -285,7 +285,10 @@ public class FormMenuItemProductController {
 			
 		}
 		
-		
+		if (errorMessage!= null){
+			errorString = errorMessage.toString();
+		}
+
 		return errorString;			
 	}
 	

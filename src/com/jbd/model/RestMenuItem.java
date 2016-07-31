@@ -207,5 +207,9 @@ public class RestMenuItem implements Serializable {
 		this.menuItemTypeText = menuItemTypeName;
 	}
 	
-	
+	@Override
+	public String toString(){
+		return this.menuItemId + " - "+ this.menuItemName;
+	}
+
 }

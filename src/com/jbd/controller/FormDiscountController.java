@@ -19,6 +19,9 @@ import com.jbd.model.CtgMenuType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -32,6 +35,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import application.Main;
 
@@ -53,7 +59,7 @@ public class FormDiscountController {
 
 	// Declaracion Botones
 	@FXML
-	private Button newBtn, saveBtn, searchBtn, editBtn, clearBtn;
+	private Button newBtn, saveBtn, searchBtn, editBtn, clearBtn, addMenuItemBtn;
 	// Declaracion Campos
 	@FXML
 	private TextField discountName, discountPercentage,discountBeginTime,discountEndTime;
@@ -82,7 +88,27 @@ public class FormDiscountController {
 	private TableColumn discountIdColumn = new TableColumn("discountIdColumn");
 
 	// Declaracion de acciones
+	@FXML
+	public void onAddMenuItem(MouseEvent event) {
+		 try {
+		        FXMLLoader fxmlLoader = new FXMLLoader();
+		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormMenuItemDiscount.fxml"));
+		                Parent root1 = (Parent) fxmlLoader.load();
+		                Stage stage = new Stage();
+		                stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initStyle(StageStyle.UNDECORATED);
+		                FormMenuItemDiscountController controller = fxmlLoader.<FormMenuItemDiscountController>getController();
+		                controller.setUserEntry("Douglas");
+		                controller.setSelectedDiscountItem(discountRecordSelected);
+		                stage.setTitle("Registro de platos (Descuento Automatico)");
+		                stage.setScene(new Scene(root1));  
+		                stage.show();
+		        } catch(Exception e) {
+		           e.printStackTrace();
+		          }
+	}
 
+	
 	@FXML
 	public void onSearch(MouseEvent event) {
 		refreshListOnSearch();
@@ -413,7 +439,7 @@ public class FormDiscountController {
 		newBtn.setDisable(false);
 		editBtn.setDisable(true);
 		saveBtn.setDisable(true);
-
+		addMenuItemBtn.setDisable(true);
 	}
 
 	public void initModeEnabled() {
@@ -431,6 +457,7 @@ public class FormDiscountController {
 		saveBtn.setDisable(true);
 		clearBtn.setDisable(false);
 		clearBtn.setText("Limpiar");
+		addMenuItemBtn.setDisable(true);
 		defaultLabel();
 	}
 
@@ -448,6 +475,7 @@ public class FormDiscountController {
 		newBtn.setDisable(false);
 		editBtn.setDisable(false);
 		saveBtn.setDisable(true);
+		addMenuItemBtn.setDisable(false);
 		clearBtn.setDisable(false);
 		clearBtn.setText("Limpiar");
 	}
@@ -466,6 +494,7 @@ public class FormDiscountController {
 		newBtn.setDisable(true);
 		editBtn.setDisable(true);
 		saveBtn.setDisable(false);
+		addMenuItemBtn.setDisable(false);
 		clearBtn.setDisable(false);
 		clearBtn.setText("Cancelar");
 	}
@@ -484,6 +513,7 @@ public class FormDiscountController {
 		newBtn.setDisable(true);
 		editBtn.setDisable(true);
 		saveBtn.setDisable(false);
+		addMenuItemBtn.setDisable(true);
 		clearBtn.setDisable(false);
 		clearBtn.setText("Cancelar");
 	}
@@ -527,7 +557,7 @@ public class FormDiscountController {
 						if (t != null) {
 							setText(t.getMenuTypeId() + " - " + t.getMenuTypeName());
 						} else {
-							setText(null);
+							setText("TODOS");
 						}
 					}
 

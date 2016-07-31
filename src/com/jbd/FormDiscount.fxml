@@ -41,9 +41,9 @@
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints maxHeight="20.0" minHeight="5.0" prefHeight="20.0" vgrow="ALWAYS" />
-                        <RowConstraints maxHeight="289.0" minHeight="10.0" prefHeight="289.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="43.0" minHeight="0.0" prefHeight="0.0" vgrow="ALWAYS" />
-                      <RowConstraints maxHeight="79.0" minHeight="10.0" prefHeight="56.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="344.0" minHeight="10.0" prefHeight="344.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="79.0" minHeight="0.0" prefHeight="24.0" vgrow="ALWAYS" />
+                      <RowConstraints maxHeight="79.0" minHeight="10.0" prefHeight="43.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <Label prefHeight="20.0" prefWidth="113.0" text="Descuento" />
@@ -59,6 +59,7 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints />
@@ -80,6 +81,7 @@
                               <Label fx:id="lblDiscountEndTime" text="Hora Fin" GridPane.rowIndex="6" />
                               <TextField fx:id="discountBeginTime" maxWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                               <TextField fx:id="discountEndTime" maxWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <Button fx:id="addMenuItemBtn" mnemonicParsing="false" onMouseClicked="#onAddMenuItem" onTouchPressed="#onAddMenuItem" text="Agregar platos" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                            </children>
                         </GridPane>
                         <GridPane GridPane.rowIndex="3">
@@ -94,11 +96,11 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" text="Guardar" GridPane.columnIndex="3" />
+                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" onTouchPressed="#onSave" text="Guardar" GridPane.columnIndex="3" />
                               <Button fx:id="editBtn" mnemonicParsing="false" text="Editar" GridPane.columnIndex="2" />
-                              <Button fx:id="newBtn" mnemonicParsing="false" onMouseClicked="#onNew" text="Nuevo" GridPane.columnIndex="1" />
-                              <Button fx:id="searchBtn" mnemonicParsing="false" onMouseClicked="#onSearch" text="Buscar" />
-                              <Button fx:id="clearBtn" mnemonicParsing="false" onMouseClicked="#onClear" text="Limpiar" GridPane.columnIndex="4" />
+                              <Button fx:id="newBtn" mnemonicParsing="false" onMouseClicked="#onNew" onTouchPressed="#onNew" text="Nuevo" GridPane.columnIndex="1" />
+                              <Button fx:id="searchBtn" mnemonicParsing="false" onMouseClicked="#onSearch" onTouchPressed="#onSearch" text="Buscar" />
+                              <Button fx:id="clearBtn" mnemonicParsing="false" onMouseClicked="#onClear" onTouchPressed="#onClear" text="Limpiar" GridPane.columnIndex="4" />
                            </children>
                         </GridPane>
                      </children>

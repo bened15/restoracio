@@ -204,7 +204,10 @@ public class FormMeasureController {
 			lblMeasureUnit.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
-		
+		if (errorMessage!= null){
+			errorString = errorMessage.toString();
+		}
+
 		return errorString;			
 	}
 	

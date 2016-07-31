@@ -249,6 +249,9 @@ public class FormProductController {
 			lblProductMeasure.setTextFill(Color.web("#ff0000"));
 
 		}
+		if (errorMessage!= null){
+			errorString = errorMessage.toString();
+		}
 
 		return errorString;
 	}
