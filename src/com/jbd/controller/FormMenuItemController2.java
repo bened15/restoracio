@@ -350,7 +350,7 @@ public class FormMenuItemController2 {
 			lblMenuKitchen.setTextFill(Color.web("#ff0000"));
 
 		}
-		if (errorMessage!= null){
+		if (errorMessage.toString().length() > 0){
 			errorString = errorMessage.toString();
 		}
 

@@ -19,7 +19,7 @@ public class FormAdministrationController {
 
 	private Main mainApp;
 	private ApplicationContext context;
-	private String userEntry = "Douglas";
+	
 	
 	//Declaracion Labels
 

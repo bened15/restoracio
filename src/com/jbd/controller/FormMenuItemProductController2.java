@@ -288,7 +288,7 @@ public class FormMenuItemProductController2 {
 			
 		}
 		
-		if (errorMessage!= null){
+		if (errorMessage.toString().length() > 0){
 			errorString = errorMessage.toString();
 		}
 

@@ -166,7 +166,7 @@ public class FormRestaurantController {
 			lblRestaurantNIT.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		}
-		if (errorMessage!= null){
+		if (errorMessage.toString().length() > 0){
 			errorString = errorMessage.toString();
 		}
 
