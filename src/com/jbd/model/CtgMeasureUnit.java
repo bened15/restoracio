@@ -138,5 +138,10 @@ public class CtgMeasureUnit implements Serializable {
 
 		return restProduct;
 	}
+	@Override
+	public String toString(){
+		return this.measureUni + " - "+ this.measureName;
+	}
+
 
 }

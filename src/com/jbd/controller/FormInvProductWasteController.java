@@ -200,6 +200,7 @@ public class FormInvProductWasteController {
 		productName.getSelectionModel().select(null);
 		transactionType.setText("");
 		productPurchaseDate.setText("");
+		productWaste.setText("");
 	}
 
 	public String validateRecord() {

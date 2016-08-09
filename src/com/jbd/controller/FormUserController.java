@@ -44,7 +44,7 @@ public class FormUserController {
 	private SysUser userRecord;
 	private SysUser userRecordSelected = new SysUser();
 	private String userEntry = "Douglas";
-	private GeneralFunctions gf;
+	private GeneralFunctions gf = new GeneralFunctions();
 	
 	@Autowired
 	private ISysUserManagement manageUser;
@@ -142,7 +142,7 @@ public class FormUserController {
 						SysUserRol item = new SysUserRol();
 						item.setEntryDate(new Date());
 						item.setEntryUser(userEntry);
-						item.setSysRole(manageRole.findSysRole((String) userRole.getValue()));
+						item.setSysRole(manageRole.findSysRole(((SysRole) userRole.getValue()).getRolCode()));
 						item.setSysUser(userRecord);
 						manageUserRole.insertSysUserRol(item);
 
@@ -441,29 +441,7 @@ public void refreshComboBoxList(){
 		 defaultLabel();
 	}
 	public void rowSelectedModeEnabled(){
-		 userCode.setEditable(true);
-		 userPassword.setEditable(false);
-		 userName.setEditable(true);
-		 userLastname.setEditable(true);
-		 userAddress.setEditable(false);
-		 userPhone1.setEditable(false);
-		 userEmail.setEditable(false);
-//		 userBirthdate.setEditable(false);
-//		 userEmploymentBeginDate.setEditable(false);
-//		 userEmploymentEndDate.setEditable(false);
-		 userBirthdate.setDisable(true);
-		 userEmploymentBeginDate.setDisable(true);
-		 userEmploymentEndDate.setDisable(true);
-		 searchBtn.setDisable(false);
-		 newBtn.setDisable(false);
-		 editBtn.setDisable(false);
-		 saveBtn.setDisable(true);
-		 clearBtn.setDisable(false);
-		 clearBtn.setText("Limpiar");
-	}
-
-	public void editModeEnabled(){
-		 userCode.setEditable(false);
+		userCode.setEditable(true);
 		 userPassword.setEditable(true);
 		 userName.setEditable(true);
 		 userLastname.setEditable(true);
@@ -483,6 +461,28 @@ public void refreshComboBoxList(){
 		 clearBtn.setDisable(false);
 		 clearBtn.setText("Cancelar");
 	}
+
+	public void editModeEnabled(){
+		userCode.setEditable(true);
+		 userPassword.setEditable(true);
+		 userName.setEditable(true);
+		 userLastname.setEditable(true);
+		 userAddress.setEditable(true);
+		 userPhone1.setEditable(true);
+		 userEmail.setEditable(true);
+//		 userBirthdate.setEditable(true);
+//		 userEmploymentBeginDate.setEditable(true);
+//		 userEmploymentEndDate.setEditable(true);
+		 userBirthdate.setDisable(false);
+		 userEmploymentBeginDate.setDisable(false);
+		 userEmploymentEndDate.setDisable(false);
+		 searchBtn.setDisable(true);
+		 newBtn.setDisable(true);
+		 editBtn.setDisable(true);
+		 saveBtn.setDisable(false);
+		 clearBtn.setDisable(false);
+		 clearBtn.setText("Cancelar");
+		 }
 	
 	public void newModeEnabled(){
 		 userCode.setEditable(true);

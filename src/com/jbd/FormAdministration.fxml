@@ -35,6 +35,7 @@
                               <MenuItem fx:id="menuItemSupplier" mnemonicParsing="false" onAction="#onMenuItemSupplier" text="Proveedor" />
                               <MenuItem fx:id="menuItemMeasure" mnemonicParsing="false" onAction="#onMenuItemMeasure" text="Unidad de medida" />
                               <MenuItem fx:id="menuItemPaymentMethod" mnemonicParsing="false" onAction="#onMenuItemPaymentMethod" text="Tipo de pago" />
+                              <MenuItem fx:id="menuItemProductType" mnemonicParsing="false" onAction="#onMenuItemProductType" text="Tipo de Producto" />
                            </items>
                       </Menu>
                       <Menu mnemonicParsing="false" text="Restaurante">

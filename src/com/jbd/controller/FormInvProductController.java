@@ -146,7 +146,7 @@ public class FormInvProductController {
 			invProductItemSelected.setProductPrice(Float.parseFloat(productPrice.getText()));
 			invProductItemSelected.setProductQty(Integer.parseInt(productQty.getText()));
 			invProductItemSelected.setRestProduct((RestProduct) productName.getValue());
-			invProductItemSelected.setTransactionTypeId((String) transactionType.getValue());			
+			invProductItemSelected.setTransactionTypeId(((CtgTransactionType) transactionType.getValue()).getTransactionTypeId());			
 			invProductItemSelected.setExpirationDate(gf.asDate(productExpirationDate.getValue()));
 
 			invProductItem = new InvProductItem();
@@ -245,6 +245,19 @@ public class FormInvProductController {
 			// return errorMessage;
 		} else {
 			if (!gf.validNumber(productPrice.getText())) {
+				errorMessage.append(messageErrorNumber+"-"+"El campo precio debe ser un numero.\n");
+			messageErrorNumber++;
+				lblProductPrice.setTextFill(Color.web("#ff0000"));
+
+			}
+		}
+		if (productQty.getText() == null || productQty.getText().isEmpty()) {
+			errorMessage.append(messageErrorNumber+"-"+"El campo cantidad es obligatorio.\n");
+			messageErrorNumber++;
+			lblProductQty.setTextFill(Color.web("#ff0000"));
+			// return errorMessage;
+		} else {
+			if (!gf.validNumber(productQty.getText())) {
 				errorMessage.append(messageErrorNumber+"-"+"El campo precio debe ser un numero.\n");
 			messageErrorNumber++;
 				lblProductPrice.setTextFill(Color.web("#ff0000"));
