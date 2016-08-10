@@ -2,6 +2,7 @@ package com.jbd.hibernate.dao;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,5 +59,39 @@ public class SysUserRolManagementDAO implements ISysUserRolManagement {
 		// TODO Auto-generated method stub
 
 	}
+	@Override
+	public boolean findSysUserRol(String uName, String uPass) {
+		// System.out.println("Entre-finduserrole");
+		try {
+			Query q = em.createQuery(
+					"SELECT ur from SysUserRol ur where ur.sysUser.userCode=:uName and ur.sysUser.userPassword=:uPass",
+					SysUserRol.class);
 
+			q.setParameter("uName", uName);
+			q.setParameter("uPass", uPass);
+
+			q.getSingleResult();
+			return true;
+		} catch (Exception e) {
+			// e.printStackTrace();
+			return false;
+		}
+
+	}
+
+	@Override
+	public boolean findWaitress(String uName) {
+		try {
+			Query q = em.createQuery("SELECT ur from SysUserRol ur where ur.sysUser.userCode=:uName ",
+					SysUserRol.class);
+
+			q.setParameter("uName", uName);
+
+			q.getSingleResult();
+			return true;
+		} catch (Exception e) {
+			// e.printStackTrace();
+			return false;
+		}
+	}
 }

@@ -2,6 +2,10 @@ package com.jbd.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +38,7 @@ public class RestOrder implements Serializable {
 
 	// bi-directional many-to-one association to RestBillDetail
 	@OneToMany(mappedBy = "restOrder")
+	@Cascade({ CascadeType.DELETE })
 	private List<RestBillDetail> restBillDetails;
 
 	// bi-directional many-to-one association to RestMenuItem
@@ -186,6 +191,17 @@ public class RestOrder implements Serializable {
 
 	public void setMenuItemPrice(double menuItemPrice) {
 		this.menuItemPrice = menuItemPrice;
+	}
+
+	@Transient
+	private String nombFactura;
+
+	public String getNombFactura() {
+		return nombFactura;
+	}
+
+	public void setNombFactura(String nombFactura) {
+		this.nombFactura = nombFactura;
 	}
 
 }

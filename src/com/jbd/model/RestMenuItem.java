@@ -212,4 +212,14 @@ public class RestMenuItem implements Serializable {
 		return this.menuItemId + " - "+ this.menuItemName;
 	}
 
+	@Transient
+	private String nombFactura;
+
+	public String getNombFactura() {
+		return nombFactura;
+	}
+
+	public void setNombFactura(String nombFactura) {
+		this.nombFactura = nombFactura;
+	}
 }

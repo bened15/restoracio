@@ -42,6 +42,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -122,7 +123,7 @@ public class SplitOrderController {
 	public void initialize() {
 
 		enableAutowireCapabilities();
-		loadPanesForMenuItem(MainController.getItemsListOrders(), contentPane, "Green");
+		loadPanesForMenuItem(MainController.getItemsListOrders(), contentPane, "#FEFCB8");
 
 	}
 
@@ -173,7 +174,7 @@ public class SplitOrderController {
 				pos = 0;
 			}
 			p.setStyle("-fx-background-color: " + color + ";-fx-font-size:10px");
-
+			p.setEffect(new InnerShadow());
 			p.setId(String.valueOf(i));
 
 			String menuItemName = "";
@@ -199,7 +200,8 @@ public class SplitOrderController {
 
 					RestOrder or = menuItemOrder.get(Integer.parseInt(clickeado.getId()));
 					or.setMenuItemName(or.getRestMenuItem().getMenuItemName());
-					or.setMenuItemPrice(Double.parseDouble(decimFormat.format(or.getRestMenuItem().getMenuItemPrice())));
+					or.setMenuItemPrice(
+							Double.parseDouble(decimFormat.format(or.getRestMenuItem().getMenuItemPrice())));
 					// String[] partida = clickeado.getText().split("\n");
 					// item.setMenuItemId(Integer.parseInt(clickeado.getId()));
 					// item.setMenuItemName(partida[0]);
@@ -220,9 +222,9 @@ public class SplitOrderController {
 					p.setPrefWidth(810.0);
 					p.setPrefHeight(700.0);
 					ap.getChildren().add(p);
-					efe.applyFadeTransitionToRectangle(p);
+//					efe.applyFadeTransitionToRectangle(p);
 					contentPane.getChildren().remove(clickeado);
-					loadPanesForBills(MainController.getBillsQuantity(), p, color, or);
+					loadPanesForBills(MainController.getBillsQuantity(), p, "#a7c9c9", or);
 
 				}
 
@@ -261,7 +263,7 @@ public class SplitOrderController {
 				pos = 0;
 			}
 			p.setStyle("-fx-background-color: " + color + ";-fx-font-size:10px");
-
+			p.setEffect(new InnerShadow());
 			p.setId(String.valueOf(i));
 			// p.setTranslateZ(bills.get(i).get);
 
@@ -276,6 +278,7 @@ public class SplitOrderController {
 			p.setText(billsName);
 			p.setWrapText(true);
 			p.setTextAlignment(TextAlignment.CENTER);
+			p.setEffect(new InnerShadow());
 			p.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 				@Override
@@ -288,12 +291,15 @@ public class SplitOrderController {
 					try {
 						RestBillDetail billDetail = new RestBillDetail();
 						RestBill bill = bills.get(Integer.parseInt(clickeado.getId()));
-						bill.setBillSubtotal(bill.getBillSubtotal() + or.getRestMenuItem().getMenuItemPrice());
-						bill.setBillTip(bill.getBillSubtotal() * 0.10);
-						bill.setBillTotal(bill.getBillSubtotal() * 1.10);
+						bill.setBillSubtotal(Double.parseDouble(
+								decimFormat.format(bill.getBillSubtotal() + or.getRestMenuItem().getMenuItemPrice())));
+						bill.setBillTip(Double.parseDouble(decimFormat.format(bill.getBillSubtotal() * 0.10)));
+						bill.setBillTotal(Double.parseDouble(decimFormat.format(bill.getBillSubtotal() * 1.10)));
 						billDetail.setRestBill(bill);
-						billDetail.setBillDetailSubtotal(or.getRestMenuItem().getMenuItemPrice());
-						billDetail.setBillDetailTotal(or.getRestMenuItem().getMenuItemPrice() * 1.10);
+						billDetail.setBillDetailSubtotal(
+								Double.parseDouble(decimFormat.format(or.getRestMenuItem().getMenuItemPrice())));
+						billDetail.setBillDetailTotal(
+								Double.parseDouble(decimFormat.format(or.getRestMenuItem().getMenuItemPrice() * 1.10)));
 
 						bDetails.add(billDetail);
 						itemsList.add(or);
@@ -376,6 +382,12 @@ public class SplitOrderController {
 			JOptionPane.showMessageDialog(null, "No hay ordenes ni facturas por crear");
 		}
 
+	}
+
+	@FXML
+	public void cancelSplit() {
+
+		this.secondaryStage.close();
 	}
 
 	private void enableAutowireCapabilities() {

@@ -1,5 +1,6 @@
 package application;
 
+
 import java.io.IOException;
 
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -18,7 +19,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 	public static Stage primaryStage;
-	private BorderPane rootLayout;
+	private AnchorPane rootLayout;
 	public static ApplicationContext context;
 
 	@Override
@@ -46,10 +47,10 @@ public class Main extends Application {
 
 		FXMLLoader loader = new FXMLLoader();
 		
-		/*
-		loader.setLocation(Main.class.getResource("../com/jbd/view/W_MainWindow.fxml"));		
+		
+		loader.setLocation(Main.class.getResource("../com/jbd/view/W_MainWindow_2_1.fxml"));		
 		try {
-			rootLayout = (BorderPane) loader.load();
+			rootLayout = (AnchorPane) loader.load();
 			// Show the scene containing the root layout.
 			Scene scene = new Scene(rootLayout);
 			// inyectar al controller la main app para cada una de las ventanas
@@ -65,39 +66,12 @@ public class Main extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		*/
-		
-		//PRUEBAS DOUGLAS
-//		loader.setLocation(Main.class.getResource("../com/jbd/FormDiscount.fxml"));
-//		loader.setLocation(Main.class.getResource("../com/jbd/FormMeasure.fxml"));
-//		loader.setLocation(Main.class.getResource("../com/jbd/FormUser.fxml"));
-//		loader.setLocation(Main.class.getResource("../com/jbd/FormSupplier.fxml"));
-//		loader.setLocation(Main.class.getResource("../com/jbd/FormPaymentMethod.fxml"));
-//		loader.setLocation(Main.class.getResource("../com/jbd/FormMenuType.fxml"));
-//		loader.setLocation(Main.class.getResource("../com/jbd/FormRole.fxml"));
-//		loader.setLocation(Main.class.getResource("../com/jbd/FormProductType.fxml"));
-		
-//		loader.setLocation(Main.class.getResource("../com/jbd/FormProduct.fxml"));
+/*		
 
-//		loader.setLocation(Main.class.getResource("../com/jbd/FormArea.fxml"));
-//		loader.setLocation(Main.class.getResource("../com/jbd/FormMenu.fxml"));
-//		loader.setLocation(Main.class.getResource("../com/jbd/FormInvProduct.fxml"));
-//		loader.setLocation(Main.class.getResource("../com/jbd/FormMenuProduct.fxml"));
-
-//				loader.setLocation(Main.class.getResource("../com/jbd/FormTable.fxml"));
-
-//	loader.setLocation(Main.class.getResource("../com/jbd/FormKitchen.fxml"));
-//		loader.setLocation(Main.class.getResource("../com/jbd/FormCustomer.fxml"));
-//		loader.setLocation(Main.class.getResource("../com/jbd/FormReservation.fxml"));
-//		loader.setLocation(Main.class.getResource("../com/jbd/FormRestaurant.fxml"));
-
-	//	loader.setLocation(Main.class.getResource("../com/jbd/FormInvProductWaste.fxml"));
 		loader.setLocation(Main.class.getResource("../com/jbd/FormAdministration.fxml"));
-
 		
 		try {
 			AnchorPane rootl;
@@ -108,19 +82,19 @@ public class Main extends Application {
 			primaryStage.show();
 			 primaryStage.setOnCloseRequest(e -> Platform.exit());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			// TODO Auto-generated catch blockW
 			e.printStackTrace();
 		}
-
+*/
 	}
 
 	
 	
-	public BorderPane getRootLayout() {
+	public AnchorPane getRootLayout() {
 		return rootLayout;
 	}
 
-	public void setRootLayout(BorderPane rootLayout) {
+	public void setRootLayout(AnchorPane rootLayout) {
 		this.rootLayout = rootLayout;
 	}
 

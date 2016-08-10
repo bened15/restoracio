@@ -8,5 +8,7 @@ public interface ISysUserRolManagement {
 	public SysUserRol updateSysUserRol(SysUserRol o);
 	public void deleteSysUserRol(SysUserRol o);
 	public SysUserRol findSysUserRol(Integer oId);
+	boolean findWaitress(String uName);
+	boolean findSysUserRol(String uName, String uPass);
 
 }

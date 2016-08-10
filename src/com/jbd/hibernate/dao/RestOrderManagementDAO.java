@@ -40,9 +40,16 @@ public class RestOrderManagementDAO implements IRestOrderManagement {
 
 	}
 
+	@Transactional
 	@Override
 	public void deleteRestOrder(RestOrder o) {
-		// TODO Auto-generated method stub
+		try {
+
+			RestOrder or = em.find(RestOrder.class, o.getOrderId());
+			em.remove(or);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -51,6 +58,7 @@ public class RestOrderManagementDAO implements IRestOrderManagement {
 		return null;
 
 	}
+
 	@Override
 	public List<RestOrder> findAllRestOrdersFromTableAccount(RestTableAccount account) {
 		try {

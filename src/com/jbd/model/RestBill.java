@@ -1,3 +1,4 @@
+
 package com.jbd.model;
 
 import java.io.Serializable;
@@ -54,7 +55,6 @@ public class RestBill implements Serializable {
 	@Column(name = "SHIFT_ID")
 	private int shiftId;
 
-
 	// bi-directional many-to-one association to CtgPaymentMethod
 	@ManyToOne
 	@JoinColumn(name = "PAYMENT_METHOD_ID")
@@ -64,6 +64,11 @@ public class RestBill implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "TABLE_ACCOUNT_ID")
 	private RestTableAccount restTableAccount;
+
+	//bi-directional many-to-one association to CtgDiscount
+		@ManyToOne
+		@JoinColumn(name="ID_DISCOUNT")
+		private CtgDiscount ctgDiscount;
 
 	// bi-directional many-to-one association to RestBillDetail
 	@OneToMany(mappedBy = "restBill")
@@ -166,7 +171,13 @@ public class RestBill implements Serializable {
 	public void setRestTableAccount(RestTableAccount restTableAccount) {
 		this.restTableAccount = restTableAccount;
 	}
+	public CtgDiscount getCtgDiscount() {
+		return this.ctgDiscount;
+	}
 
+	public void setCtgDiscount(CtgDiscount ctgDiscount) {
+		this.ctgDiscount = ctgDiscount;
+	}
 	// public List<RestBillDetail> getRestBillDetails() {
 	// return this.restBillDetails;
 	// }
@@ -240,4 +251,5 @@ public class RestBill implements Serializable {
 
 		return restBillDetailXDiscount;
 	}
+
 }

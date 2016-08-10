@@ -1,3 +1,4 @@
+
 package com.jbd.hibernate.dao;
 
 import java.util.List;
@@ -12,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jbd.hibernate.interfaces.IRestBillManagement;
 import com.jbd.model.RestBill;
 import com.jbd.model.RestTableAccount;
+
+
+
 
 public class RestBillManagementDAO implements IRestBillManagement {
 
@@ -99,12 +103,24 @@ public class RestBillManagementDAO implements IRestBillManagement {
 	}
 
 	@Override
-	public Double getTotalAccountFromTable(RestTableAccount ta) {
+	public Double getTotalAccountFromTable(RestTableAccount ta, RestBill rb) {
 		try {
-			Query q = em.createQuery(
-					"select sum(b.billTotal) from RestBill b where b.restTableAccount=:ta and b.restTableAccount.closedDatetime is null",
-					Double.class);
-			q.setParameter("ta", ta);
+			Query q = null;
+			if (rb.getCtgDiscount() != null) {
+				q = em.createQuery(
+						"select sum(b.billTotal-(b.billTotal*(b.ctgDiscount.discountPercentage/100.0))) from RestBill b where b.restTableAccount=:ta and b.restTableAccount.closedDatetime is null",
+						Double.class);
+				q.setParameter("ta", ta);
+				System.out.println("Tiene descuento");
+
+			} else {
+				q = em.createQuery(
+						"select  sum(b.billTotal) from RestBill b where b.restTableAccount=:ta and b.restTableAccount.closedDatetime is null",
+						Double.class);
+				System.out.println("No Tiene descuento");
+				q.setParameter("ta", ta);
+			}
+
 			return (Double) q.getSingleResult();
 		} catch (Exception e) {
 
@@ -112,6 +128,12 @@ public class RestBillManagementDAO implements IRestBillManagement {
 			return null;
 		}
 
+	}
+
+	@Override
+	public Double getTotalAccountFromTable(RestTableAccount ta) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
