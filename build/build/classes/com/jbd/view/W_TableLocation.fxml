@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="631.0" prefWidth="682.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jbd.controller.OrdersController">
+   <children>
+      <Pane layoutX="52.0" layoutY="43.0" onMouseClicked="#openNewOrderTables" onTouchPressed="#openNewOrderTables" prefHeight="200.0" prefWidth="182.0" style="-fx-background-color: #c87732;">
+         <children>
+            <Label layoutX="62.0" layoutY="87.0" rotate="-35.5" text="Azotea" textAlignment="CENTER">
+               <font>
+                  <Font name="Arial Narrow" size="23.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane layoutX="241.0" layoutY="43.0" prefHeight="200.0" prefWidth="378.0" style="-fx-background-color: #b26a2c;">
+         <children>
+            <Label layoutX="169.0" layoutY="86.0" rotate="-26.6" text="Jardin" textAlignment="CENTER">
+               <font>
+                  <Font name="Arial Narrow" size="23.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane layoutX="52.0" layoutY="261.0" prefHeight="200.0" prefWidth="356.0" style="-fx-background-color: #df8538;">
+         <children>
+            <Label layoutX="110.0" layoutY="87.0" rotate="-26.6" text="Zona de Carnes" textAlignment="CENTER">
+               <font>
+                  <Font name="Arial Narrow" size="23.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane layoutX="419.0" layoutY="262.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #593516;">
+         <children>
+            <Label layoutX="36.0" layoutY="87.0" rotate="-31.0" text="Zona de Mariscos" textAlignment="CENTER">
+               <font>
+                  <Font name="Arial Narrow" size="23.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane layoutX="52.0" layoutY="479.0" prefHeight="138.0" prefWidth="567.0" style="-fx-background-color: #efc29b;">
+         <children>
+            <Label layoutX="269.0" layoutY="56.0" rotate="-26.6" text="Bar" textAlignment="CENTER">
+               <font>
+                  <Font name="Arial Narrow" size="23.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

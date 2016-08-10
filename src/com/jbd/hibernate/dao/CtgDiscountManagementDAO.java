@@ -14,9 +14,7 @@ import com.jbd.model.CtgDiscount;
 import com.jbd.model.RestTable;
 import com.jbd.model.SysUser;
 
-
 public class CtgDiscountManagementDAO implements ICtgDiscountManagement {
-
 
 	@PersistenceContext
 	public EntityManager em;
@@ -37,6 +35,7 @@ public class CtgDiscountManagementDAO implements ICtgDiscountManagement {
 		}
 
 	}
+
 	@Transactional
 	@Override
 	public CtgDiscount updateCtgDiscount(CtgDiscount o) {
@@ -59,32 +58,31 @@ public class CtgDiscountManagementDAO implements ICtgDiscountManagement {
 
 	@Override
 	public CtgDiscount findCtgDiscount(Integer oId) {
-		
+
 		// TODO Auto-generated method stub
 		try {
 			CtgDiscount discount;
-				TypedQuery<CtgDiscount> tq = em.createQuery("select o from CtgDiscount o where o.discountId=:prmDiscountId",
-						CtgDiscount.class);
-				tq.setParameter("prmDiscountId", oId);
+			TypedQuery<CtgDiscount> tq = em.createQuery("select o from CtgDiscount o where o.discountId=:prmDiscountId",
+					CtgDiscount.class);
+			tq.setParameter("prmDiscountId", oId);
 
-				discount = tq.getSingleResult();
-				return discount;
+			discount = tq.getSingleResult();
+			return discount;
 
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 
-			}
+		}
 	}
 
 	@Override
 	public List<CtgDiscount> findAll() {
 		// TODO Auto-generated method stub
-try {
-			
+		try {
+
 			List<CtgDiscount> discountList;
-			TypedQuery<CtgDiscount> tq = em.createQuery("select o from CtgDiscount o ",
-					CtgDiscount.class);
+			TypedQuery<CtgDiscount> tq = em.createQuery("select o from CtgDiscount o ", CtgDiscount.class);
 			discountList = tq.getResultList();
 			return discountList;
 
@@ -98,15 +96,16 @@ try {
 	@Override
 	public List<CtgDiscount> findDiscountByExample(String discountName) {
 		try {
-			List<CtgDiscount> discounts ;
-			if(discountName == null || discountName.isEmpty() ){
+			List<CtgDiscount> discounts;
+			if (discountName == null || discountName.isEmpty()) {
 				discounts = findAll();
-			}else{
-					TypedQuery<CtgDiscount> tq = em.createQuery("select t from CtgDiscount t where upper(t.discountName) like '%' ||:prmDiscountName || '%' ",
-							CtgDiscount.class);
-					tq.setParameter("prmDiscountName", discountName.toUpperCase());
-					discounts = tq.getResultList();
-					
+			} else {
+				TypedQuery<CtgDiscount> tq = em.createQuery(
+						"select t from CtgDiscount t where upper(t.discountName) like '%' ||:prmDiscountName || '%' ",
+						CtgDiscount.class);
+				tq.setParameter("prmDiscountName", discountName.toUpperCase());
+				discounts = tq.getResultList();
+
 			}
 
 			return discounts;
@@ -120,15 +119,16 @@ try {
 	@Override
 	public List<CtgDiscount> findDiscountByExample(Date discountDate) {
 		try {
-			List<CtgDiscount> discounts ;
-			if(discountDate == null){
+			List<CtgDiscount> discounts;
+			if (discountDate == null) {
 				discounts = findAll();
-			}else{
-				TypedQuery<CtgDiscount> tq = em.createQuery("select t from CtgDiscount t where :prmDiscountDate between discountValidSince and discountValidUntil ",
+			} else {
+				TypedQuery<CtgDiscount> tq = em.createQuery(
+						"select t from CtgDiscount t where :prmDiscountDate between discountValidSince and discountValidUntil ",
 						CtgDiscount.class);
 				tq.setParameter("prmDiscountDate", discountDate);
 				discounts = tq.getResultList();
-					
+
 			}
 
 			return discounts;
@@ -139,36 +139,37 @@ try {
 		}
 	}
 
-		@Override
-		public List<CtgDiscount> findDiscountByExample(String discountName, Date discountDate) {
-			try {
-				List<CtgDiscount> discounts ;
-				if( (discountName == null || discountName.isEmpty()) && discountDate == null){
-					discounts = findAll();
-				}else{
-					if( (discountName != null && !discountName.isEmpty()) && discountDate != null){
-						TypedQuery<CtgDiscount> tq = em.createQuery("select t from CtgDiscount t where upper(t.discountName) like '%' ||:prmDiscountName || '%' "
-								+ "and trunc(:prmDiscountDate) between trunc(discountValidSince) and trunc(discountValidUntil) ",
-								CtgDiscount.class);
-						tq.setParameter("prmDiscountName", discountName.toUpperCase());
-						tq.setParameter("prmDiscountDate", discountDate);
-						discounts = tq.getResultList();
-					}else{
-						if (discountDate != null){
-							discounts = findDiscountByExample(discountDate);
-						}else{
-							discounts = findDiscountByExample(discountName);							
-						}
-						
-					}						
+	@Override
+	public List<CtgDiscount> findDiscountByExample(String discountName, Date discountDate) {
+		try {
+			List<CtgDiscount> discounts;
+			if ((discountName == null || discountName.isEmpty()) && discountDate == null) {
+				discounts = findAll();
+			} else {
+				if ((discountName != null && !discountName.isEmpty()) && discountDate != null) {
+					TypedQuery<CtgDiscount> tq = em.createQuery(
+							"select t from CtgDiscount t where upper(t.discountName) like '%' ||:prmDiscountName || '%' "
+									+ "and trunc(:prmDiscountDate) between trunc(discountValidSince) and trunc(discountValidUntil) ",
+							CtgDiscount.class);
+					tq.setParameter("prmDiscountName", discountName.toUpperCase());
+					tq.setParameter("prmDiscountDate", discountDate);
+					discounts = tq.getResultList();
+				} else {
+					if (discountDate != null) {
+						discounts = findDiscountByExample(discountDate);
+					} else {
+						discounts = findDiscountByExample(discountName);
+					}
+
 				}
-
-				return discounts;
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-
 			}
+
+			return discounts;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+
+		}
 
 	}
 

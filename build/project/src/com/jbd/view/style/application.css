@@ -1,0 +1,39 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.bigButtons{
+	-fx-pref-width: 90.0;
+	-fx-pref-height: 90.0;
+	-fx-font-weight: bold;
+	-fx-text-fill: white ;
+	-fx-alignment: center;
+	-fx-border-radius: 10.0px;
+	-fx-border-color:  rgb(228.0,228.0,228.0) ;
+
+
+}
+.bigButtons2{
+-fx-border-radius: 10.0px;
+-fx-border-color: aliceblue ;
+-fx-background-color: rgb(0.0,128.0,192.0);
+
+
+
+}
+.table-row-cell{
+
+	-fx-border-color: rgb(255.0,255.0,255.0);
+	-fx-padding:0.00.00.0 ;
+	-fx-cell-size: 35.0px;
+	-fx-font-size: 12.0px;
+
+}
+.list-cell {
+  -fx-cell-size: 35.0 ;
+  -fx-border-color: rgb(128.0,128.0,255.0);
+  -fx-font-size: 12.0px;
+}
+.list{
+	-fx-border-radius: 10.0px;
+	-fx-border-color: rgb(128.0,128.0,255.0);
+
+
+}

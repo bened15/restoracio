@@ -52,6 +52,10 @@ public class CtgDiscount implements Serializable {
 	@OneToMany(mappedBy = "ctgDiscount")
 	private List<RestBillDetailXDiscount> restBillDetailXDiscounts;
 
+	// bi-directional many-to-one association to RestBill
+	@OneToMany(mappedBy = "ctgDiscount")
+	private List<RestBill> restBills;
+
 	public CtgDiscount() {
 	}
 
@@ -147,6 +151,21 @@ public class CtgDiscount implements Serializable {
 		restBillDetailXDiscount.setCtgDiscount(null);
 
 		return restBillDetailXDiscount;
+	}
+
+	public List<RestBill> getRestBills() {
+		return this.restBills;
+	}
+
+	public void setRestBills(List<RestBill> restBills) {
+		this.restBills = restBills;
+	}
+
+	public RestBill removeRestBill(RestBill restBill) {
+		getRestBills().remove(restBill);
+		restBill.setCtgDiscount(null);
+
+		return restBill;
 	}
 
 	@Override

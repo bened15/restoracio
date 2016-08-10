@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jbd.controller.FormAdministrationController">
+   <children>
+      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="220.0" prefWidth="656.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <MenuBar layoutY="2.0" AnchorPane.bottomAnchor="79.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="2.0">
+                    <menus>
+                      <Menu mnemonicParsing="false" text="Administracion">
+                        <items>
+                          <MenuItem fx:id="menuItemRol" mnemonicParsing="false" onAction="#onMenuItemRol" text="Rol" />
+                              <MenuItem fx:id="menuItemUsuario" mnemonicParsing="false" onAction="#onMenuItemUsuario" text="Usuarios" />
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Catalogos">
+                           <items>
+                          <MenuItem fx:id="menuItemProduct" mnemonicParsing="false" onAction="#onMenuItemProduct" text="Productos" />
+                              <MenuItem fx:id="menuItemSupplier" mnemonicParsing="false" onAction="#onMenuItemSupplier" text="Proveedor" />
+                              <MenuItem fx:id="menuItemMeasure" mnemonicParsing="false" onAction="#onMenuItemMeasure" text="Unidad de medida" />
+                              <MenuItem fx:id="menuItemPaymentMethod" mnemonicParsing="false" onAction="#onMenuItemPaymentMethod" text="Tipo de pago" />
+                           </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Restaurante">
+                        <items>
+                          <MenuItem fx:id="menuItemArea" mnemonicParsing="false" onAction="#onMenuItemArea" text="Area" />
+                              <MenuItem fx:id="menuItemTable" mnemonicParsing="false" onAction="#onMenuItemTable" text="Mesa" />
+                              <Menu mnemonicParsing="false" text="Menu">
+                                 <items>
+                                    <MenuItem fx:id="menuItemMenuType" mnemonicParsing="false" onAction="#onMenuItemMenuType" text="Tipo de menu" />
+                                    <MenuItem fx:id="menuItemMenu" mnemonicParsing="false" onAction="#onMenuItemMenu" text="Registro de plato" />
+                                    <MenuItem fx:id="menuItemMenuProduct" mnemonicParsing="false" onAction="#onMenuItemMenuProduct" text="Registro ingredientes" />
+                                 </items>
+                              </Menu>
+                              <MenuItem fx:id="menuItemDiscount" mnemonicParsing="false" onAction="#onMenuItemDiscount" text="Descuentos" />
+                        </items>
+                      </Menu>
+                        <Menu mnemonicParsing="false" text="Inventario">
+                           <items>
+                              <MenuItem fx:id="menuItemInvProduct" mnemonicParsing="false" onAction="#onMenuItemInvProduct" text="Compras" />
+                              <MenuItem fx:id="menuItemInvProductWaste" mnemonicParsing="false" onAction="#onMenuItemInvProductWaste" text="Desperdicios" />
+                           </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Help">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="About" />
+                           </items>
+                        </Menu>
+                    </menus>
+                  </MenuBar>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <SplitPane layoutY="-64.0" prefHeight="170.0" prefWidth="638.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-64.0" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

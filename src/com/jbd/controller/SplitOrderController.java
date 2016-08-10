@@ -107,7 +107,7 @@ public class SplitOrderController {
 				this.secondaryStage.initOwner(Main.primaryStage);
 			}
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("../com/jbd/view/W_SplitOrderView.fxml"));
+			loader.setLocation(Main.class.getResource("/com/jbd/view/W_SplitOrderView.fxml"));
 			AnchorPane paymentOverview = (AnchorPane) loader.load();
 
 			Scene scene = new Scene(paymentOverview);

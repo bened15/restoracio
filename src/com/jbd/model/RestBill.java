@@ -65,6 +65,11 @@ public class RestBill implements Serializable {
 	@JoinColumn(name = "TABLE_ACCOUNT_ID")
 	private RestTableAccount restTableAccount;
 
+	//bi-directional many-to-one association to CtgDiscount
+		@ManyToOne
+		@JoinColumn(name="ID_DISCOUNT")
+		private CtgDiscount ctgDiscount;
+
 	// bi-directional many-to-one association to RestBillDetail
 	@OneToMany(mappedBy = "restBill")
 	@Cascade({ org.hibernate.annotations.CascadeType.DELETE })
@@ -166,7 +171,13 @@ public class RestBill implements Serializable {
 	public void setRestTableAccount(RestTableAccount restTableAccount) {
 		this.restTableAccount = restTableAccount;
 	}
+	public CtgDiscount getCtgDiscount() {
+		return this.ctgDiscount;
+	}
 
+	public void setCtgDiscount(CtgDiscount ctgDiscount) {
+		this.ctgDiscount = ctgDiscount;
+	}
 	// public List<RestBillDetail> getRestBillDetails() {
 	// return this.restBillDetails;
 	// }

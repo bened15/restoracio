@@ -12,12 +12,14 @@ import javax.swing.JOptionPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
+import com.jbd.hibernate.interfaces.ICtgDiscountManagement;
 import com.jbd.hibernate.interfaces.ICtgPaymentMethodManagement;
 import com.jbd.hibernate.interfaces.IRestBillDetailManagement;
 import com.jbd.hibernate.interfaces.IRestBillManagement;
 import com.jbd.hibernate.interfaces.IRestBillPaymentManagement;
 import com.jbd.hibernate.interfaces.IRestTableAccountManagement;
 import com.jbd.hibernate.interfaces.IRestTableManagement;
+import com.jbd.model.CtgDiscount;
 import com.jbd.model.CtgPaymentMethod;
 import com.jbd.model.RestBill;
 import com.jbd.model.RestBillDetail;
@@ -44,6 +46,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -56,6 +59,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -88,6 +92,8 @@ public class PaymentController {
 	private IRestBillDetailManagement manageRestBillDetail;
 	@Autowired
 	private IRestTableAccountManagement manageRestTableAccount;
+	@Autowired
+	private ICtgDiscountManagement manageCtgDiscount;
 	@Autowired
 	private CtgPaymentMethod paymentMethod;
 	private static String RestBillN = "";
@@ -123,7 +129,7 @@ public class PaymentController {
 			}
 
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("../com/jbd/view/W_PaymentView.fxml"));
+			loader.setLocation(Main.class.getResource("/com/jbd/view/W_PaymentView.fxml"));
 			AnchorPane paymentOverview = (AnchorPane) loader.load();
 
 			facturaAPagar.setLayoutX(224.0);
@@ -192,6 +198,7 @@ public class PaymentController {
 		List<RestBillDetail> rbd;
 
 		String[] bills = RestBillN.split("--");
+		// RestBill rb = null;
 		rbd = manageRestBillDetail.findAllRestBillDetailFromRestBill(new RestBill(Integer.parseInt(bills[1])));
 		if (rbd.size() > 0) {
 			bDetailsOrders.clear();
@@ -201,10 +208,29 @@ public class PaymentController {
 				ro.setMenuItemPrice(Double.parseDouble(decimFormat.format(ro.getRestMenuItem().getMenuItemPrice())));
 				ro.setNombFactura(rbd.get(i).getRestBill().getBillName());
 				bDetailsOrders.add(ro);
+				if (rbd.get(i).getRestBill().getCtgDiscount() != null) {
+					totalCuenta = totalCuenta
+							+ (rbd.get(i).getBillDetailSubtotal() - (rbd.get(i).getBillDetailSubtotal()
+									* rbd.get(i).getRestBill().getCtgDiscount().getDiscountPercentage() / 100.0));
+				} else {
+					totalCuenta = totalCuenta + rbd.get(i).getBillDetailSubtotal();
+				}
 
-				totalCuenta = totalCuenta + rbd.get(i).getBillDetailSubtotal();
 				i++;
 			}
+
+			// rb = manageRestBill.findRestBill(Integer.parseInt(bills[1]));
+			// if (rb.getCtgDiscount() != null) {
+			// System.out.println(totalCuenta);
+			// System.out.println("etnre no es nulo el
+			// disocun"+(rb.getCtgDiscount().getDiscountPercentage()/100.0));
+			// this.totalCuenta.setText(decimFormat
+			// .format(((totalCuenta) - (totalCuenta *
+			// (rb.getCtgDiscount().getDiscountPercentage() / 100.0)))));
+
+			// } else {
+			// this.totalCuenta.setText(decimFormat.format(totalCuenta * 1.10));
+			// }
 			this.totalCuenta.setText(decimFormat.format(totalCuenta * 1.10));
 			this.totalPropina.setText(decimFormat.format(totalCuenta * 0.10));
 			this.totalRecibido.setText("");
@@ -214,7 +240,7 @@ public class PaymentController {
 		bp = manageRestBillPayment.findRestBillPayments(Integer.parseInt(bills[1]));
 		i = 0;
 		if (bp.size() > 0) {
-			totalCuenta = (totalCuenta * 1.10);
+			totalCuenta = totalCuenta * 1.10;
 			while (i < bp.size()) {
 				totalCuenta = totalCuenta - bp.get(i).getAmount();
 				i++;
@@ -460,6 +486,200 @@ public class PaymentController {
 
 	}
 
+	private void loadTypesOfDiscounts() {
+		Label l = new Label();
+		l.setLayoutY(10);
+		l.setLayoutX(20.0);
+		l.setStyle("-fx-font-size: 14.0px;");
+		l.setText("Seleccione el tipo de descuento a aplicar:");
+		Stage st = new Stage();
+		st.initModality(Modality.WINDOW_MODAL);
+		st.initOwner(secondaryStage);
+
+		AnchorPane p = new AnchorPane();
+
+		p.setStyle("-fx-background-color:#9fb9b9");
+		// p.setLayoutX(218.0);
+
+		// p.setLayoutY(40.0);
+		p.setPrefHeight(200.0);
+		p.setPrefWidth(450.0);
+
+		Button totalFactura = new Button();
+		Button porItem = new Button();
+		Button other = new Button();
+
+		totalFactura.setLayoutX(50);
+		totalFactura.setLayoutY(60);
+		totalFactura.setPrefHeight(100);
+		totalFactura.setPrefWidth(100);
+		totalFactura.setText("Total de Factura");
+		totalFactura.setTextAlignment(TextAlignment.CENTER);
+		totalFactura.setWrapText(true);
+
+		porItem.setLayoutX(160);
+		porItem.setLayoutY(60);
+		porItem.setPrefHeight(100);
+		porItem.setPrefWidth(100);
+		porItem.setText("Orden en particular");
+		porItem.setTextAlignment(TextAlignment.CENTER);
+		porItem.setWrapText(true);
+
+		other.setLayoutX(270);
+		other.setLayoutY(60);
+		other.setPrefHeight(100);
+		other.setPrefWidth(100);
+		other.setText("Otro");
+		other.setTextAlignment(TextAlignment.CENTER);
+		other.setWrapText(true);
+
+		totalFactura.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				// String totalDeDescuento =
+				// JOptionPane.showInputDialog("Ingrese porcentaje de descuento
+				// a aplicar(%):");
+				loadTypesOfDiscountsItems(manageCtgDiscount.findAll());
+				st.close();
+
+			}
+
+		});
+		porItem.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+
+			}
+
+		});
+		other.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+
+			}
+
+		});
+
+		p.getChildren().add(l);
+		p.getChildren().add(totalFactura);
+		p.getChildren().add(porItem);
+		p.getChildren().add(other);
+
+		Scene scene = new Scene(p);
+		st.setScene(scene);
+		st.show();
+		// principal.getChildren().add(p);
+		// efe.applyFadeTransitionToTextField(txtComment);
+		// txtComment.requestFocus();
+
+	}
+
+	private void loadTypesOfDiscountsItems(List<CtgDiscount> discountItem) {
+		AnchorPane ap = new AnchorPane();
+
+		Stage st = new Stage();
+		st.initModality(Modality.WINDOW_MODAL);
+		st.initOwner(secondaryStage);
+		int i = 0, pos = 1;
+		int y = 10;
+
+		while (i < discountItem.size()) {
+			Button p = new Button();
+
+			p.setPrefHeight(80);
+			p.setPrefWidth(80);
+
+			switch (pos) {
+			case 1:
+				p.setLayoutX(10);
+				break;
+			case 2:
+				p.setLayoutX(100);
+				break;
+			case 3:
+				p.setLayoutX(190);
+				break;
+			case 4:
+				p.setLayoutX(280);
+				break;
+			case 5:
+				p.setLayoutX(370);
+				break;
+			case 6:
+				p.setLayoutX(460);
+				break;
+			case 7:
+				p.setLayoutX(550);
+				break;
+			case 8:
+				p.setLayoutX(640);
+				break;
+			case 9:
+				p.setLayoutX(730);
+				break;
+
+			}
+			p.setLayoutY(y);
+			if (pos % 9 == 0) {
+				y = y + 90;
+				// se pone cero porque se aumenta abajo
+				pos = 0;
+			}
+			p.setStyle("-fx-background-color:#fffff;-fx-font-size:10px");
+			p.setEffect(new InnerShadow());
+			p.setId(String.valueOf(i));
+
+			String menuItemName = "";
+			if (discountItem.get(i).getDiscountName().length() > 30) {
+				menuItemName = discountItem.get(i).getDiscountName().substring(0, 29) + "..";
+			} else {
+				menuItemName = discountItem.get(i).getDiscountName();
+
+			}
+
+			p.setText(menuItemName + "\n" + "%  " + discountItem.get(i).getDiscountPercentage());
+			p.setWrapText(true);
+			p.setTextAlignment(TextAlignment.CENTER);
+			p.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+				@Override
+				public void handle(MouseEvent arg0) {
+					Button clickeado = (Button) arg0.getSource();
+					efe.applyFadeTransitionToButton(clickeado);
+					String[] bills = RestBillN.split("--");
+					RestBill rb = manageRestBill.findRestBill(Integer.parseInt(bills[1]));
+
+					rb.setCtgDiscount(discountItem.get(Integer.parseInt(clickeado.getId())));
+					manageRestBill.updateRestBill(rb);
+					loadConfig();
+					st.close();
+					JOptionPane.showMessageDialog(null, "El descuento ha sido aplicado", "Alerta",
+							JOptionPane.INFORMATION_MESSAGE);
+
+				}
+			});
+
+			p.setStyle("-fx-background-color:#9fb9b9");
+			ap.getChildren().add(p);
+			i++;
+			pos++;
+			// p.setLayoutX(218.0);
+
+			// p.setLayoutY(40.0);
+
+		}
+		ap.setPrefHeight(600.0);
+		ap.setPrefWidth(650.0);
+
+		Scene scene = new Scene(ap);
+		st.setScene(scene);
+		st.show();
+
+	}
+
 	private void askForCuponNumber() {
 		String cuponNum = JOptionPane.showInputDialog("Ingrese el numero de cupon");
 		commentForPaymentMethod = "Cupon # " + cuponNum;
@@ -481,6 +701,7 @@ public class PaymentController {
 	public void descuentoSelected() {
 
 		this.numbersArea.setDisable(true);
+		loadTypesOfDiscounts();
 
 	}
 
@@ -506,11 +727,12 @@ public class PaymentController {
 			rbp.setRestBill(new RestBill(Integer.parseInt(bills[1])));
 			rbp.setCtgPaymentMethod(this.paymentMethod);
 			rbp.setComments(commentForPaymentMethod);
-			manageRestBillPayment.insertRestBillPayment(rbp);
+			rbp = manageRestBillPayment.insertRestBillPayment(rbp);
 			RestTableAccount ta = MainController.getBillsDetailQuantity().get(0).getRestBill().getRestTableAccount();
+			RestBill rb = manageRestBill.findRestBill(Integer.parseInt(bills[1]));
 			// System.out.println("supuestamente " + totalAccount);
 			if (manageRestBillPayment.isAmmountPaymentEqualOrMoreThanAccount(
-					manageRestBill.getTotalAccountFromTable(ta),
+					manageRestBill.getTotalAccountFromTable(ta, rb),
 					MainController.getBillsDetailQuantity().get(0).getRestBill().getRestTableAccount())) {
 
 				ta.setClosedDatetime(new Date());
@@ -549,11 +771,12 @@ public class PaymentController {
 			rbp.setAmount(Float.parseFloat(totalRecibido.getText()));
 			rbp.setRestBill(new RestBill(Integer.parseInt(bills[1])));
 			rbp.setCtgPaymentMethod(this.paymentMethod);
-			manageRestBillPayment.insertRestBillPayment(rbp);
+			rbp = manageRestBillPayment.insertRestBillPayment(rbp);
 			RestTableAccount ta = MainController.getBillsDetailQuantity().get(0).getRestBill().getRestTableAccount();
 			// System.out.println("supuestamente " + totalAccount);
+			RestBill rb = manageRestBill.findRestBill(Integer.parseInt(bills[1]));
 			if (manageRestBillPayment.isAmmountPaymentEqualOrMoreThanAccount(
-					manageRestBill.getTotalAccountFromTable(ta),
+					manageRestBill.getTotalAccountFromTable(ta, rb),
 					MainController.getBillsDetailQuantity().get(0).getRestBill().getRestTableAccount())) {
 
 				ta.setClosedDatetime(new Date());

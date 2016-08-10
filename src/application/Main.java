@@ -47,7 +47,7 @@ public class Main extends Application {
 		FXMLLoader loader = new FXMLLoader();
 
 
-		loader.setLocation(Main.class.getResource("../com/jbd/view/W_MainWindow_2_1.fxml"));
+		loader.setLocation(Main.class.getResource("/com/jbd/view/W_MainWindow_2_1.fxml"));
 		try {
 			rootLayout = (AnchorPane) loader.load();
 			// Show the scene containing the root layout.
@@ -119,6 +119,7 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
+		System.out.println("las pruebas estan fucnionando");
 		launch(args);
 	}
 
