@@ -181,6 +181,7 @@ public class FormDiscountController {
 							"Registro actualizado exitosamente");
 						
 				}
+				
 				System.out.println("EXITO AL GUARDAR");
 				resetValues();
 				refreshList();
@@ -348,7 +349,9 @@ public class FormDiscountController {
 			}
 			
 		}
-
+		if (errorMessage.toString().length() > 0){
+			errorString = errorMessage.toString();
+		}
 		return errorString;
 	}
 

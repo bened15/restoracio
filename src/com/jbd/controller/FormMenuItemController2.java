@@ -227,7 +227,7 @@ public class FormMenuItemController2 {
 			if (imageSelected != null) {
 				menuItemSelected.setMenuImage(imageBytes);
 			}
-			// menuItemSelected.setCtgMenuType((CtgMenuType)
+			 menuItemSelected.setCtgMenuType((CtgMenuType) menuItemType.getValue());
 			// menuItemType.getValue());
 
 			menuItem = new RestMenuItem();
@@ -330,7 +330,7 @@ public class FormMenuItemController2 {
 		if (menuItemPrice.getText() == null || menuItemPrice.getText().isEmpty()) {
 			errorMessage.append(messageErrorNumber+"-"+"El campo precio es obligatorio.\n");
 			messageErrorNumber++;				
-			lblMenuItemName.setTextFill(Color.web("#ff0000"));
+			lblMenuItemPrice.setTextFill(Color.web("#ff0000"));
 			if (!gf.validNumber(menuItemPrice.getText())) {
 				errorMessage.append(messageErrorNumber+"-"+"El campo precio debe ser un numero.\n");
 			messageErrorNumber++;				

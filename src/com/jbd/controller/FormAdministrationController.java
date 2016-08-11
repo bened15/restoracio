@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import application.Main;
 
@@ -48,7 +49,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormArea.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                stage.setTitle("Registro de areas");
 		                stage.setScene(new Scene(root1));  
@@ -66,7 +67,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormCustomer.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                stage.setTitle("Registro de clientes");
 		                stage.setScene(new Scene(root1));  
@@ -82,7 +83,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormDiscount.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                stage.setTitle("Registro de descuentos");
 		                stage.setScene(new Scene(root1));  
@@ -100,7 +101,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormInvProduct3.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                FormInvProductController controller = fxmlLoader.<FormInvProductController>getController();
 		                controller.setUserEntry("Douglas");
@@ -119,7 +120,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormInvProductWaste.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                stage.setTitle("Registro de desperdicios");
 		                stage.setScene(new Scene(root1));  
@@ -136,7 +137,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormKitchen.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                stage.setTitle("Registro de cocinas");
 		                stage.setScene(new Scene(root1));  
@@ -153,7 +154,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormMeasure.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                stage.setTitle("Registro de unidades de medida");
 		                stage.setScene(new Scene(root1));  
@@ -170,7 +171,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormMenu2.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                FormMenuItemController2 controller = fxmlLoader.<FormMenuItemController2>getController();
 		                controller.setUserEntry("Douglas");
@@ -189,7 +190,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormMenuProduct.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                stage.setTitle("Registro de ingredientes");
 		                stage.setScene(new Scene(root1));  
@@ -206,7 +207,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormReservation.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                stage.setTitle("Registro de reservaciones");
 		                stage.setScene(new Scene(root1));  
@@ -223,7 +224,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormRestaurant.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                stage.setTitle("Datos generales del restaurante");
 		                stage.setScene(new Scene(root1));  
@@ -241,7 +242,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormMenuType.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                stage.setTitle("Registro de tipo de menu");
 		                stage.setScene(new Scene(root1));  
@@ -258,7 +259,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormPaymentMethod.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                stage.setTitle("Registro de tipos de pago");
 		                stage.setScene(new Scene(root1));  
@@ -275,7 +276,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormProduct.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                FormProductController controller = fxmlLoader.<FormProductController>getController();
 		                controller.setUserEntry("Douglas");
@@ -294,7 +295,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormProductType.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                stage.setTitle("Registro de tipo de producto");
 		                stage.setScene(new Scene(root1));  
@@ -311,7 +312,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormRole.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                stage.setTitle("Registro de rol");
 		                stage.setScene(new Scene(root1));  
@@ -328,7 +329,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormSupplier.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                stage.setTitle("Registro de proveedores");
 		                stage.setScene(new Scene(root1));  
@@ -345,7 +346,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormTable.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                stage.setTitle("Registro de mesas");
 		                stage.setScene(new Scene(root1));  
@@ -362,7 +363,7 @@ public class FormAdministrationController {
 		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormUser.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
-		                //stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                stage.setTitle("Registro de usuarios");
 		                stage.setScene(new Scene(root1));  
