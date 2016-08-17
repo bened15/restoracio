@@ -117,7 +117,7 @@ public class FormMenuItemController {
 
 	@FXML
 	public void onNew(MouseEvent event) {
-		resetValues();
+		resetRecord();
 		newModeEnabled();
 	}
 
@@ -258,6 +258,10 @@ public class FormMenuItemController {
 		menuItemType.getSelectionModel().select(null);
 		menuKitchen.getSelectionModel().select(null);
 		menuItemImage.setImage(null);
+
+	}
+	public void resetRecord() {
+		menuItemSelected = new RestMenuItem();
 
 	}
 

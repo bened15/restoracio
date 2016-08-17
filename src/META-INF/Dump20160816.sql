@@ -84,7 +84,7 @@ CREATE TABLE `ctg_discount` (
   PRIMARY KEY (`DISCOUNT_ID`),
   KEY `FK_MENU_TYPE_ID_FROM_DISCOUNT_idx` (`MENU_TYPE_ID`),
   CONSTRAINT `FK_MENU_TYPE_ID_FROM_DISCOUNT` FOREIGN KEY (`MENU_TYPE_ID`) REFERENCES `ctg_menu_type` (`MENU_TYPE_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='	';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='	';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -214,7 +214,7 @@ CREATE TABLE `ctg_menu_type` (
   `ENTRY_DATE` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `PRIORITY` int(3) DEFAULT NULL,
   PRIMARY KEY (`MENU_TYPE_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -271,7 +271,7 @@ CREATE TABLE `ctg_product_type` (
   `ENTRY_DATE` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`PRODUCT_TYPE_ID`),
   UNIQUE KEY `TYPE_NAME_UNIQUE` (`TYPE_NAME`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -471,7 +471,7 @@ CREATE TABLE `inv_product_transaction_log` (
   PRIMARY KEY (`INV_PRODUCT_TRNS_ID`),
   KEY `FK_CTG_PRODUCT_idx` (`PRODUCT_ID`),
   CONSTRAINT `FK_PRD_TRNS_LOG` FOREIGN KEY (`PRODUCT_ID`) REFERENCES `rest_product` (`PRODUCT_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -517,7 +517,7 @@ CREATE TABLE `rest_bill` (
   CONSTRAINT `FK_BILL_PAYMENTMETHOD` FOREIGN KEY (`PAYMENT_METHOD_ID`) REFERENCES `ctg_payment_method` (`PAYMENT_METHOD_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_BILL_TABLEACCOUNT` FOREIGN KEY (`TABLE_ACCOUNT_ID`) REFERENCES `rest_table_account` (`TABLE_ACCOUNT_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_CTG_DISCOUNT_idx` FOREIGN KEY (`ID_DISCOUNT`) REFERENCES `ctg_discount` (`DISCOUNT_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -533,13 +533,42 @@ CREATE TABLE `rest_bill_detail` (
   `BILL_DETAIL_SUBTOTAL` float NOT NULL,
   `BILL_DETAIL_TOTAL` float NOT NULL,
   `ORDER_ID` int(11) NOT NULL,
+  `DISCOUNT_ID` int(11) DEFAULT NULL,
+  `DISCOUNT_VALUE` float DEFAULT NULL,
   PRIMARY KEY (`BILL_DETAIL_ID`),
   KEY `FK_BILLDETAIL_BILL_idx` (`BILL_ID`),
   KEY `FK_BILLDETAIL_ORDER_idx` (`ORDER_ID`),
   CONSTRAINT `FK_BILLDETAIL_BILL` FOREIGN KEY (`BILL_ID`) REFERENCES `rest_bill` (`BILL_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_BILLDETAIL_ORDER` FOREIGN KEY (`ORDER_ID`) REFERENCES `rest_order` (`ORDER_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`ROOT`@`localhost`*/ /*!50003 TRIGGER `restoracio`.`rest_bill_detail_BEFORE_INSERT` BEFORE INSERT ON `rest_bill_detail` FOR EACH ROW
+BEGIN
+		DECLARE VAR_DISCOUNT_ID INT ;
+		DECLARE VAR_DISCOUNT_VALUE FLOAT ;
+
+		SELECT DISCOUNT_ID , DISCOUNT_VALUE 
+        INTO @VAR_DISCOUNT_ID, VAR_DISCOUNT_VALUE
+        FROM REST_ORDER WHERE ORDER_ID = NEW.ORDER_ID;
+        
+        SET NEW.DISCOUNT_ID = VAR_DISCOUNT_ID;
+        SET NEW.DISCOUNT_VALUE = VAR_DISCOUNT_VALUE;
+
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `rest_bill_detail_x_discount`
@@ -644,7 +673,7 @@ CREATE TABLE `rest_menu_item` (
   KEY `FK_MENUITEM_KITCHEN_idx` (`KITCHEN_ID`),
   CONSTRAINT `FK_MENUITEM_KITCHEN` FOREIGN KEY (`KITCHEN_ID`) REFERENCES `rest_kitchen` (`KITCHEN_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_MENUITEM_MENUTYPE` FOREIGN KEY (`MENU_TYPE_ID`) REFERENCES `ctg_menu_type` (`MENU_TYPE_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -732,7 +761,7 @@ CREATE TABLE `rest_order` (
   CONSTRAINT `FK_ORDER_MENUITM` FOREIGN KEY (`MENU_ITEM_ID`) REFERENCES `rest_menu_item` (`MENU_ITEM_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_ORDER_SHIFT_` FOREIGN KEY (`ID_SHIFT`) REFERENCES `rest_shift` (`ID_SHIFT`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_ORDER_TABLEACCOUNT` FOREIGN KEY (`TABLE_ACCOUNT_ID`) REFERENCES `rest_table_account` (`TABLE_ACCOUNT_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -827,7 +856,7 @@ CREATE TABLE `rest_order_log` (
   `TABLE_ACCOUNT_ID` int(11) DEFAULT NULL,
   `ID_SHIFT` int(11) DEFAULT NULL,
   PRIMARY KEY (`ORDER_LOG_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -990,7 +1019,7 @@ CREATE TABLE `rest_table_account` (
   CONSTRAINT `FK_ORDER_SHIFT_CLOSE` FOREIGN KEY (`ID_SHIFT_CLOSED`) REFERENCES `rest_shift` (`ID_SHIFT`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_ORDER_SHIFT_OPEN` FOREIGN KEY (`ID_SHIFT_OPENED`) REFERENCES `rest_shift` (`ID_SHIFT`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_TABLEACCOUNT_TABLE` FOREIGN KEY (`TABLE_ID`) REFERENCES `rest_table` (`TABLE_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1172,7 +1201,16 @@ BEGIN
 		AND dis_menu.menu_item_id = item.menu_item_id
 		order by DIS.DISCOUNT_VALID_SINCE, DIS.ENTRY_DATE ;
 
-		DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_finished = 1;
+		DECLARE GENERAL_DISCOUNT_LIST_CURSOR CURSOR FOR
+		SELECT DIS.DISCOUNT_ID,ROUND(((SELECT ITEM.MENU_ITEM_PRICE FROM rest_menu_item item where item.menu_item_id = PRM_MENU_ITEM_ID)*(DIS.DISCOUNT_PERCENTAGE/100)),2)
+		FROM ctg_discount DIS 
+		WHERE PRM_DATE between DIS.DISCOUNT_VALID_SINCE and DIS.DISCOUNT_VALID_UNTIL
+        AND DIS.TOTAL_PRODUCTS = 0
+        AND DIS.MENU_TYPE_ID = (SELECT ITEM.MENU_TYPE_ID FROM rest_menu_item item where item.menu_item_id = PRM_MENU_ITEM_ID)
+		order by DIS.DISCOUNT_VALID_SINCE, DIS.ENTRY_DATE ;
+
+        
+        DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_finished = 1;
 		
 		SET PRM_ORDER_ID =0;
 		SET PRM_DISCOUNT_VALUE = 0;
@@ -1192,9 +1230,34 @@ BEGIN
 					LEAVE get_discount_list;
                 end if;
 		END LOOP get_discount_list;
-
 		-- Cerramos el cursor
 		CLOSE DISCOUNT_LIST_CURSOR;
+        IF v_apply_discount = 0  then 
+			
+						SET v_finished =0;
+
+			OPEN GENERAL_DISCOUNT_LIST_CURSOR;
+
+			get_general_discount_list: LOOP
+
+					FETCH GENERAL_DISCOUNT_LIST_CURSOR INTO VAR_DISCOUNT_ID,VAR_MENU_ITEM_DISCOUNT;
+
+					IF v_finished = 1 THEN
+						LEAVE get_general_discount_list;
+					END IF;
+					if v_apply_discount = 0 then
+						SET v_apply_discount = 1;
+						SET PRM_DISCOUNT_ID =VAR_DISCOUNT_ID;
+						SET PRM_DISCOUNT_VALUE = ROUND(VAR_MENU_ITEM_DISCOUNT,2);
+						
+						LEAVE get_general_discount_list;
+					end if;
+			END LOOP get_general_discount_list;
+			-- Cerramos el cursor
+			CLOSE GENERAL_DISCOUNT_LIST_CURSOR;
+        
+        end if;
+        
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1659,4 +1722,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-08-10 15:25:53
+-- Dump completed on 2016-08-16 20:48:05

@@ -128,7 +128,7 @@ public class FormMenuItemProductController {
 	@FXML
 	public void onNew(MouseEvent event) {	
 		refreshComboBoxList();
-			resetValues();
+			resetRecord();
 			newModeEnabled();
 	}
 
@@ -259,7 +259,12 @@ public class FormMenuItemProductController {
 		menuItemProductMeasure.setText("");
 		 		 
 	}
-	
+
+	public void resetRecord(){
+		menuItemProductSelected = new RestMenuItemProduct();
+				 		 
+	}
+
 	public String validateRecord() {
 		 defaultLabel();
 		 String errorString = null;

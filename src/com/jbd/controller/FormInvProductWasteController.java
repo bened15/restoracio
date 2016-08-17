@@ -109,7 +109,7 @@ public class FormInvProductWasteController {
 
 	@FXML
 	public void onNew(MouseEvent event) {
-		resetValues();
+		resetRecord();
 		newModeEnabled();
 	}
 
@@ -201,6 +201,11 @@ public class FormInvProductWasteController {
 		transactionType.setText("");
 		productPurchaseDate.setText("");
 		productWaste.setText("");
+	}
+
+	public void resetRecord() {
+		invProductItemRecordSelected = new InvProductItem();
+
 	}
 
 	public String validateRecord() {

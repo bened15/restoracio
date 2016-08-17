@@ -85,7 +85,7 @@ public class FormCustomerController {
 
 	@FXML
 	public void onNew(MouseEvent event) {				
-			resetValues();
+			resetRecord();
 			newModeEnabled();
 	}
 	@FXML
@@ -196,7 +196,11 @@ public class FormCustomerController {
 		 customerNumber.setText("");
 		 		 
 	}
-	
+
+	public void resetRecord(){
+		customerRecordSelected = new AdmCustomer();		 		 
+	}
+
 	public String validateRecord() {
 		 defaultLabel();
 		 String errorString = null;

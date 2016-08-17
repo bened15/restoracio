@@ -102,7 +102,7 @@ public class FormUserController {
 
 	@FXML
 	public void onNew(MouseEvent event) {				
-			resetValues();
+			resetRecord();
 			newModeEnabled();
 	}
 	@FXML
@@ -252,6 +252,12 @@ public class FormUserController {
 		 userRole.getSelectionModel().select(null);
 
 	}
+
+	public void resetRecord(){
+		userRecordSelected = new SysUser();
+
+	}
+
 	
 	public String validateRecord() {
 		 defaultLabel();
@@ -264,6 +270,17 @@ public class FormUserController {
 			messageErrorNumber++;
 			lblUsercode.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
+		} else {
+			if (userRecordSelected.getUserCode() == null ){
+				SysUser user = null;
+				user = manageUser.findSysUser(userCode.getText().trim());
+				if (user == null || user.getUserCode() == null){
+					errorMessage.append(messageErrorNumber+"-"+"El usuario a ingresar ya existe.\n");
+					messageErrorNumber++;
+					lblUsercode.setTextFill(Color.web("#ff0000"));
+					
+				}
+			}
 		}
 		if (userPassword.getText()== null ||userPassword.getText().isEmpty()){
 			errorMessage.append(messageErrorNumber+"-"+ "El campo de contraseña es obligatorio.\n");

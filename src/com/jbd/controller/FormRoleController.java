@@ -85,7 +85,7 @@ public class FormRoleController {
 
 	@FXML
 	public void onNew(MouseEvent event) {				
-			resetValues();
+			resetRecord();
 			newModeEnabled();
 	}
 	@FXML
@@ -191,7 +191,11 @@ public class FormRoleController {
 		 roleName.setText("");
 		 roleDescription.setText("");
 	}
-	
+
+	public void resetRecord(){
+		sysRoleRecordSelected = new SysRole();
+	}
+
 	public String validateRecord() {
 		 defaultLabel();
 		 String errorString = null;

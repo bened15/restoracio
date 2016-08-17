@@ -164,7 +164,7 @@ public class FormMenuItemController2 {
 
 	@FXML
 	public void onNew(MouseEvent event) {
-		resetValues();
+		resetRecord();
 		newModeEnabled();
 	}
 
@@ -216,6 +216,7 @@ public class FormMenuItemController2 {
 				newRecord = true;
 			}
 			menuItemSelected.setMenuItemName(menuItemName.getText());
+			menuItemSelected.setMenuItemPrice(gf.asFloat(menuItemPrice.getText()));
 			menuItemSelected.setMenuItemDescription(menuItemDescription.getText());
 			menuItemSelected.setRestKitchen((RestKitchen) menuKitchen.getValue());
 			if (menuItemAvailable.getValue() == null || menuItemAvailable.getValue() == "No") {
@@ -312,6 +313,9 @@ public class FormMenuItemController2 {
 		menuKitchen.getSelectionModel().select(null);
 		menuItemImage.setImage(null);
 
+	}
+	public void resetRecord() {
+		menuItemSelected = new RestMenuItem();
 	}
 
 	public String validateRecord() {

@@ -81,7 +81,7 @@ public class FormKitchenController {
 
 	@FXML
 	public void onNew(MouseEvent event) {				
-			resetValues();
+			resetRecord();
 			newModeEnabled();
 	}
 	@FXML
@@ -182,6 +182,9 @@ public class FormKitchenController {
 		kitchenRecordSelected = new RestKitchen();
 		 kitchenName.setText("");
 		 kitchenDescription.setText("");
+	}
+	public void resetRecord(){
+		kitchenRecordSelected = new RestKitchen();
 	}
 	
 	public String validateRecord() {

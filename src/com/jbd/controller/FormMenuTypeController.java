@@ -83,7 +83,7 @@ public class FormMenuTypeController {
 
 	@FXML
 	public void onNew(MouseEvent event) {				
-			resetValues();
+			resetRecord();
 			newModeEnabled();
 	}
 	@FXML
@@ -186,6 +186,10 @@ public class FormMenuTypeController {
 		menuTypeRecordSelected = new CtgMenuType();
 		 menuTypeName.setText("");
 		 menuTypeDescription.setText("");
+	}
+
+	public void resetRecord(){
+		menuTypeRecordSelected = new CtgMenuType();
 	}
 	
 	public String validateRecord() {

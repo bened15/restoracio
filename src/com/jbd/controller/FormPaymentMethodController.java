@@ -83,7 +83,7 @@ public class FormPaymentMethodController {
 
 	@FXML
 	public void onNew(MouseEvent event) {				
-			resetValues();
+			resetRecord();
 			newModeEnabled();
 	}
 	@FXML
@@ -187,7 +187,11 @@ public class FormPaymentMethodController {
 		 paymentMethodName.setText("");
 		 paymentMethodDescription.setText("");
 	}
-	
+
+	public void resetRecord(){
+		paymentMethodRecordSelected = new CtgPaymentMethod();
+	}
+
 	public String validateRecord() {
 		 defaultLabel();
 		 String errorString = null;

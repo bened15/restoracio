@@ -119,7 +119,7 @@ public class FormInvProductController {
 
 	@FXML
 	public void onNew(MouseEvent event) {
-		resetValues();
+		resetRecord();
 		newModeEnabled();
 	}
 
@@ -229,6 +229,11 @@ public class FormInvProductController {
 		productName.getSelectionModel().select(null);
 		transactionType.getSelectionModel().select(null);
 		 productExpirationDate.setValue(null);
+
+	}
+	public void resetRecord() {
+		invProductItemSelected = new InvProductItem();
+
 
 	}
 
