@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jbd.controller.MainController">
+   <children>
+      <GridPane AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="929.0" minWidth="10.0" prefWidth="643.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="686.0" minWidth="10.0" prefWidth="627.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="221.0" minHeight="141.0" prefHeight="159.0" vgrow="ALWAYS" />
+            <RowConstraints maxHeight="163.0" minHeight="0.0" prefHeight="15.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="482.0" minHeight="10.0" prefHeight="214.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="317.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="345.0" minHeight="10.0" prefHeight="345.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ScrollPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #E4F1ED;">
+               <content>
+                  <AnchorPane prefHeight="192.0" style="-fx-background-color: #E4F1ED;">
+                     <children>
+                        <Button id="lleOrder" layoutX="224.0" layoutY="3.0" mnemonicParsing="false" onMouseClicked="#openTableLocation" onTouchPressed="#openTableLocation" prefHeight="90.0" prefWidth="90.0" style="-fx-background-color: #507E8A;" styleClass="bigButtons" text="Para llevar" textAlignment="CENTER" wrapText="true">
+                           <effect>
+                              <InnerShadow>
+                                 <input>
+                                    <DropShadow />
+                                 </input>
+                              </InnerShadow>
+                           </effect>
+                        </Button>
+                        <Button layoutX="324.0" layoutY="3.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="90.0" style="-fx-background-color: #507E8A;" styleClass="bigButtons" text="Menú" textAlignment="CENTER" wrapText="true">
+                           <effect>
+                              <InnerShadow>
+                                 <input>
+                                    <DropShadow />
+                                 </input>
+                              </InnerShadow>
+                           </effect>
+                        </Button>
+                        <Button layoutX="424.0" layoutY="3.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="90.0" style="-fx-background-color: #507E8A;" styleClass="bigButtons" text="Generar Reportes" textAlignment="CENTER" wrapText="true">
+                           <effect>
+                              <InnerShadow>
+                                 <input>
+                                    <DropShadow />
+                                 </input>
+                              </InnerShadow>
+                           </effect>
+                        </Button>
+                        <Button layoutX="525.0" layoutY="3.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="90.0" style="-fx-background-color: #507E8A;" styleClass="bigButtons" text="Reservaciones" textAlignment="CENTER" wrapText="true">
+                           <effect>
+                              <InnerShadow>
+                                 <input>
+                                    <DropShadow />
+                                 </input>
+                              </InnerShadow>
+                           </effect>
+                        </Button>
+                        <Button layoutX="626.0" layoutY="3.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="90.0" style="-fx-background-color: #507E8A;" styleClass="bigButtons" text="Imprimir Facturas" textAlignment="CENTER" wrapText="true">
+                           <effect>
+                              <InnerShadow>
+                                 <input>
+                                    <DropShadow />
+                                 </input>
+                              </InnerShadow>
+                           </effect>
+                        </Button>
+                        <Button layoutX="757.0" layoutY="3.0" mnemonicParsing="false" onMouseClicked="#exitApp" onTouchPressed="#exitApp" prefHeight="90.0" prefWidth="90.0" style="-fx-background-color: #507E8A;" styleClass="bigButtons" text="Salir" textAlignment="CENTER">
+                           <effect>
+                              <InnerShadow>
+                                 <input>
+                                    <DropShadow />
+                                 </input>
+                              </InnerShadow>
+                           </effect>
+                        </Button>
+                        <Button id="nOrder" layoutX="24.0" layoutY="3.0" mnemonicParsing="false" onMouseClicked="#openTableLocation" onTouchPressed="#openTableLocation" prefHeight="90.0" prefWidth="90.0" style="-fx-background-color: #507E8A;" styleClass="bigButtons" text="Nueva Orden" textAlignment="CENTER" wrapText="true">
+                           <effect>
+                              <InnerShadow>
+                                 <input>
+                                    <DropShadow />
+                                 </input>
+                              </InnerShadow>
+                           </effect>
+                        </Button>
+                        <Button id="vOrder" layoutX="124.0" layoutY="3.0" mnemonicParsing="false" onMouseClicked="#openTableLocation" onTouchPressed="#openTableLocation" prefHeight="90.0" prefWidth="90.0" style="-fx-background-color: #507E8A;" styleClass="bigButtons" text="Ordenes" textAlignment="CENTER" wrapText="true">
+                           <effect>
+                              <InnerShadow>
+                                 <input>
+                                    <DropShadow />
+                                 </input>
+                              </InnerShadow>
+                           </effect>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+            <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+               <content>
+                  <AnchorPane fx:id="menuTypePane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #E4F1ED;" />
+               </content>
+            </ScrollPane>
+            <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
+               <content>
+                  <AnchorPane fx:id="principal" prefHeight="400.0" prefWidth="603.0" style="-fx-background-color: #E4F1ED;">
+                     <padding>
+                        <Insets bottom="5.0" />
+                     </padding>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+            <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowSpan="2147483647">
+               <content>
+                  <AnchorPane fx:id="rightSide" prefHeight="686.0" prefWidth="455.0" style="-fx-background-color: #E4F1ED;">
+                     <children>
+                        <Button fx:id="confirmButton" layoutX="88.0" layoutY="633.0" mnemonicParsing="false" onMouseClicked="#confirmOrder" onTouchPressed="#confirmOrder" prefHeight="45.0" prefWidth="280.0" styleClass="bigButtons2" text="Confirmar Orden" textAlignment="CENTER" wrapText="true" />
+                        <Label fx:id="totalL" layoutX="14.0" layoutY="548.0" text="Total: $ " />
+                        <TableView fx:id="itemsOrderTable" layoutX="2.0" layoutY="29.0" prefHeight="515.0" prefWidth="449.0" />
+                        <Label layoutX="4.0" layoutY="6.0" prefHeight="17.0" prefWidth="172.0" text="Detalle:" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

@@ -46,13 +46,13 @@ public class Main extends Application {
 	public void initPrincipalLayout() {
 
 		FXMLLoader loader = new FXMLLoader();
-		
-		
-		loader.setLocation(Main.class.getResource("../com/jbd/view/W_MainWindow_2_1.fxml"));		
+//		/*
+		loader.setLocation(Main.class.getResource("../com/jbd/view/W_MainWindow_scroll.fxml"));		
 		try {
 			rootLayout = (AnchorPane) loader.load();
 			// Show the scene containing the root layout.
-			Scene scene = new Scene(rootLayout);
+			Scene scene = new Scene(rootLayout,1024,768);
+//			Scene scene = new Scene(rootLayout);
 			// inyectar al controller la main app para cada una de las ventanas
 
 			MainController mainController = loader.getController();
@@ -69,8 +69,10 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 		
-/*		
 
+//*/
+
+		/*
 		loader.setLocation(Main.class.getResource("../com/jbd/FormAdministration.fxml"));
 		
 		try {
@@ -85,7 +87,8 @@ public class Main extends Application {
 			// TODO Auto-generated catch blockW
 			e.printStackTrace();
 		}
-*/
+		*/
+		
 	}
 
 	
