@@ -66,18 +66,18 @@
                            <children>
                               <Label fx:id="lblProductPrice" text="Precio" GridPane.rowIndex="2" />
                               <Label fx:id="lblProductQty" text="Cantidad" GridPane.rowIndex="4" />
-                              <TextField fx:id="productPrice" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <TextField fx:id="productQty" prefHeight="25.0" prefWidth="48.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                               <Label text="Disponible" GridPane.rowIndex="5" />
-                              <TextField fx:id="productAvailable" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                               <Label fx:id="lblProductType" text="Tipo de producto" />
                               <Label fx:id="lblProduct" text="Producto" GridPane.rowIndex="1" />
                               <ComboBox fx:id="productType" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" />
                               <ComboBox fx:id="productName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <ComboBox fx:id="transactionType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                               <Label fx:id="lblTransactionType" text="Transaccion" GridPane.rowIndex="6" />
                               <Label fx:id="lblProductExpirationDate" text="Fecha caducidad" GridPane.rowIndex="3" />
+                              <TextField fx:id="productPrice" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <DatePicker fx:id="productExpirationDate" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <TextField fx:id="productQty" prefHeight="25.0" prefWidth="48.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <TextField fx:id="productAvailable" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <ComboBox fx:id="transactionType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                            </children>
                         </GridPane>
                         <GridPane GridPane.rowIndex="2">
@@ -92,10 +92,10 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button fx:id="clearBtn" mnemonicParsing="false" onMouseClicked="#onClear" text="Limpiar" GridPane.columnIndex="4" />
-                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" text="Guardar" GridPane.columnIndex="3" />
-                              <Button fx:id="newBtn" mnemonicParsing="false" onMouseClicked="#onNew" text="Nuevo" GridPane.columnIndex="2" />
                               <Button fx:id="searchBtn" mnemonicParsing="false" onMouseClicked="#onSearch" text="Buscar" GridPane.columnIndex="1" />
+                              <Button fx:id="newBtn" mnemonicParsing="false" onMouseClicked="#onNew" text="Nuevo" GridPane.columnIndex="2" />
+                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" text="Guardar" GridPane.columnIndex="3" />
+                              <Button fx:id="clearBtn" mnemonicParsing="false" onMouseClicked="#onClear" text="Limpiar" GridPane.columnIndex="4" />
                            </children>
                         </GridPane>
                      </children>

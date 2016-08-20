@@ -74,9 +74,9 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button fx:id="deleteBtn" mnemonicParsing="false" onMouseClicked="#onDelete" onTouchPressed="#onDelete" text="Eliminar" GridPane.columnIndex="3" />
-                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" onTouchPressed="#onSave" text="Guardar" GridPane.columnIndex="2" />
                               <Button fx:id="newBtn" mnemonicParsing="false" onMouseClicked="#onNew" onTouchPressed="#onNew" text="Nuevo" GridPane.columnIndex="1" />
+                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" onTouchPressed="#onSave" text="Guardar" GridPane.columnIndex="2" />
+                              <Button fx:id="deleteBtn" mnemonicParsing="false" onMouseClicked="#onDelete" onTouchPressed="#onDelete" text="Eliminar" GridPane.columnIndex="3" />
                               <Button fx:id="closeBtn" mnemonicParsing="false" onMouseClicked="#onClose" onTouchPressed="#onDelete" text="Cerrar" GridPane.columnIndex="4" />
                            </children>
                         </GridPane>

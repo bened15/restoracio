@@ -104,7 +104,7 @@ public class FormAdministrationController {
 		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                FormInvProductController controller = fxmlLoader.<FormInvProductController>getController();
-		                controller.setUserEntry("Douglas");
+		                controller.setUserEntry("admin");
 		                stage.setTitle("Registro de compras");
 		                stage.setScene(new Scene(root1));  
 		                stage.show();
@@ -168,13 +168,13 @@ public class FormAdministrationController {
 	public void onMenuItemMenu() {
 		 try {
 		        FXMLLoader fxmlLoader = new FXMLLoader();
-		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormMenu2.fxml"));
+		        fxmlLoader.setLocation(Main.class.getResource("../com/jbd/FormMenu3.fxml"));
 		                Parent root1 = (Parent) fxmlLoader.load();
 		                Stage stage = new Stage();
 		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                FormMenuItemController2 controller = fxmlLoader.<FormMenuItemController2>getController();
-		                controller.setUserEntry("Douglas");
+		                controller.setUserEntry("admin");
 		                stage.setTitle("Registro de platos");
 		                stage.setScene(new Scene(root1));  
 		                stage.show();
@@ -279,7 +279,7 @@ public class FormAdministrationController {
 		                stage.initModality(Modality.APPLICATION_MODAL);
 		                //stage.initStyle(StageStyle.UNDECORATED);
 		                FormProductController controller = fxmlLoader.<FormProductController>getController();
-		                controller.setUserEntry("Douglas");
+		                controller.setUserEntry("admin");
 		                stage.setTitle("Registro de productos");
 		                stage.setScene(new Scene(root1));  
 		                stage.show();

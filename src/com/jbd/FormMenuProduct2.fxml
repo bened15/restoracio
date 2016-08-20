@@ -63,9 +63,9 @@
                               <Label fx:id="lblMenuItemProduct" text="Producto" GridPane.rowIndex="1" />
                               <Label fx:id="lblMenuItemProductMeasure" text="Unidad de Medida" GridPane.rowIndex="2" />
                               <Label fx:id="lblMenuItemProductQty" text="Cantidad" GridPane.rowIndex="3" />
-                              <TextField fx:id="menuItemProductMeasure" editable="false" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
                               <ComboBox fx:id="menuItemProductType" prefHeight="25.0" prefWidth="329.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" />
                               <ComboBox fx:id="menuItemRestProduct" prefHeight="25.0" prefWidth="327.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" />
+                              <TextField fx:id="menuItemProductMeasure" editable="false" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
                               <TextField fx:id="menuItemProductQty" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
                            </children>
                         </GridPane>
@@ -81,10 +81,10 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button fx:id="deleteBtn" mnemonicParsing="false" onMouseClicked="#onDelete" onTouchPressed="#onDelete" text="Eliminar" GridPane.columnIndex="3" />
-                              <Button fx:id="clearBtn" mnemonicParsing="false" onMouseClicked="#onClear" onTouchPressed="#onClear" text="Limpiar" GridPane.columnIndex="2" />
-                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" onTouchPressed="#onSave" text="Guardar" GridPane.columnIndex="1" />
                               <Button fx:id="newBtn" mnemonicParsing="false" onMouseClicked="#onNew" onTouchPressed="#onNew" text="Nuevo" />
+                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" onTouchPressed="#onSave" text="Guardar" GridPane.columnIndex="1" />
+                              <Button fx:id="clearBtn" mnemonicParsing="false" onMouseClicked="#onClear" onTouchPressed="#onClear" text="Limpiar" GridPane.columnIndex="2" />
+                              <Button fx:id="deleteBtn" mnemonicParsing="false" onMouseClicked="#onDelete" onTouchPressed="#onDelete" text="Eliminar" GridPane.columnIndex="3" />
                               <Button fx:id="closeBtn" mnemonicParsing="false" onMouseClicked="#onClose" onTouchPressed="#onDelete" text="Cerrar" GridPane.columnIndex="4" />
                            </children>
                         </GridPane>

@@ -74,13 +74,13 @@
                               <TextArea fx:id="discountDescription" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <TextField fx:id="discountPercentage" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <DatePicker fx:id="discountBeginDate" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <DatePicker fx:id="discountEndDate" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <TextField fx:id="discountBeginTime" maxWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                               <Label fx:id="lblDiscountMenutype" text="Tipo de menu" GridPane.rowIndex="7" />
+                              <DatePicker fx:id="discountEndDate" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <TextField fx:id="discountEndTime" maxWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                               <ComboBox fx:id="discountMenuType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                               <Label fx:id="lblDiscountBeginTime" text="Hora Inicio" GridPane.rowIndex="4" />
                               <Label fx:id="lblDiscountEndTime" text="Hora Fin" GridPane.rowIndex="6" />
-                              <TextField fx:id="discountBeginTime" maxWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <TextField fx:id="discountEndTime" maxWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                               <Button fx:id="addMenuItemBtn" mnemonicParsing="false" onMouseClicked="#onAddMenuItem" onTouchPressed="#onAddMenuItem" text="Agregar platos" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                            </children>
                         </GridPane>
@@ -96,10 +96,10 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" onTouchPressed="#onSave" text="Guardar" GridPane.columnIndex="3" />
-                              <Button fx:id="editBtn" mnemonicParsing="false" text="Editar" GridPane.columnIndex="2" />
-                              <Button fx:id="newBtn" mnemonicParsing="false" onMouseClicked="#onNew" onTouchPressed="#onNew" text="Nuevo" GridPane.columnIndex="1" />
                               <Button fx:id="searchBtn" mnemonicParsing="false" onMouseClicked="#onSearch" onTouchPressed="#onSearch" text="Buscar" />
+                              <Button fx:id="newBtn" mnemonicParsing="false" onMouseClicked="#onNew" onTouchPressed="#onNew" text="Nuevo" GridPane.columnIndex="1" />
+                              <Button fx:id="editBtn" mnemonicParsing="false" text="Editar" GridPane.columnIndex="2" />
+                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" onTouchPressed="#onSave" text="Guardar" GridPane.columnIndex="3" />
                               <Button fx:id="clearBtn" mnemonicParsing="false" onMouseClicked="#onClear" onTouchPressed="#onClear" text="Limpiar" GridPane.columnIndex="4" />
                            </children>
                         </GridPane>

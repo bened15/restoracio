@@ -108,10 +108,10 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" text="Guardar" GridPane.columnIndex="3" />
-                              <Button fx:id="editBtn" mnemonicParsing="false" text="Edit" GridPane.columnIndex="2" />
-                              <Button fx:id="newBtn" mnemonicParsing="false" onMouseClicked="#onNew" text="Nuevo" GridPane.columnIndex="1" />
                               <Button fx:id="searchBtn" mnemonicParsing="false" onMouseClicked="#onSearch" text="Buscar" />
+                              <Button fx:id="newBtn" mnemonicParsing="false" onMouseClicked="#onNew" text="Nuevo" GridPane.columnIndex="1" />
+                              <Button fx:id="editBtn" mnemonicParsing="false" text="Editar" GridPane.columnIndex="2" />
+                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" text="Guardar" GridPane.columnIndex="3" />
                               <Button fx:id="clearBtn" mnemonicParsing="false" onMouseClicked="#onClear" text="Limpiar" GridPane.columnIndex="4" />
                            </children>
                         </GridPane>

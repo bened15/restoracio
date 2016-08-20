@@ -43,11 +43,11 @@
                   <Label fx:id="lblRestaurantNIT" text="NIT" GridPane.rowIndex="1" />
                   <Label fx:id="lbkRestaurantPhone1" text="Telefono" GridPane.rowIndex="2" />
                   <Label fx:id="lblRestaurantEmail" text="Email" GridPane.rowIndex="3" />
+                  <Label fx:id="lblRestaurantAddress" text="Direccion" GridPane.rowIndex="4" />
                   <TextField fx:id="restaurantName" GridPane.columnIndex="1" />
                   <TextField fx:id="restaurantNIT" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="restaurantPhone1" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <TextField fx:id="restaurantEmail" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Label fx:id="lblRestaurantAddress" text="Direccion" GridPane.rowIndex="4" />
                   <TextArea fx:id="restaurantAddress" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                </children>
             </GridPane>

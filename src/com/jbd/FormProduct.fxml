@@ -67,19 +67,19 @@
                               <Label fx:id="lblProductName" text="Nombre" />
                               <Label text="Descripcion" GridPane.rowIndex="1" />
                               <Label text="Disponibilidad" GridPane.rowIndex="2" />
-                              <TextField fx:id="productName" GridPane.columnIndex="1" />
-                              <TextField fx:id="productAvailability" editable="false" prefHeight="25.0" prefWidth="48.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <Label text="Umbral" GridPane.rowIndex="3" />
                               <Label text="Desperdicio" GridPane.rowIndex="4" />
-                              <TextArea fx:id="productDescription" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <TextField fx:id="productTreshold" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <TextField fx:id="productWaste" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                               <Label fx:id="lblProductType" text="Tipo de producto" GridPane.rowIndex="5" />
                               <Label fx:id="lblProductMeasure" text="Unidad de medida" GridPane.rowIndex="6" />
+                              <Label text="Proveedor" GridPane.rowIndex="7" />
+                              <TextField fx:id="productName" GridPane.columnIndex="1" />
+                              <TextArea fx:id="productDescription" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="productAvailability" editable="false" prefHeight="25.0" prefWidth="48.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="productTreshold" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <TextField fx:id="productWaste" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                               <ComboBox fx:id="productType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                               <ComboBox fx:id="productMeasure" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                               <ComboBox fx:id="productSupplier" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                              <Label text="Proveedor" GridPane.rowIndex="7" />
                            </children>
                         </GridPane>
                         <GridPane GridPane.rowIndex="3">
@@ -94,10 +94,10 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button fx:id="clearBtn" mnemonicParsing="false" onMouseClicked="#onClear" text="Limpiar" GridPane.columnIndex="4" />
-                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" text="Guardar" GridPane.columnIndex="3" />
-                              <Button fx:id="newBtn" mnemonicParsing="false" onMouseClicked="#onNew" text="Nuevo" GridPane.columnIndex="2" />
                               <Button fx:id="searchBtn" mnemonicParsing="false" onMouseClicked="#onSearch" text="Buscar" GridPane.columnIndex="1" />
+                              <Button fx:id="newBtn" mnemonicParsing="false" onMouseClicked="#onNew" text="Nuevo" GridPane.columnIndex="2" />
+                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" text="Guardar" GridPane.columnIndex="3" />
+                              <Button fx:id="clearBtn" mnemonicParsing="false" onMouseClicked="#onClear" text="Limpiar" GridPane.columnIndex="4" />
                            </children>
                         </GridPane>
                      </children>

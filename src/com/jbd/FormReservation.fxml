@@ -66,17 +66,17 @@
                               <Label fx:id="lblCustomerLastname" alignment="CENTER" prefHeight="17.0" prefWidth="66.0" text="Apellido" GridPane.columnIndex="2" />
                               <Label fx:id="lblReservationDate" text="Fecha" GridPane.rowIndex="3" />
                               <Label fx:id="lblReservationAdvancePayment" text="Adelanto" GridPane.rowIndex="4" />
+                              <Label fx:id="lblRservationComments" text="Comentarios" GridPane.rowIndex="6" />
+                              <Label fx:id="lblReservationCustomer" text="Cliente" GridPane.rowIndex="2" />
+                              <Label fx:id="lblReservationPaymentMethod" text="Tipo de pago" GridPane.rowIndex="5" />
                               <TextField fx:id="customerName" prefHeight="25.0" prefWidth="120.0" GridPane.columnIndex="1" />
                               <TextField fx:id="customerLastname" GridPane.columnIndex="3" />
-                              <TextField fx:id="reservationAdvancePayment" prefHeight="25.0" prefWidth="42.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <Label fx:id="lblRservationComments" text="Comentarios" GridPane.rowIndex="6" />
-                              <TextArea fx:id="reservationComments" prefHeight="106.0" prefWidth="257.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="6" />
-                              <Label fx:id="lblReservationCustomer" text="Cliente" GridPane.rowIndex="2" />
                               <Button fx:id="searchCustomerBtn" mnemonicParsing="false" onMouseClicked="#onSearchClient" text="Buscar cliente" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
                               <ComboBox fx:id="reservationCustomer" prefHeight="25.0" prefWidth="274.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
                               <DatePicker fx:id="reservationDate" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
-                              <Label fx:id="lblReservationPaymentMethod" text="Tipo de pago" GridPane.rowIndex="5" />
+                              <TextField fx:id="reservationAdvancePayment" prefHeight="25.0" prefWidth="42.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                               <ComboBox fx:id="reservationPaymentMethod" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+                              <TextArea fx:id="reservationComments" prefHeight="106.0" prefWidth="257.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="6" />
                            </children>
                         </GridPane>
                         <GridPane GridPane.rowIndex="2">
@@ -91,10 +91,10 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" text="Guardar" GridPane.columnIndex="3" />
-                              <Button fx:id="editBtn" mnemonicParsing="false" text="Edit" GridPane.columnIndex="2" />
-                              <Button fx:id="newBtn" mnemonicParsing="false" onMouseClicked="#onNew" text="Nuevo" GridPane.columnIndex="1" />
                               <Button fx:id="searchBtn" mnemonicParsing="false" onMouseClicked="#onSearch" text="Buscar" />
+                              <Button fx:id="newBtn" mnemonicParsing="false" onMouseClicked="#onNew" text="Nuevo" GridPane.columnIndex="1" />
+                              <Button fx:id="editBtn" mnemonicParsing="false" text="Edit" GridPane.columnIndex="2" />
+                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" text="Guardar" GridPane.columnIndex="3" />
                               <Button fx:id="clearBtn" mnemonicParsing="false" onMouseClicked="#onClear" text="Limpiar" GridPane.columnIndex="4" />
                            </children>
                         </GridPane>

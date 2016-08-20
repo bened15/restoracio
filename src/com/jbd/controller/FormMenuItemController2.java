@@ -71,14 +71,14 @@ public class FormMenuItemController2 {
 	private IRestKitchenManagement manageKitchen;
 	// Declaracion Labels
 	@FXML
-	private Label lblMenuItemName, lblMenuItemType, lblMenuItemPrice, lblMenuItemAvailable, lblMenuKitchen;
+	private Label lblMenuItemName, lblMenuItemType, lblMenuItemPrice, lblMenuItemAvailable, lblMenuKitchen, lblMenuItemShortName;
 
 	// Declaracion Botones
 	@FXML
 	private Button newBtn, saveBtn, searchBtn, clearBtn, openFileBtn, addProductBtn, addCommentBtn;
 	// Declaracion Campos
 	@FXML
-	private TextField menuItemName, menuItemPrice;
+	private TextField menuItemName, menuItemPrice, menuItemShortName;
 	@FXML
 	private TextArea menuItemDescription;
 
@@ -219,6 +219,7 @@ public class FormMenuItemController2 {
 			menuItemSelected.setMenuItemPrice(gf.asFloat(menuItemPrice.getText()));
 			menuItemSelected.setMenuItemDescription(menuItemDescription.getText());
 			menuItemSelected.setRestKitchen((RestKitchen) menuKitchen.getValue());
+			menuItemSelected.setMenuItemShortName(menuItemShortName.getText());
 			if (menuItemAvailable.getValue() == null || menuItemAvailable.getValue() == "No") {
 				menuItemSelected.setAvailable(0);
 			} else {
@@ -307,6 +308,7 @@ public class FormMenuItemController2 {
 
 		menuItemDescription.setText("");
 		menuItemName.setText("");
+		menuItemShortName.setText("");
 		menuItemPrice.setText("");
 		menuItemDescription.setText("");
 		menuItemType.getSelectionModel().select(null);
@@ -325,12 +327,18 @@ public class FormMenuItemController2 {
 			int messageErrorNumber = 1;	
 
 
-		if (menuItemName.getText() == null || menuItemName.getText().isEmpty()) {
-			errorMessage.append(messageErrorNumber+"-"+"El campo nombre es obligatorio.\n");
-			messageErrorNumber++;				
-			lblMenuItemName.setTextFill(Color.web("#ff0000"));
-			// return errorMessage;
-		}
+			if (menuItemName.getText() == null || menuItemName.getText().isEmpty()) {
+				errorMessage.append(messageErrorNumber+"-"+"El campo nombre es obligatorio.\n");
+				messageErrorNumber++;				
+				lblMenuItemName.setTextFill(Color.web("#ff0000"));
+				// return errorMessage;
+			}
+			if (menuItemShortName.getText() == null || menuItemShortName.getText().isEmpty()) {
+				errorMessage.append(messageErrorNumber+"-"+"El campo nombre corto es obligatorio.\n");
+				messageErrorNumber++;				
+				lblMenuItemShortName.setTextFill(Color.web("#ff0000"));
+				// return errorMessage;
+			}
 		if (menuItemPrice.getText() == null || menuItemPrice.getText().isEmpty()) {
 			errorMessage.append(messageErrorNumber+"-"+"El campo precio es obligatorio.\n");
 			messageErrorNumber++;				
@@ -413,6 +421,7 @@ public class FormMenuItemController2 {
 	public void loadRecordInformation(int menuItemCodePrm) {
 		menuItemSelected = manageRestMenuItem.findRestMenuItem(menuItemCodePrm);
 		menuItemName.setText(menuItemSelected.getMenuItemName());
+		menuItemShortName.setText(menuItemSelected.getMenuItemShortName());
 		menuItemDescription.setText(menuItemSelected.getMenuItemDescription());
 		menuItemPrice.setText(Float.toString(menuItemSelected.getMenuItemPrice()));
 		if (menuItemSelected.getAvailable() == 0) {
@@ -458,6 +467,7 @@ public class FormMenuItemController2 {
 
 	public void defaultModeEnabled() {
 		menuItemName.setEditable(true);
+		menuItemShortName.setEditable(false);
 		menuItemDescription.setEditable(false);
 		menuItemPrice.setEditable(false);
 		menuItemType.setDisable(false);
@@ -473,6 +483,7 @@ public class FormMenuItemController2 {
 
 	public void initModeEnabled() {
 		menuItemName.setEditable(true);
+		menuItemShortName.setEditable(false);
 		menuItemDescription.setEditable(false);
 		menuItemPrice.setEditable(false);
 		menuItemType.setDisable(false);
@@ -489,6 +500,7 @@ public class FormMenuItemController2 {
 
 	public void rowSelectedModeEnabled() {
 		menuItemName.setEditable(true);
+		menuItemShortName.setEditable(true);
 		menuItemPrice.setEditable(true);
 		menuItemDescription.setEditable(true);
 		menuItemType.setDisable(false);
@@ -505,6 +517,7 @@ public class FormMenuItemController2 {
 	public void editModeEnabled() {
 
 		menuItemName.setEditable(true);
+		menuItemShortName.setEditable(true);
 		menuItemDescription.setEditable(true);
 		menuItemType.setDisable(false);
 		menuItemPrice.setEditable(true);
@@ -521,6 +534,7 @@ public class FormMenuItemController2 {
 	public void newModeEnabled() {
 
 		menuItemName.setEditable(true);
+		menuItemShortName.setEditable(true);
 		menuItemPrice.setEditable(true);
 		menuItemDescription.setEditable(true);
 		menuItemType.setDisable(false);
@@ -537,6 +551,7 @@ public class FormMenuItemController2 {
 	public void defaultLabel() {
 		lblMenuItemPrice.setTextFill(Color.web("#000000"));
 		lblMenuItemName.setTextFill(Color.web("#000000"));
+		lblMenuItemShortName.setTextFill(Color.web("#000000"));
 		lblMenuItemType.setTextFill(Color.web("#000000"));
 		lblMenuKitchen.setTextFill(Color.web("#000000"));
 	}

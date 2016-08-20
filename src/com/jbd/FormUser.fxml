@@ -70,16 +70,16 @@
                               <Label text="Direccion" GridPane.rowIndex="2" />
                               <Label text="Telefono" GridPane.rowIndex="3" />
                               <Label text="Email" GridPane.rowIndex="4" />
+                              <Label text="Fecha de nacimiento*" GridPane.rowIndex="5" />
+                              <Label fx:id="lblBegindate" text="Fecha de contratacion" GridPane.rowIndex="6" />
+                              <Label text="Employment end date" GridPane.rowIndex="7" />
                               <TextField fx:id="userName" GridPane.columnIndex="1" />
                               <TextField fx:id="userLastname" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <TextField fx:id="userAddress" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <TextField fx:id="userPhone1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                               <TextField fx:id="userEmail" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <Label text="Fecha de nacimiento*" GridPane.rowIndex="5" />
                               <DatePicker fx:id="userBirthdate" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                               <DatePicker fx:id="userEmploymentBeginDate" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                              <Label fx:id="lblBegindate" text="Fecha de contratacion" GridPane.rowIndex="6" />
-                              <Label text="Employment end date" GridPane.rowIndex="7" />
                               <DatePicker fx:id="userEmploymentEndDate" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                            </children>
                         </GridPane>
@@ -96,9 +96,9 @@
                            <children>
                               <Label fx:id="lblUsercode" text="Usuario*" />
                               <Label fx:id="lblUserPassword" text="Contraseña*" GridPane.rowIndex="1" />
+                              <Label fx:id="lblUserRole" text="Rol*" GridPane.rowIndex="2" />
                               <TextField fx:id="userCode" GridPane.columnIndex="1" />
                               <TextField fx:id="userPassword" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label fx:id="lblUserRole" text="Rol*" GridPane.rowIndex="2" />
                               <ComboBox fx:id="userRole" prefHeight="25.0" prefWidth="179.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>

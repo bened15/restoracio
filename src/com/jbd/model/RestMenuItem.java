@@ -28,6 +28,9 @@ public class RestMenuItem implements Serializable {
 	@Column(name="MENU_ITEM_NAME")
 	private String menuItemName;
 
+	@Column(name="MENU_ITEM_SHORT_NAME")
+	private String menuItemShortName;
+
 	@Column(name="MENU_ITEM_PRICE")
 	private float menuItemPrice;
 
@@ -195,6 +198,16 @@ public class RestMenuItem implements Serializable {
 	}
 
 	
+
+	public String getMenuItemShortName() {
+		return menuItemShortName;
+	}
+
+	public void setMenuItemShortName(String menuItemShortName) {
+		this.menuItemShortName = menuItemShortName;
+	}
+
+
 
 	@Transient
 	private String menuItemTypeText;
