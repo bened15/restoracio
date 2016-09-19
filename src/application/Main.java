@@ -123,7 +123,23 @@ public class Main extends Application {
 					AnchorPane rootMain 	= null;
 
 					switch (frmLogin.getSelectedModule().getModuleId()){
-						case 1:		loaderMain.setLocation(Main.class.getResource("../com/jbd/view/W_MainWindow_scroll.fxml"));
+						case 1:		loaderMain.setLocation(Main.class.getResource("../com/jbd/FormAdministration.fxml"));
+
+									try {
+										rootMain 	= loaderMain.load();
+									} catch (Exception e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+									sceneMain 	= new Scene(rootMain);
+
+									stageMain.setScene(sceneMain);
+									stageMain.setMaximized(true);
+									stageMain.setTitle("JBD Admin");
+									stageMain.show();
+
+									break;
+						case 2:  	loaderMain.setLocation(Main.class.getResource("../com/jbd/view/W_MainWindow_scroll.fxml"));
 									try {
 										rootMain = (AnchorPane) loaderMain.load();
 									} catch (Exception e1) {
@@ -145,21 +161,6 @@ public class Main extends Application {
 									stageMain.setTitle("JBD Restaurant");
 									stageMain.show();
 
-									break;
-						case 2:  	loaderMain.setLocation(Main.class.getResource("../com/jbd/FormAdministration.fxml"));
-
-									try {
-										rootMain 	= loaderMain.load();
-									} catch (Exception e1) {
-										// TODO Auto-generated catch block
-										e1.printStackTrace();
-									}
-									sceneMain 	= new Scene(rootMain);
-
-									stageMain.setScene(sceneMain);
-									stageMain.setMaximized(true);
-									stageMain.setTitle("JBD Admin");
-									stageMain.show();
 									break;
 
 						default:	System.exit(0);
