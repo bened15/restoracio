@@ -18,7 +18,7 @@ public class RestBillPayment implements Serializable {
 	@Column(name = "ID_BILL_PAYMENT")
 	private int idBillPayment;
 
-	private float amount;
+	private double amount;
 
 	// bi-directional many-to-one association to RestBill
 	@ManyToOne
@@ -51,11 +51,11 @@ public class RestBillPayment implements Serializable {
 		this.idBillPayment = idBillPayment;
 	}
 
-	public float getAmount() {
+	public double getAmount() {
 		return this.amount;
 	}
 
-	public void setAmount(float amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 

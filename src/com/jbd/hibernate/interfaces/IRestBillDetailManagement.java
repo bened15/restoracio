@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.jbd.model.RestBill;
 import com.jbd.model.RestBillDetail;
+import com.jbd.model.RestOrder;
 import com.jbd.model.RestTableAccount;
 
 public interface IRestBillDetailManagement {
@@ -17,9 +18,9 @@ public interface IRestBillDetailManagement {
 	public RestBillDetail findRestBillDetail(Integer oId);
 
 	public List<RestBillDetail> findAllRestBillDetailFromTableAccount(RestTableAccount Taccount);
+
 	public List<RestBillDetail> findAllRestBillDetailFromRestBill(RestBill bill);
 
-
-
+	public List<RestOrder> findAllRestBillDetailFromRestBillForTable(RestBill bill);
 
 }

@@ -22,8 +22,8 @@
                <children>
                   <TableView fx:id="supplierList" layoutX="-12.0" onMouseClicked="#getSelectedRow" prefHeight="398.0" prefWidth="229.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-25.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn fx:id="supplierColumn" prefWidth="87.0" text="Supplier" />
-                      <TableColumn fx:id="contactColumn" prefWidth="111.0" text="Contact" />
+                      <TableColumn fx:id="supplierColumn" prefWidth="87.0" text="Nombre" />
+                      <TableColumn fx:id="contactColumn" prefWidth="111.0" text="Contacto" />
                         <TableColumn fx:id="supplierIdColumn" prefWidth="87.0" text="SupplierId" visible="false" />
                     </columns>
                      <columnResizePolicy>
@@ -47,8 +47,8 @@
                       <RowConstraints maxHeight="79.0" minHeight="10.0" prefHeight="78.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label prefHeight="22.0" prefWidth="82.0" text="Supplier details" />
-                        <Label alignment="BOTTOM_LEFT" text="Contact details" GridPane.rowIndex="3" />
+                        <Label prefHeight="22.0" prefWidth="82.0" text="Proveedor" />
+                        <Label alignment="BOTTOM_LEFT" text="Contacto" GridPane.rowIndex="3" />
                         <GridPane GridPane.rowIndex="1">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="100.0" />
@@ -62,10 +62,10 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label fx:id="lblSupplierName" text="Name" />
-                              <Label text="Address" GridPane.rowIndex="1" />
-                              <Label text="City" GridPane.rowIndex="2" />
-                              <Label text="Phone number" GridPane.rowIndex="3" />
+                              <Label fx:id="lblSupplierName" text="Nombre" />
+                              <Label text="Direccion" GridPane.rowIndex="1" />
+                              <Label text="Ciudad" GridPane.rowIndex="2" />
+                              <Label text="Telefono" GridPane.rowIndex="3" />
                               <Label text="Email" GridPane.rowIndex="4" />
                               <TextField fx:id="supplierName" GridPane.columnIndex="1" />
                               <TextField fx:id="supplierAddress" GridPane.columnIndex="1" GridPane.rowIndex="1" />
@@ -86,9 +86,9 @@
                               <RowConstraints />
                           </rowConstraints>
                            <children>
-                              <Label fx:id="lblSupplierContactName" text="Firstname" />
-                              <Label fx:id="lblSupplierContactLastname" text="Lastname" GridPane.rowIndex="1" />
-                              <Label text="Phone number" GridPane.rowIndex="2" />
+                              <Label fx:id="lblSupplierContactName" text="Nombre" />
+                              <Label fx:id="lblSupplierContactLastname" text="Apellido" GridPane.rowIndex="1" />
+                              <Label text="Telefono" GridPane.rowIndex="2" />
                               <Label text="Email" GridPane.rowIndex="3" />
                               <TextField fx:id="supplierContactName" GridPane.columnIndex="1" />
                               <TextField fx:id="supplierContactLastname" GridPane.columnIndex="1" GridPane.rowIndex="1" />
@@ -108,11 +108,11 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" text="Save" GridPane.columnIndex="3" />
-                              <Button fx:id="editBtn" mnemonicParsing="false" text="Edit" GridPane.columnIndex="2" />
-                              <Button fx:id="newBtn" mnemonicParsing="false" onMouseClicked="#onNew" text="New" GridPane.columnIndex="1" />
-                              <Button fx:id="searchBtn" mnemonicParsing="false" onMouseClicked="#onSearch" text="Search" />
-                              <Button fx:id="clearBtn" mnemonicParsing="false" onMouseClicked="#onClear" text="Clear" GridPane.columnIndex="4" />
+                              <Button fx:id="searchBtn" mnemonicParsing="false" onMouseClicked="#onSearch" text="Buscar" />
+                              <Button fx:id="newBtn" mnemonicParsing="false" onMouseClicked="#onNew" text="Nuevo" GridPane.columnIndex="1" />
+                              <Button fx:id="editBtn" mnemonicParsing="false" text="Editar" GridPane.columnIndex="2" />
+                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" text="Guardar" GridPane.columnIndex="3" />
+                              <Button fx:id="clearBtn" mnemonicParsing="false" onMouseClicked="#onClear" text="Limpiar" GridPane.columnIndex="4" />
                            </children>
                         </GridPane>
                      </children>

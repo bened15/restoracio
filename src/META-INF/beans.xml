@@ -48,7 +48,14 @@
 	<bean id="manageMenuItemProduct" class="com.jbd.hibernate.dao.RestMenuItemProductManagementDAO"
 		autowire="byType">
 	</bean>
+	<bean id="manageCtgTip" class="com.jbd.hibernate.dao.CtgTipManagementDAO"
+		autowire="byType">
+	</bean>
+	<bean id="manageRestShift" class="com.jbd.hibernate.dao.RestShiftManagementDAO"
+		autowire="byType">
+	</bean>
 	<bean id="restOrder" class="com.jbd.model.RestOrder" autowire="byType"></bean>
+	<bean id="ctgTip" class="com.jbd.model.CtgTip" autowire="byType"></bean>
 	<bean id="stage" class="javafx.stage.Stage" autowire="byType"></bean>
 
 	<bean id="restArea" class="com.jbd.model.RestArea" autowire="byType"></bean>
@@ -71,29 +78,52 @@
 		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
-<bean id="ctgPaymentMethodId" class="com.jbd.model.CtgPaymentMethod"
+	<bean id="ctgPaymentMethodId" class="com.jbd.model.CtgPaymentMethod"
 		autowire="byType"></bean>
-		
-	<bean id="sysUser" class="com.jbd.hibernate.dao.SysUserManagementDAO" autowire="byType"></bean>
-	<bean id="sysRole" class="com.jbd.hibernate.dao.SysRoleManagementDAO" autowire="byType"></bean>
-	<bean id="sysUserRol" class="com.jbd.hibernate.dao.SysUserRolManagementDAO" autowire="byType"></bean>
-	<bean id="ctgSupplier" class="com.jbd.hibernate.dao.CtgSupplierManagementDAO" autowire="byType"></bean>
-	<bean id="restProduct" class="com.jbd.hibernate.dao.RestProductManagementDAO" autowire="byType"></bean>
-	<bean id="ctgDiscount" class="com.jbd.hibernate.dao.CtgDiscountManagementDAO" autowire="byType"></bean>
-	<bean id="ctgMeasureUnit" class="com.jbd.hibernate.dao.CtgMeasureUnitManagementDAO" autowire="byType"></bean>
-	<bean id="ctgPaymentMethod" class="com.jbd.hibernate.dao.CtgPaymentMethodManagementDAO" autowire="byType"></bean>
-	<bean id="ctgMenuType" class="com.jbd.hibernate.dao.CtgMenuTypeManagementDAO" autowire="byType"></bean>
-	<bean id="ctgProductType" class="com.jbd.hibernate.dao.CtgProductTypeManagementDAO" autowire="byType"></bean>
 
-	<bean id="invProductItem" class="com.jbd.hibernate.dao.InvProductItemManagementDAO" autowire="byType"></bean>
-	<bean id="ctgTransactionType" class="com.jbd.hibernate.dao.CtgTransactionTypeManagementDAO" autowire="byType"></bean>
-	<bean id="restKitchen" class="com.jbd.hibernate.dao.RestKitchenManagementDAO" autowire="byType"></bean>
-	<bean id="admCustomer" class="com.jbd.hibernate.dao.AdmCustomerManagementDAO" autowire="byType"></bean>
-	<bean id="admReservation" class="com.jbd.hibernate.dao.AdmReservationManagementDAO" autowire="byType"></bean>
-	<bean id="restInformation" class="com.jbd.hibernate.dao.RestInformationManagementDAO" autowire="byType"></bean>
-	<bean id="restMenuItemComment" class="com.jbd.hibernate.dao.RestMenuItemCommentManagementDAO" autowire="byType"></bean>
-	<bean id="invProductWaste" class="com.jbd.hibernate.dao.InvInventoryWasteManagementDAO" autowire="byType"></bean>
-	<bean id="ctgDiscountMenu" class="com.jbd.hibernate.dao.CtgDiscountMenuManagementDAO" autowire="byType"></bean>
+	<bean id="sysUser" class="com.jbd.hibernate.dao.SysUserManagementDAO"
+		autowire="byType"></bean>
+	<bean id="sysRole" class="com.jbd.hibernate.dao.SysRoleManagementDAO"
+		autowire="byType"></bean>
+	<bean id="sysUserRol" class="com.jbd.hibernate.dao.SysUserRolManagementDAO"
+		autowire="byType"></bean>
+	<bean id="ctgSupplier" class="com.jbd.hibernate.dao.CtgSupplierManagementDAO"
+		autowire="byType"></bean>
+	<bean id="restProduct" class="com.jbd.hibernate.dao.RestProductManagementDAO"
+		autowire="byType"></bean>
+	<bean id="ctgDiscount" class="com.jbd.hibernate.dao.CtgDiscountManagementDAO"
+		autowire="byType"></bean>
+	<bean id="ctgMeasureUnit" class="com.jbd.hibernate.dao.CtgMeasureUnitManagementDAO"
+		autowire="byType"></bean>
+	<bean id="ctgPaymentMethod" class="com.jbd.hibernate.dao.CtgPaymentMethodManagementDAO"
+		autowire="byType"></bean>
+	<bean id="ctgMenuType" class="com.jbd.hibernate.dao.CtgMenuTypeManagementDAO"
+		autowire="byType"></bean>
+	<bean id="ctgProductType" class="com.jbd.hibernate.dao.CtgProductTypeManagementDAO"
+		autowire="byType"></bean>
+	<bean id="restShift" class="com.jbd.model.RestShift" autowire="byType"></bean>
+
+	<bean id="invProductItem" class="com.jbd.hibernate.dao.InvProductItemManagementDAO"
+		autowire="byType"></bean>
+	<bean id="ctgTransactionType" class="com.jbd.hibernate.dao.CtgTransactionTypeManagementDAO"
+		autowire="byType"></bean>
+	<bean id="restKitchen" class="com.jbd.hibernate.dao.RestKitchenManagementDAO"
+		autowire="byType"></bean>
+	<bean id="admCustomer" class="com.jbd.hibernate.dao.AdmCustomerManagementDAO"
+		autowire="byType"></bean>
+	<bean id="admReservation" class="com.jbd.hibernate.dao.AdmReservationManagementDAO"
+		autowire="byType"></bean>
+	<bean id="restInformation" class="com.jbd.hibernate.dao.RestInformationManagementDAO"
+		autowire="byType"></bean>
+	<bean id="restMenuItemComment" class="com.jbd.hibernate.dao.RestMenuItemCommentManagementDAO"
+		autowire="byType"></bean>
+	<bean id="invProductWaste" class="com.jbd.hibernate.dao.InvInventoryWasteManagementDAO"
+		autowire="byType"></bean>
+	<bean id="ctgDiscountMenu" class="com.jbd.hibernate.dao.CtgDiscountMenuManagementDAO"
+		autowire="byType"></bean>
+	<bean id="ctgMenuSubType" class="com.jbd.hibernate.dao.CtgMenuSubTypeManagementDAO"
+		autowire="byType"></bean>
+
 
 
 

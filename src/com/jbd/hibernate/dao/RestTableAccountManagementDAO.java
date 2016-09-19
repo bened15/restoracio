@@ -50,7 +50,7 @@ public class RestTableAccountManagementDAO implements IRestTableAccountManagemen
 		try {
 			RestTableAccount r = em.find(RestTableAccount.class, o.getTableAccountId());
 			em.remove(r);
-			em.flush();
+			// em.flush();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -22,8 +22,8 @@
                <children>
                   <TableView fx:id="measureList" layoutX="-12.0" onMouseClicked="#getSelectedRow" prefHeight="478.0" prefWidth="236.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn fx:id="measureNameColumn" prefWidth="87.0" text="Name" />
-                      <TableColumn fx:id="measureUnitColumn" prefWidth="111.0" text="Unit" />
+                      <TableColumn fx:id="measureNameColumn" prefWidth="87.0" text="Nombre" />
+                      <TableColumn fx:id="measureUnitColumn" prefWidth="111.0" text="Unidad" />
                         <TableColumn fx:id="measureIdColumn" prefWidth="87.0" text="measureId" visible="false" />
                     </columns>
                      <columnResizePolicy>
@@ -54,11 +54,11 @@
                               <RowConstraints maxHeight="36.0" minHeight="0.0" prefHeight="36.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label fx:id="lblMeasureName" text="Name" GridPane.rowIndex="1" />
-                              <Label fx:id="lblMeasureUnit" text="Unit" GridPane.rowIndex="2" />
+                              <Label fx:id="lblMeasureName" text="Nombre" GridPane.rowIndex="1" />
+                              <Label fx:id="lblMeasureUnit" text="Unidad" GridPane.rowIndex="2" />
                               <TextField fx:id="measureName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <TextField fx:id="measureUnit" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <Label prefHeight="20.0" prefWidth="113.0" text="Measure details" />
+                              <Label prefHeight="20.0" prefWidth="141.0" text="Unidad de medida" GridPane.columnSpan="2" />
                            </children>
                         </GridPane>
                         <GridPane GridPane.rowIndex="1">
@@ -73,11 +73,11 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" text="Save" GridPane.columnIndex="3" />
-                              <Button fx:id="editBtn" mnemonicParsing="false" text="Edit" GridPane.columnIndex="2" />
-                              <Button fx:id="newBtn" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#onNew" text="New" GridPane.columnIndex="1" />
-                              <Button fx:id="searchBtn" alignment="TOP_CENTER" mnemonicParsing="false" onMouseClicked="#onSearch" text="Search" />
-                              <Button fx:id="clearBtn" mnemonicParsing="false" onMouseClicked="#onClear" text="Clear" GridPane.columnIndex="4" />
+                              <Button fx:id="searchBtn" alignment="TOP_CENTER" mnemonicParsing="false" onMouseClicked="#onSearch" text="Buscar" />
+                              <Button fx:id="newBtn" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#onNew" text="Nuevo" GridPane.columnIndex="1" />
+                              <Button fx:id="editBtn" mnemonicParsing="false" text="Editar" GridPane.columnIndex="2" />
+                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" text="Guardar" GridPane.columnIndex="3" />
+                              <Button fx:id="clearBtn" mnemonicParsing="false" onMouseClicked="#onClear" text="Limpiar" GridPane.columnIndex="4" />
                            </children>
                         </GridPane>
                      </children>

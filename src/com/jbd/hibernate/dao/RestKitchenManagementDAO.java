@@ -59,7 +59,7 @@ public class RestKitchenManagementDAO implements IRestKitchenManagement {
 			RestKitchen menuType;
 				TypedQuery<RestKitchen> tq = em.createQuery("select o from RestKitchen o where o.kitchenId=:prmKitchenId",
 						RestKitchen.class);
-				tq.setParameter("m", oId);
+				tq.setParameter("prmKitchenId", oId);
 
 				menuType = tq.getSingleResult();
 				return menuType;

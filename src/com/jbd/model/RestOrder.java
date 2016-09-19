@@ -1,6 +1,8 @@
 package com.jbd.model;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
+
 import javax.persistence.*;
 
 import org.hibernate.annotations.Cascade;
@@ -36,6 +38,8 @@ public class RestOrder implements Serializable {
 	@Column(name = "ORDER_STATUS")
 	private String orderStatus;
 
+	private int priority;
+
 	// bi-directional many-to-one association to RestBillDetail
 	@OneToMany(mappedBy = "restOrder")
 	@Cascade({ CascadeType.DELETE })
@@ -63,6 +67,14 @@ public class RestOrder implements Serializable {
 	public RestOrder() {
 	}
 
+	public RestOrder(int idMenuItem, String menuItemName, double menuItemPrice, long cantidad) {
+		this.idMenuItem = idMenuItem;
+		this.menuItemName = menuItemName;
+		this.menuItemPrice = menuItemPrice;
+		this.cantidad = (int) cantidad;
+
+	}
+
 	public int getOrderId() {
 		return this.orderId;
 	}
@@ -85,6 +97,14 @@ public class RestOrder implements Serializable {
 
 	public void setEntryDate(Date entryDate) {
 		this.entryDate = entryDate;
+	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
 	}
 
 	public String getOrderComment() {
@@ -173,9 +193,19 @@ public class RestOrder implements Serializable {
 
 	@Transient
 	private String menuItemName;
+	@Transient
+	private int idMenuItem;
 
 	@Transient
 	private double menuItemPrice;
+
+	public int getIdMenuItem() {
+		return idMenuItem;
+	}
+
+	public void setIdMenuItem(int idMenuItem) {
+		this.idMenuItem = idMenuItem;
+	}
 
 	public String getMenuItemName() {
 		return menuItemName;
@@ -186,7 +216,8 @@ public class RestOrder implements Serializable {
 	}
 
 	public double getMenuItemPrice() {
-		return menuItemPrice;
+		DecimalFormat decimFormat = new DecimalFormat("#.00");
+		return Double.parseDouble(decimFormat.format(menuItemPrice));
 	}
 
 	public void setMenuItemPrice(double menuItemPrice) {
@@ -195,6 +226,8 @@ public class RestOrder implements Serializable {
 
 	@Transient
 	private String nombFactura;
+	@Transient
+	private int cantidad;
 
 	public String getNombFactura() {
 		return nombFactura;
@@ -202,6 +235,14 @@ public class RestOrder implements Serializable {
 
 	public void setNombFactura(String nombFactura) {
 		this.nombFactura = nombFactura;
+	}
+
+	public int getCantidad() {
+		return cantidad;
+	}
+
+	public void setCantidad(int cantidad) {
+		this.cantidad = cantidad;
 	}
 
 }

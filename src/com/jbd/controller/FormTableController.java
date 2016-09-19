@@ -94,7 +94,7 @@ public class FormTableController {
 
 	@FXML
 	public void onNew(MouseEvent event) {				
-			resetRecord();
+			resetValues();
 			newModeEnabled();
 	}
 	@FXML
@@ -201,11 +201,7 @@ public class FormTableController {
 		 tableName.setText("");
 		 tableSeatsAvailable.setText("");
 	}
-
-	public void resetRecord(){
-		restTableRecordSelected = new RestTable();
-	}
-
+	
 	public String validateRecord() {
 		 defaultLabel();
 		 String errorString = null;

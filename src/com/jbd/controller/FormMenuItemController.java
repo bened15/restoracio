@@ -27,6 +27,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -43,7 +46,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import application.Main;
 
@@ -66,14 +71,14 @@ public class FormMenuItemController {
 	private IRestKitchenManagement manageKitchen;
 	// Declaracion Labels
 	@FXML
-	private Label lblMenuItemName, lblMenuItemType, lblMenuItemPrice, lblMenuItemAvailable, lblMenuKitchen;
+	private Label lblMenuItemName, lblMenuItemType, lblMenuItemPrice, lblMenuItemAvailable, lblMenuKitchen, lblMenuItemShortName;
 
 	// Declaracion Botones
 	@FXML
-	private Button newBtn, saveBtn, searchBtn, clearBtn, openFileBtn;
+	private Button newBtn, saveBtn, searchBtn, clearBtn, openFileBtn, addProductBtn, addCommentBtn;
 	// Declaracion Campos
 	@FXML
-	private TextField menuItemName, menuItemPrice;
+	private TextField menuItemName, menuItemPrice, menuItemShortName;
 	@FXML
 	private TextArea menuItemDescription;
 
@@ -87,6 +92,8 @@ public class FormMenuItemController {
 	private ObservableList<CtgMenuType> menuItemTypeData = FXCollections.observableArrayList();
 	@FXML
 	private ObservableList<RestKitchen> kitchenData = FXCollections.observableArrayList();
+	@FXML
+	private ObservableList<String> itemAvailableData = FXCollections.observableArrayList();
 
 	// Declaracion Tablas
 	@FXML
@@ -99,6 +106,46 @@ public class FormMenuItemController {
 	private TableColumn menuItemTypeColumn = new TableColumn("menuItemTypeColumn");
 
 	// Declaracion de acciones
+
+	@FXML
+	public void onAddProduct(MouseEvent event) {
+		 try {
+		        FXMLLoader fxmlLoader = new FXMLLoader();
+		        fxmlLoader.setLocation(Main.class.getResource("/com/jbd/view/FormMenuProduct2.fxml"));
+		                Parent root1 = (Parent) fxmlLoader.load();
+		                Stage stage = new Stage();
+		                stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initStyle(StageStyle.UNDECORATED);
+		                FormMenuItemProductController2 controller = fxmlLoader.<FormMenuItemProductController2>getController();
+		                controller.setUserEntry("Douglas");
+		                controller.setSelectedMenuItem(menuItemSelected);
+		                stage.setTitle("Registro de productos");
+		                stage.setScene(new Scene(root1));
+		                stage.show();
+		        } catch(Exception e) {
+		           e.printStackTrace();
+		          }
+	}
+
+	@FXML
+	public void onAddComments(MouseEvent event) {
+		 try {
+		        FXMLLoader fxmlLoader = new FXMLLoader();
+		        fxmlLoader.setLocation(Main.class.getResource("/com/jbd/FormMenuComment.fxml"));
+		                Parent root1 = (Parent) fxmlLoader.load();
+		                Stage stage = new Stage();
+		                stage.initModality(Modality.APPLICATION_MODAL);
+		                stage.initStyle(StageStyle.UNDECORATED);
+		                FormMenuItemCommentController controller = fxmlLoader.<FormMenuItemCommentController>getController();
+		                controller.setUserEntry("Douglas");
+		                controller.setSelectedMenuItem(menuItemSelected);
+		                stage.setTitle("Registro de comentarios");
+		                stage.setScene(new Scene(root1));
+		                stage.show();
+		        } catch(Exception e) {
+		           e.printStackTrace();
+		          }
+	}
 
 	@FXML
 	public void onSearch(MouseEvent event) {
@@ -169,19 +216,27 @@ public class FormMenuItemController {
 				newRecord = true;
 			}
 			menuItemSelected.setMenuItemName(menuItemName.getText());
+			menuItemSelected.setMenuItemPrice(gf.asFloat(menuItemPrice.getText()));
 			menuItemSelected.setMenuItemDescription(menuItemDescription.getText());
 			menuItemSelected.setRestKitchen((RestKitchen) menuKitchen.getValue());
-			
+			menuItemSelected.setMenuItemShortName(menuItemShortName.getText());
+			if (menuItemAvailable.getValue() == null || menuItemAvailable.getValue() == "No") {
+				menuItemSelected.setAvailable(0);
+			} else {
+				menuItemSelected.setAvailable(1);
+			}
+
 			if (imageSelected != null) {
 				menuItemSelected.setMenuImage(imageBytes);
 			}
-			// menuItemSelected.setCtgMenuType((CtgMenuType)
+			 menuItemSelected.setCtgMenuType((CtgMenuType) menuItemType.getValue());
 			// menuItemType.getValue());
 
 			menuItem = new RestMenuItem();
 			if (newRecord) {
 				System.out.println("NUEVO");
 				menuItem = manageRestMenuItem.insertRestMenuItem(menuItemSelected);
+
 			} else {
 				System.out.println("UPDATE");
 				menuItem = manageRestMenuItem.updateRestMenuItem(menuItemSelected);
@@ -189,13 +244,13 @@ public class FormMenuItemController {
 			if (menuItem == null) {
 				System.out.println("ERROR AL GUARDAR");
 			} else {
-				if (newRecord) {	
+				if (newRecord) {
 					JOptionPane.showMessageDialog(null,
 						"Registro almacenado exitosamente");
 				}else{
 					JOptionPane.showMessageDialog(null,
 							"Registro actualizado exitosamente");
-						
+
 				}
 				System.out.println("EXITO AL GUARDAR");
 				resetValues();
@@ -253,6 +308,7 @@ public class FormMenuItemController {
 
 		menuItemDescription.setText("");
 		menuItemName.setText("");
+		menuItemShortName.setText("");
 		menuItemPrice.setText("");
 		menuItemDescription.setText("");
 		menuItemType.getSelectionModel().select(null);
@@ -262,41 +318,47 @@ public class FormMenuItemController {
 	}
 	public void resetRecord() {
 		menuItemSelected = new RestMenuItem();
-
 	}
 
 	public String validateRecord() {
 		defaultLabel();
 		 String errorString = null;
 			StringBuilder errorMessage = new StringBuilder();
-			int messageErrorNumber = 1;	
+			int messageErrorNumber = 1;
 
-		if (menuItemName.getText() == null || menuItemName.getText().isEmpty()) {
-			errorMessage.append(messageErrorNumber+"-"+"El campo nombre es obligatorio.\n");
-			messageErrorNumber++;				
-			lblMenuItemName.setTextFill(Color.web("#ff0000"));
-			// return errorMessage;
-		}
+
+			if (menuItemName.getText() == null || menuItemName.getText().isEmpty()) {
+				errorMessage.append(messageErrorNumber+"-"+"El campo nombre es obligatorio.\n");
+				messageErrorNumber++;
+				lblMenuItemName.setTextFill(Color.web("#ff0000"));
+				// return errorMessage;
+			}
+			if (menuItemShortName.getText() == null || menuItemShortName.getText().isEmpty()) {
+				errorMessage.append(messageErrorNumber+"-"+"El campo nombre corto es obligatorio.\n");
+				messageErrorNumber++;
+				lblMenuItemShortName.setTextFill(Color.web("#ff0000"));
+				// return errorMessage;
+			}
 		if (menuItemPrice.getText() == null || menuItemPrice.getText().isEmpty()) {
 			errorMessage.append(messageErrorNumber+"-"+"El campo precio es obligatorio.\n");
-			messageErrorNumber++;				
-			lblMenuItemName.setTextFill(Color.web("#ff0000"));
+			messageErrorNumber++;
+			lblMenuItemPrice.setTextFill(Color.web("#ff0000"));
 			if (!gf.validNumber(menuItemPrice.getText())) {
 				errorMessage.append(messageErrorNumber+"-"+"El campo precio debe ser un numero.\n");
-			messageErrorNumber++;				
+			messageErrorNumber++;
 
 			}
 			// return errorMessage;
 		}
 		if (menuItemType.getValue() == null) {
 			errorMessage.append(messageErrorNumber+"-"+"El campo tipo de menu obligatorio.\n");
-			messageErrorNumber++;				
+			messageErrorNumber++;
 			lblMenuItemType.setTextFill(Color.web("#ff0000"));
 
 		}
 		if (menuKitchen.getValue() == null) {
 			errorMessage.append(messageErrorNumber+"-"+"El campo cocina es obligatorio.\n");
-			messageErrorNumber++;				
+			messageErrorNumber++;
 			lblMenuKitchen.setTextFill(Color.web("#ff0000"));
 
 		}
@@ -328,8 +390,8 @@ public class FormMenuItemController {
 	}
 
 	public void refreshListOnSearch(){
-		
-		
+
+
 		menuItemData.clear();
 		menuItemList.getColumns().clear();
 		menuItemNameColumn.setCellValueFactory(new PropertyValueFactory<RestMenuItem, String>("menuItemName"));
@@ -339,7 +401,7 @@ public class FormMenuItemController {
 		if(menuItemType.getValue()!= null){
 			menuItemTypeId = ((CtgMenuType) menuItemType.getValue()).getMenuTypeId();
 		}
-		
+
 		List<RestMenuItem> list = manageRestMenuItem.findMenuItemByExample(menuItemName.getText(), menuItemTypeId);
 		for(RestMenuItem u : list){
 			u.setMenuItemTypeText(u.getCtgMenuType().getMenuTypeName());
@@ -347,20 +409,27 @@ public class FormMenuItemController {
 			//System.out.println(u1.getUserCode());
 			//System.out.println(u1.getUserName());
 		}
-		
+
 		menuItemList.setItems(menuItemData);
-		
+
 		menuItemList.getColumns().addAll(menuItemNameColumn,menuItemTypeColumn)		;
 
 	}
-	
 
-	
+
+
 	public void loadRecordInformation(int menuItemCodePrm) {
 		menuItemSelected = manageRestMenuItem.findRestMenuItem(menuItemCodePrm);
 		menuItemName.setText(menuItemSelected.getMenuItemName());
+		menuItemShortName.setText(menuItemSelected.getMenuItemShortName());
 		menuItemDescription.setText(menuItemSelected.getMenuItemDescription());
-		menuItemPrice.setText(Float.toString(menuItemSelected.getMenuItemPrice()));
+		menuItemPrice.setText(Double.toString(menuItemSelected.getMenuItemPrice()));
+		if (menuItemSelected.getAvailable() == 0) {
+			menuItemAvailable.getSelectionModel().select("No");
+		} else {
+			menuItemAvailable.getSelectionModel().select("Si");
+
+		}
 
 		// menuItemSelected
 		if (menuItemSelected.getCtgMenuType() != null) {
@@ -398,6 +467,7 @@ public class FormMenuItemController {
 
 	public void defaultModeEnabled() {
 		menuItemName.setEditable(true);
+		menuItemShortName.setEditable(false);
 		menuItemDescription.setEditable(false);
 		menuItemPrice.setEditable(false);
 		menuItemType.setDisable(false);
@@ -406,11 +476,14 @@ public class FormMenuItemController {
 		newBtn.setDisable(false);
 		clearBtn.setDisable(true);
 		saveBtn.setDisable(true);
+		addCommentBtn.setDisable(true);
+		addProductBtn.setDisable(true);
 
 	}
 
 	public void initModeEnabled() {
 		menuItemName.setEditable(true);
+		menuItemShortName.setEditable(false);
 		menuItemDescription.setEditable(false);
 		menuItemPrice.setEditable(false);
 		menuItemType.setDisable(false);
@@ -418,6 +491,8 @@ public class FormMenuItemController {
 		searchBtn.setDisable(false);
 		newBtn.setDisable(false);
 		saveBtn.setDisable(true);
+		addCommentBtn.setDisable(true);
+		addProductBtn.setDisable(true);
 		clearBtn.setDisable(false);
 		clearBtn.setText("Limpiar");
 		defaultLabel();
@@ -425,6 +500,7 @@ public class FormMenuItemController {
 
 	public void rowSelectedModeEnabled() {
 		menuItemName.setEditable(true);
+		menuItemShortName.setEditable(true);
 		menuItemPrice.setEditable(true);
 		menuItemDescription.setEditable(true);
 		menuItemType.setDisable(false);
@@ -432,6 +508,8 @@ public class FormMenuItemController {
 		searchBtn.setDisable(false);
 		newBtn.setDisable(false);
 		saveBtn.setDisable(true);
+		addCommentBtn.setDisable(false);
+		addProductBtn.setDisable(false);
 		clearBtn.setDisable(false);
 		clearBtn.setText("Limpiar");
 	}
@@ -439,6 +517,7 @@ public class FormMenuItemController {
 	public void editModeEnabled() {
 
 		menuItemName.setEditable(true);
+		menuItemShortName.setEditable(true);
 		menuItemDescription.setEditable(true);
 		menuItemType.setDisable(false);
 		menuItemPrice.setEditable(true);
@@ -446,6 +525,8 @@ public class FormMenuItemController {
 		searchBtn.setDisable(true);
 		newBtn.setDisable(true);
 		saveBtn.setDisable(false);
+		addCommentBtn.setDisable(false);
+		addProductBtn.setDisable(false);
 		clearBtn.setDisable(false);
 		clearBtn.setText("Cancelar");
 	}
@@ -453,6 +534,7 @@ public class FormMenuItemController {
 	public void newModeEnabled() {
 
 		menuItemName.setEditable(true);
+		menuItemShortName.setEditable(true);
 		menuItemPrice.setEditable(true);
 		menuItemDescription.setEditable(true);
 		menuItemType.setDisable(false);
@@ -460,6 +542,8 @@ public class FormMenuItemController {
 		searchBtn.setDisable(true);
 		newBtn.setDisable(true);
 		saveBtn.setDisable(false);
+		addCommentBtn.setDisable(true);
+		addProductBtn.setDisable(true);
 		clearBtn.setDisable(false);
 		clearBtn.setText("Cancelar");
 	}
@@ -467,11 +551,19 @@ public class FormMenuItemController {
 	public void defaultLabel() {
 		lblMenuItemPrice.setTextFill(Color.web("#000000"));
 		lblMenuItemName.setTextFill(Color.web("#000000"));
+		lblMenuItemShortName.setTextFill(Color.web("#000000"));
 		lblMenuItemType.setTextFill(Color.web("#000000"));
 		lblMenuKitchen.setTextFill(Color.web("#000000"));
 	}
 
 	public void refreshComboBoxList() {
+
+		itemAvailableData.clear();
+		itemAvailableData.add("No");
+		itemAvailableData.add("Si");
+
+		menuItemAvailable.setItems(itemAvailableData);
+
 
 		menuItemTypeData.clear();
 		List<CtgMenuType> list = manageMenuItemType.findAll();
@@ -548,6 +640,6 @@ public class FormMenuItemController {
 		this.userEntry = userEntry;
 	}
 
-	
-		
+
+
 }

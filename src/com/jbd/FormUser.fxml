@@ -98,7 +98,7 @@
                               <Label fx:id="lblUserPassword" text="Contraseña*" GridPane.rowIndex="1" />
                               <Label fx:id="lblUserRole" text="Rol*" GridPane.rowIndex="2" />
                               <TextField fx:id="userCode" GridPane.columnIndex="1" />
-                              <TextField fx:id="userPassword" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <PasswordField fx:id="userPassword" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <ComboBox fx:id="userRole" prefHeight="25.0" prefWidth="179.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>

@@ -36,10 +36,16 @@ public class RestBillDetailManagementDAO implements IRestBillDetailManagement {
 
 	}
 
+	@Transactional
 	@Override
 	public void updateRestBillDetail(RestBillDetail o) {
-		// TODO Auto-generated method stub
+		try {
+			em.merge(o);
+			System.out.println("Actualizado");
+		} catch (Exception e) {
+			e.printStackTrace();
 
+		}
 	}
 
 	@Transactional
@@ -95,6 +101,25 @@ public class RestBillDetailManagementDAO implements IRestBillDetailManagement {
 			e.printStackTrace();
 			List<RestBillDetail> billDetail = null;
 			return billDetail;
+
+		}
+	}
+
+	@Override
+	public List<RestOrder> findAllRestBillDetailFromRestBillForTable(RestBill bill) {
+		try {
+			TypedQuery<RestOrder> tq = em.createQuery(
+					"select new RestOrder(d.restOrder.restMenuItem.menuItemId,d.restOrder.restMenuItem.menuItemName,ROUND(d.restOrder.restMenuItem.menuItemPrice,2),count(d.restOrder)) from RestBillDetail d where d.restBill=:bill group by d.restOrder.restMenuItem.menuItemId,d.restOrder.restMenuItem.menuItemName,d.restOrder.restMenuItem.menuItemPrice ",
+					RestOrder.class);
+			tq.setParameter("bill", bill);
+			List<RestOrder> orderDetail = tq.getResultList();
+			System.out.println(orderDetail.get(0).getCantidad() + "esta es la cantidad");
+			return orderDetail;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			List<RestOrder> orderDetail = null;
+			return orderDetail;
 
 		}
 	}

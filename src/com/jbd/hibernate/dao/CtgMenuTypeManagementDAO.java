@@ -46,9 +46,19 @@ public class CtgMenuTypeManagementDAO implements ICtgMenuTypeManagement {
 		}
 	}
 
+	@Transactional
 	@Override
-	public void deleteCtgMenuType(CtgMenuType o) {
+
+	public boolean deleteCtgMenuType(CtgMenuType o) {
 		// TODO Auto-generated method stub
+		try {
+			em.remove(em.merge(o));
+			return true;
+		} catch (Exception e) {
+			//e.printStackTrace();
+			return false;
+		}
+
 
 	}
 

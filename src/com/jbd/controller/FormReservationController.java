@@ -118,7 +118,7 @@ public class FormReservationController {
 
 	@FXML
 	public void onNew(MouseEvent event) {				
-			resetRecord();
+			resetValues();
 			newModeEnabled();
 			refreshComboBoxList();
 	}
@@ -234,11 +234,6 @@ public class FormReservationController {
 		 reservationAdvancePayment.setText("");
 		 reservationDate.setValue(null);
 		 reservationComments.setText("");
-		 		 
-	}
-
-	public void resetRecord(){
-		reservationRecordSelected = new AdmReservation();
 		 		 
 	}
 	

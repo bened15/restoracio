@@ -47,10 +47,7 @@ public class RestBillDetail implements Serializable {
 	@JoinColumn(name = "ORDER_ID")
 	private RestOrder restOrder;
 
-	// bi-directional many-to-one association to RestBillDetailXDiscount
-	@OneToMany(mappedBy = "restBillDetail")
-	@Cascade({ org.hibernate.annotations.CascadeType.DELETE })
-	private List<RestBillDetailXDiscount> restBillDetailXDiscounts;
+
 
 	public RestBillDetail() {
 	}
@@ -95,26 +92,6 @@ public class RestBillDetail implements Serializable {
 		this.restOrder = restOrder;
 	}
 
-	public List<RestBillDetailXDiscount> getRestBillDetailXDiscounts() {
-		return this.restBillDetailXDiscounts;
-	}
 
-	public void setRestBillDetailXDiscounts(List<RestBillDetailXDiscount> restBillDetailXDiscounts) {
-		this.restBillDetailXDiscounts = restBillDetailXDiscounts;
-	}
-
-	public RestBillDetailXDiscount addRestBillDetailXDiscount(RestBillDetailXDiscount restBillDetailXDiscount) {
-		getRestBillDetailXDiscounts().add(restBillDetailXDiscount);
-		restBillDetailXDiscount.setRestBillDetail(this);
-
-		return restBillDetailXDiscount;
-	}
-
-	public RestBillDetailXDiscount removeRestBillDetailXDiscount(RestBillDetailXDiscount restBillDetailXDiscount) {
-		getRestBillDetailXDiscounts().remove(restBillDetailXDiscount);
-		restBillDetailXDiscount.setRestBillDetail(null);
-
-		return restBillDetailXDiscount;
-	}
 
 }

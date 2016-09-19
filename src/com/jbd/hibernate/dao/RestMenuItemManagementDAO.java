@@ -9,9 +9,9 @@ import javax.persistence.TypedQuery;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jbd.hibernate.interfaces.IRestMenuItemManagement;
+import com.jbd.model.CtgMenuSubType;
 import com.jbd.model.CtgMenuType;
 import com.jbd.model.RestMenuItem;
-import com.jbd.model.RestTable;
 
 public class RestMenuItemManagementDAO implements IRestMenuItemManagement {
 
@@ -59,8 +59,8 @@ public class RestMenuItemManagementDAO implements IRestMenuItemManagement {
 	public RestMenuItem findRestMenuItem(Integer oId) {
 		try {
 			RestMenuItem user;
-			TypedQuery<RestMenuItem> tq = em.createQuery("select o from RestMenuItem o where o.menuItemId=:prmRestMenuItemId",
-					RestMenuItem.class);
+			TypedQuery<RestMenuItem> tq = em.createQuery(
+					"select o from RestMenuItem o where o.menuItemId=:prmRestMenuItemId", RestMenuItem.class);
 			tq.setParameter("prmRestMenuItemId", oId);
 
 			user = tq.getSingleResult();
@@ -78,10 +78,9 @@ public class RestMenuItemManagementDAO implements IRestMenuItemManagement {
 	@Override
 	public List<RestMenuItem> findAll() {
 		try {
-			
+
 			List<RestMenuItem> menuItemList;
-			TypedQuery<RestMenuItem> tq = em.createQuery("select o from RestMenuItem o ",
-					RestMenuItem.class);
+			TypedQuery<RestMenuItem> tq = em.createQuery("select o from RestMenuItem o ", RestMenuItem.class);
 			menuItemList = tq.getResultList();
 			return menuItemList;
 
@@ -91,6 +90,7 @@ public class RestMenuItemManagementDAO implements IRestMenuItemManagement {
 
 		}
 	}
+
 	@Override
 	public List<RestMenuItem> findMenuItemByTypeMenu(CtgMenuType typeMenu) {
 		try {
@@ -114,47 +114,91 @@ public class RestMenuItemManagementDAO implements IRestMenuItemManagement {
 	}
 
 	@Override
+	public List<RestMenuItem> findMenuItemBySubTypeMenu(CtgMenuSubType typeSubMenu) {
+		try {
+
+			TypedQuery<RestMenuItem> tq = em.createQuery("select t from RestMenuItem t where t.ctgMenuSubType=:menuSubType",
+					RestMenuItem.class);
+			tq.setParameter("menuSubType", typeSubMenu);
+			List<RestMenuItem> menuItem = tq.getResultList();
+			System.out.println("Tmaño de items" + menuItem.size());
+			for (RestMenuItem t : menuItem) {
+				System.out.println("Resultados :" + t.getMenuItemId());
+
+			}
+
+			return menuItem;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+
+		}
+	}
+
+	@Override
+	public List<RestMenuItem> findMenuItemByName(String nameMenuItem) {
+		try {
+
+			TypedQuery<RestMenuItem> tq = em.createQuery(
+					"select t from RestMenuItem t where t.menuItemName like '%" + nameMenuItem + "%'",
+					RestMenuItem.class);
+
+			List<RestMenuItem> menuItem = tq.getResultList();
+			System.out.println("Tmaño de items" + menuItem.size());
+			for (RestMenuItem t : menuItem) {
+				System.out.println("Resultados :" + t.getMenuItemId());
+
+			}
+
+			return menuItem;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+
+		}
+	}
+
+	@Override
 	public List<RestMenuItem> findMenuItemByExample(String menuItemName, int menuItemTypeId) {
 		// TODO Auto-generated method stub
-		StringBuilder sqlQuery = new StringBuilder(); 
+		StringBuilder sqlQuery = new StringBuilder();
 		Boolean isFirst = true;
 		Boolean useMenuItemName = false;
 		Boolean useMenuItemTypeId = false;
 		Boolean userProductSupplierId = false;
 		sqlQuery.append("select t from RestMenuItem t where ");
 		try {
-			List<RestMenuItem> products ;
-			if( (menuItemName == null || menuItemName.isEmpty()) && (menuItemTypeId == 0 )   ){
+			List<RestMenuItem> products;
+			if ((menuItemName == null || menuItemName.isEmpty()) && (menuItemTypeId == 0)) {
 				products = findAll();
-			}else{
-				if( (menuItemName != null && !menuItemName.isEmpty())){
+			} else {
+				if ((menuItemName != null && !menuItemName.isEmpty())) {
 					useMenuItemName = true;
-					if(isFirst){
+					if (isFirst) {
 						sqlQuery.append(" upper(t.menuItemName) like '%' ||:prmMenuItemName || '%'  ");
-						isFirst= false;					
-						}
+						isFirst = false;
+					}
 				}
-				if( menuItemTypeId != 0 ){
+				if (menuItemTypeId != 0) {
 					useMenuItemTypeId = true;
-					if(isFirst){
+					if (isFirst) {
 						sqlQuery.append(" t.ctgMenuType.menuTypeId = :prmMenuItemTypeId  ");
-						isFirst= false;					
-						}else{
-							sqlQuery.append(" and t.ctgMenuType.menuTypeId = :prmMenuItemTypeId   ");						
-						}
+						isFirst = false;
+					} else {
+						sqlQuery.append(" and t.ctgMenuType.menuTypeId = :prmMenuItemTypeId   ");
+					}
 
 				}
-					TypedQuery<RestMenuItem> tq = em.createQuery(sqlQuery.toString(),
-							RestMenuItem.class);
-					if(useMenuItemName){
-						tq.setParameter("prmMenuItemName", menuItemName.toUpperCase());
-						
-					}
-					if(useMenuItemTypeId){
-						tq.setParameter("prmMenuItemTypeId", menuItemTypeId);
-						
-					}
-					products = tq.getResultList();
+				TypedQuery<RestMenuItem> tq = em.createQuery(sqlQuery.toString(), RestMenuItem.class);
+				if (useMenuItemName) {
+					tq.setParameter("prmMenuItemName", menuItemName.toUpperCase());
+
+				}
+				if (useMenuItemTypeId) {
+					tq.setParameter("prmMenuItemTypeId", menuItemTypeId);
+
+				}
+				products = tq.getResultList();
 			}
 
 			return products;
@@ -165,6 +209,5 @@ public class RestMenuItemManagementDAO implements IRestMenuItemManagement {
 		}
 
 	}
-	
 
 }

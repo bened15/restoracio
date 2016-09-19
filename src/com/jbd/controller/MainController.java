@@ -1,5 +1,7 @@
 package com.jbd.controller;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,29 +12,32 @@ import javax.swing.JOptionPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
+import com.jbd.hibernate.interfaces.ICtgMenuSubTypeManagement;
 import com.jbd.hibernate.interfaces.ICtgMenuTypeManagement;
+import com.jbd.hibernate.interfaces.ICtgTipManagement;
 import com.jbd.hibernate.interfaces.IRestAreaManagement;
 import com.jbd.hibernate.interfaces.IRestBillDetailManagement;
 import com.jbd.hibernate.interfaces.IRestBillManagement;
 import com.jbd.hibernate.interfaces.IRestMenuItemManagement;
 import com.jbd.hibernate.interfaces.IRestMenuItemProductManagement;
-
 import com.jbd.hibernate.interfaces.IRestOrderManagement;
+import com.jbd.hibernate.interfaces.IRestShiftManagement;
 import com.jbd.hibernate.interfaces.IRestTableAccountManagement;
 import com.jbd.hibernate.interfaces.IRestTableManagement;
-import com.jbd.hibernate.interfaces.ISysUserRolManagement;
+import com.jbd.model.CtgMenuSubType;
 import com.jbd.model.CtgMenuType;
+import com.jbd.model.CtgTip;
 import com.jbd.model.RestArea;
 import com.jbd.model.RestBill;
 import com.jbd.model.RestBillDetail;
 import com.jbd.model.RestMenuItem;
-import com.jbd.model.RestMenuItemProduct;
 import com.jbd.model.RestOrder;
-
 import com.jbd.model.RestShift;
 import com.jbd.model.RestTable;
 import com.jbd.model.RestTableAccount;
 import com.jbd.utils.Effect;
+import com.jbd.utils.Printer;
+import com.jbd.utils.Util;
 
 import application.Main;
 import javafx.collections.FXCollections;
@@ -41,7 +46,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -49,13 +53,12 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.InnerShadow;
-import javafx.scene.effect.SepiaTone;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
 public class MainController {
@@ -66,13 +69,24 @@ public class MainController {
 	private DecimalFormat decimFormat = new DecimalFormat("#.00");
 	@FXML
 	private AnchorPane principal;
+	public static AnchorPane principalEstatica;
 	@FXML
 	private AnchorPane rightSide;
 	@FXML
 	private AnchorPane menuTypePane;
 	@FXML
 	private Button confirmButton;
-	private int opcionSelected = 0;
+	@FXML
+	private Button nuevaOrden;
+	@FXML
+	private Button ordenes;
+	@FXML
+	private Button paraLlevar;
+	@FXML
+	private Button cerrarTurno;
+	private static PaymentController payment = new PaymentController();
+	private static SplitOrderController splitController = new SplitOrderController();
+	public static int opcionSelected = 0;
 	private boolean editandoOrden = false;
 	// @Autowired
 	// private ISysUserRolManagement manageSysUserRol;
@@ -86,6 +100,8 @@ public class MainController {
 	@Autowired
 	private ICtgMenuTypeManagement manageCtgMenuType;
 	@Autowired
+	private ICtgMenuSubTypeManagement manageCtgSubMenuType;
+	@Autowired
 	private IRestMenuItemManagement manageRestMenuItem;
 	@Autowired
 	private IRestMenuItemProductManagement manageRestMenuItemProduct;
@@ -93,6 +109,8 @@ public class MainController {
 	private IRestTableAccountManagement manageRestTableAccount;
 	@Autowired
 	private IRestBillManagement manageRestBill;
+	@Autowired
+	private IRestShiftManagement manageRestShift;
 	@Autowired
 	private IRestBillDetailManagement manageRestBillDetail;
 	@Autowired
@@ -103,10 +121,21 @@ public class MainController {
 	private RestTableAccount restTableAccount;
 	@Autowired
 	private RestBillDetail restBillDetail;
+	@Autowired
+	private static RestShift restS;
+	@Autowired
+	private ICtgTipManagement manageTip;
+	@Autowired
+	private static CtgTip tip;
+
+	private Button aRemoverEffect;
+	@FXML
+	private TextField subtotalL, ttotalL, propinaL;
 
 	private static List<RestBill> billsQuantity = new ArrayList<RestBill>();
 	private static List<RestBillDetail> billsDetailQuantity = new ArrayList<RestBillDetail>();
 	private static List<RestBillDetail> billsDetailQuantityAddition = new ArrayList<RestBillDetail>();
+	private static List<RestMenuItem> listItemsR = new ArrayList<RestMenuItem>();
 
 	@Autowired
 	private Effect efe;
@@ -115,9 +144,26 @@ public class MainController {
 	private static ObservableList<RestOrder> itemsListOrders = FXCollections.observableArrayList();
 	@FXML
 	private TableView<RestMenuItem> itemsOrderTable = new TableView<RestMenuItem>();
+
 	@FXML
-	private Label totalL = new Label();
+	private Label detalleTable;
 	int optionSplit = 0, inProcess = 0;
+
+	public static CtgTip getTip() {
+		return tip;
+	}
+
+	public static void setTip(CtgTip tip) {
+		MainController.tip = tip;
+	}
+
+	public static RestShift getRestS() {
+		return restS;
+	}
+
+	public static void setRestS(RestShift restS) {
+		MainController.restS = restS;
+	}
 
 	public static ObservableList<RestOrder> getItemsListOrders() {
 		return itemsListOrders;
@@ -211,6 +257,14 @@ public class MainController {
 		return principal;
 	}
 
+	public static AnchorPane getPrincipalEstatica() {
+		return principalEstatica;
+	}
+
+	public static void setPrincipalEstatica(AnchorPane principalEstatica) {
+		MainController.principalEstatica = principalEstatica;
+	}
+
 	public AnchorPane getRightSide() {
 		return rightSide;
 	}
@@ -252,7 +306,7 @@ public class MainController {
 					itemsListAddition.clear();
 					billsQuantity.clear();
 					editandoOrden = false;
-					// refreshTable();
+
 					disableControls(true);
 
 				}
@@ -264,6 +318,7 @@ public class MainController {
 					billsDetailQuantityAddition.clear();
 					itemsListAddition.clear();
 					billsQuantity.clear();
+
 					editandoOrden = false;
 
 					// refreshTable();
@@ -273,7 +328,7 @@ public class MainController {
 
 				principal.getChildren().clear();
 				menuTypePane.getChildren().clear();
-				loadPanesForAreas(manageRestAreas.getAllAreas(), principal, "#e9dfb1");
+				loadPanesForAreas(manageRestAreas.getAllAreas(), principal, "#6d71a5");
 			}
 
 		} catch (Exception e) {
@@ -288,31 +343,34 @@ public class MainController {
 		while (i < areas.size()) {
 			Button p = new Button();
 
-			p.setPrefHeight(180);
-			p.setPrefWidth(180);
+			p.setPrefHeight(120);
+			p.setPrefWidth(120);
 
 			switch (pos) {
 			case 1:
 				p.setLayoutX(10);
 				break;
 			case 2:
-				p.setLayoutX(210);
+				p.setLayoutX(140);
 				break;
 			case 3:
-				p.setLayoutX(410);
+				p.setLayoutX(300);
 				break;
 			case 4:
-				p.setLayoutX(610);
+				p.setLayoutX(430);
 				break;
 
 			}
 			p.setLayoutY(y);
 			if (pos % 4 == 0) {
-				y = y + 200;
+				y = y + 140;
 				// se pone cero porque se aumenta abajo
 				pos = 0;
 			}
-			p.setStyle("-fx-background-color: " + color + ";-fx-border-radius: 10.0px;-fx-border-color:#40441e;");
+			p.setStyle("-fx-background-color: " + color
+					+ ";-fx-border-radius: 10.0px;-fx-border-color:#40441e;-fx-font-weight:bold;");
+			p.setTextFill(Color.GHOSTWHITE);
+
 			p.setId(String.valueOf(areas.get(i).getAreaId()));
 			p.setText(areas.get(i).getAreaName());
 			p.setWrapText(true);
@@ -350,7 +408,12 @@ public class MainController {
 
 	public void loadPanesForTables(List<RestTable> tables, AnchorPane ap, String color) {
 		int i = 0, pos = 1;
-		int x = 120, y = 10;
+		int y = 10;
+		if (!editandoOrden) {
+			menuTypePane.getChildren().clear();
+			priceTotal = 0.0;
+
+		}
 
 		while (i < tables.size()) {
 			Button p = new Button();
@@ -377,19 +440,13 @@ public class MainController {
 			case 6:
 				p.setLayoutX(460);
 				break;
-			case 7:
-				p.setLayoutX(550);
-				break;
-			case 8:
-				p.setLayoutX(640);
-				break;
-			case 9:
-				p.setLayoutX(730);
-				break;
+			// case 7:
+			// p.setLayoutX(550);
+			// break;
 
 			}
 			p.setLayoutY(y);
-			if (pos % 9 == 0) {
+			if (pos % 6 == 0) {
 				y = y + 90;
 				// se pone cero porque se aumenta abajo
 				pos = 0;
@@ -403,7 +460,7 @@ public class MainController {
 
 			if (manageRestTableAccount.isRestTableAccountOpen(tables.get(i))) {
 				p.setStyle("-fx-background-color: #da6377;");
-				p.setEffect(new SepiaTone());
+				p.setEffect(new DropShadow());
 				p.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 					@Override
@@ -412,24 +469,36 @@ public class MainController {
 						// JOptionPane.showMessageDialog(null, "Alerta" +
 						// listaObjeto.getClass());
 						System.out.println("opciton seleconadad" + opcionSelected);
+
 						if (opcionSelected == 2) {
+
 							menuTypePane.getChildren().clear();
 
 							Button clickeado = (Button) arg0.getSource();
 
 							efe.applyFadeTransitionToButton(clickeado);
 							restTable = manageRestTables.findRestTable(Integer.parseInt(clickeado.getId()));
+							fillTotalWithTotalBill(manageRestTableAccount.findRestTableAccountOpen(restTable));
 
 							List<String> op = new ArrayList<String>();
 							op.add("Pagar");
 							op.add("Cancelar Orden");
 							op.add("Dividir Orden");
 							op.add("Editar Orden");
+							op.add("Trasladar Cuenta-Cambio de Mesa");
 
 							// en el mismo anchor pane de menuType se ponen las
 							// opciones
+							detalleTable.setText("Detalle Mesa : " + restTable.getTableName());
+							detalleTable.setStyle("-fx-font-weight:bold;");
+							if (aRemoverEffect != null) {
+								aRemoverEffect.setStyle("-fx-background-color: #da6377;");
+							}
 
-							loadOptionButtons(op, restTable, menuTypePane, "#99d1e2");
+							aRemoverEffect = clickeado;
+							clickeado.setStyle("-fx-background-color: #e3cb66;");
+
+							loadOptionButtons(op, restTable, menuTypePane, "#2eb7e1");
 						}
 
 					}
@@ -444,6 +513,7 @@ public class MainController {
 						if (opcionSelected == 1) {
 
 							// se pregunta si seran cuentas separadas.
+							priceTotal = 0.0;
 
 							ap.getChildren().clear();
 							// JOptionPane.showMessageDialog(null, "Alerta" +
@@ -478,6 +548,8 @@ public class MainController {
 							ap.getChildren().add(p);
 							// efe.applyFadeTransitionToRectangle(p);
 							optionSplit = 0;
+							detalleTable.setText("Detalle Mesa : " + restTable.getTableName());
+							detalleTable.setStyle("-fx-font-weight:bold;");
 							loadPanesForHowManyBills(billsNo, p, color);
 						}
 
@@ -499,9 +571,100 @@ public class MainController {
 		}
 	}
 
+	public void loadPanesForMenuSubType(List<CtgMenuSubType> menuSubType, AnchorPane ap, String color, int y, int pos) {
+		int i = 0;
+		// int y = 5;
+
+		while (i < menuSubType.size()) {
+			Button p = new Button();
+
+			p.setPrefHeight(80);
+			p.setPrefWidth(80);
+
+			switch (pos) {
+			case 1:
+				p.setLayoutX(10);
+				break;
+			case 2:
+				p.setLayoutX(100);
+				break;
+			case 3:
+				p.setLayoutX(190);
+				break;
+			case 4:
+				p.setLayoutX(280);
+				break;
+			case 5:
+				p.setLayoutX(370);
+				break;
+			case 6:
+				p.setLayoutX(460);
+				break;
+			// case 7:
+			// p.setLayoutX(610);
+			// break;
+
+			}
+			p.setLayoutY(y);
+			if (pos % 6 == 0) {
+				y = y + 90;
+				// se pone cero porque se aumenta abajo
+				pos = 0;
+			}
+
+			p.setStyle("-fx-background-color: " + color + ";");
+
+			p.setId(String.valueOf(i));
+			p.setText(menuSubType.get(i).getMenuSubTypeName());
+			p.setWrapText(true);
+			p.setTextAlignment(TextAlignment.CENTER);
+			p.setEffect(new DropShadow());
+
+			p.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+				@Override
+				public void handle(MouseEvent arg0) {
+					// ap.getChildren().clear();
+					// JOptionPane.showMessageDialog(null, "Alerta" +
+					// listaObjeto.getClass());
+					Button clickeado = (Button) arg0.getSource();
+					CtgMenuSubType type = new CtgMenuSubType();
+					type = menuSubType.get(Integer.parseInt(clickeado.getId()));
+					principal.getChildren().clear();
+
+					if (aRemoverEffect != null) {
+						aRemoverEffect.setStyle("-fx-background-color: " + color + ";");
+					}
+
+					aRemoverEffect = clickeado;
+					clickeado.setStyle("-fx-background-color: #168d81;");
+
+					// if (type.getMenuTypeId() == 0) {
+					// loadPanesForMenuItem(
+					// manageRestMenuItem.findMenuItemByName(
+					// JOptionPane.showInputDialog("Ingrese el nombre del menu a
+					// buscar:")),
+					// principal, "#FEFCB8");
+					// } else {
+					loadPanesForMenuItem(manageRestMenuItem.findMenuItemBySubTypeMenu(type), principal, "#FEFCB8");
+					// }
+
+				}
+
+			});
+
+			ap.getChildren().add(p);
+			efe.applyTranslateTransitionToButton(p, -500, 10);
+
+			i++;
+			pos++;
+		}
+	}
+
 	public void loadPanesForMenuType(List<CtgMenuType> menuType, AnchorPane ap, String color) {
 		int i = 0, pos = 1;
-		int y = 10;
+		int y = 5;
+		menuType.add(0, new CtgMenuType(0, "Buscar..."));
 
 		while (i < menuType.size()) {
 			Button p = new Button();
@@ -511,53 +674,41 @@ public class MainController {
 
 			switch (pos) {
 			case 1:
-				p.setLayoutX(10);
+				p.setLayoutX(5);
 				break;
 			case 2:
-				p.setLayoutX(110);
+				p.setLayoutX(105);
 				break;
 			case 3:
-				p.setLayoutX(210);
+				p.setLayoutX(205);
 				break;
 			case 4:
-				p.setLayoutX(310);
+				p.setLayoutX(305);
 				break;
 			case 5:
-				p.setLayoutX(410);
+				p.setLayoutX(405);
 				break;
 			case 6:
-				p.setLayoutX(510);
+				p.setLayoutX(505);
 				break;
-			case 7:
-				p.setLayoutX(610);
-				break;
-			case 8:
-				p.setLayoutX(710);
-				break;
-			case 9:
-				p.setLayoutX(810);
-				break;
-			// case 10:
-			// p.setLayoutX(910);
-			// break;
-			// case 11:
-			// p.setLayoutX(1010);
-			// break;
-			// case 12:
-			// p.setLayoutX(1110);
-			// break;
-			// case 13:
-			// p.setLayoutX(1210);
+			// case 7:
+			// p.setLayoutX(610);
 			// break;
 
 			}
 			p.setLayoutY(y);
-			if (pos % 9 == 0) {
-				y = y + 80;
+			if (pos % 6 == 0) {
+				y = y + 75;
 				// se pone cero porque se aumenta abajo
 				pos = 0;
 			}
-			p.setStyle("-fx-background-color: " + color + ";");
+			if (i == 0) {
+
+				p.setStyle("-fx-background-color: #b2f289;");
+			} else {
+				p.setStyle("-fx-background-color: " + color + ";");
+			}
+
 			p.setId(String.valueOf(menuType.get(i).getMenuTypeId()));
 			p.setText(menuType.get(i).getMenuTypeName());
 			p.setWrapText(true);
@@ -575,7 +726,27 @@ public class MainController {
 					CtgMenuType type = new CtgMenuType();
 					type.setMenuTypeId(Integer.parseInt(clickeado.getId()));
 					principal.getChildren().clear();
-					loadPanesForMenuItem(manageRestMenuItem.findMenuItemByTypeMenu(type), principal, "#FEFCB8");
+
+					if (aRemoverEffect != null) {
+						aRemoverEffect.setStyle("-fx-background-color: " + color + ";");
+					}
+
+					aRemoverEffect = clickeado;
+					clickeado.setStyle("-fx-background-color: #168d81;");
+
+					if (type.getMenuTypeId() == 0) {
+						loadPanesForMenuItem(
+								manageRestMenuItem.findMenuItemByName(
+										JOptionPane.showInputDialog("Ingrese el nombre del menu a buscar:")),
+								principal, "#FEFCB8");
+					} else {
+						List<Integer> value = new ArrayList<Integer>();
+
+						value = loadPanesForMenuItem(manageRestMenuItem.findMenuItemByTypeMenu(type), principal,
+								"#FEFCB8");
+						loadPanesForMenuSubType(manageCtgSubMenuType.findAllByType(type), principal, "#3DA3BF",
+								value.get(1), value.get(0));
+					}
 
 				}
 
@@ -589,9 +760,9 @@ public class MainController {
 		}
 	}
 
-	public void loadPanesForMenuItem(List<RestMenuItem> menuItem, AnchorPane ap, String color) {
+	public List<Integer> loadPanesForMenuItem(List<RestMenuItem> menuItem, AnchorPane ap, String color) {
 		int i = 0, pos = 1;
-		int x = 120, y = 10;
+		int y = 10;
 
 		while (i < menuItem.size()) {
 			Button p = new Button();
@@ -618,26 +789,20 @@ public class MainController {
 			case 6:
 				p.setLayoutX(460);
 				break;
-			case 7:
-				p.setLayoutX(550);
-				break;
-			case 8:
-				p.setLayoutX(640);
-				break;
-			case 9:
-				p.setLayoutX(730);
-				break;
+			// case 7:
+			// p.setLayoutX(550);
+			// break;
 
 			}
 			p.setLayoutY(y);
-			if (pos % 9 == 0) {
+			if (pos % 6 == 0) {
 				y = y + 90;
 				// se pone cero porque se aumenta abajo
 				pos = 0;
 			}
 			p.setStyle("-fx-background-color: " + color + ";-fx-font-size:10px");
 			p.setEffect(new InnerShadow());
-			p.setId(String.valueOf(menuItem.get(i).getMenuItemId()));
+			p.setId(String.valueOf(i));
 
 			String menuItemName = "";
 			if (menuItem.get(i).getMenuItemName().length() > 30) {
@@ -648,6 +813,7 @@ public class MainController {
 			}
 
 			p.setText(menuItemName + "\n" + "$  " + menuItem.get(i).getMenuItemPrice());
+
 			p.setWrapText(true);
 			p.setTextAlignment(TextAlignment.CENTER);
 			p.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -660,15 +826,21 @@ public class MainController {
 					Button clickeado = (Button) arg0.getSource();
 					efe.applyFadeTransitionToButton(clickeado);
 					RestMenuItem item = new RestMenuItem();
-					String[] partida = clickeado.getText().split("\n");
-					item.setMenuItemId(Integer.parseInt(clickeado.getId()));
-					item.setMenuItemName(partida[0]);
-					item.setMenuItemPrice(Float.parseFloat(partida[1].trim().substring(1, partida[1].length())));
+					item = menuItem.get(Integer.parseInt(clickeado.getId()));
+
+					// String[] partida = clickeado.getText().split("\n");
+					// item.setMenuItemId(Integer.parseInt(clickeado.getId()));
+					// item.setMenuItemName(partida[0]);
+					// item.setMenuItemPrice(Float.parseFloat(partida[1].trim().substring(1,
+					// partida[1].length())));
 
 					priceTotal = priceTotal + item.getMenuItemPrice();
-					totalL.setText("Total: $ " + decimFormat.format(priceTotal) + "\n" + "Propina (10%) $"
-							+ (decimFormat.format(priceTotal * 0.10)) + "\n" + "----------" + "\n" + "Total: $ "
-							+ decimFormat.format(priceTotal + (priceTotal * 0.10)));
+
+					subtotalL.setText("$" + decimFormat.format(priceTotal));
+					propinaL.setText("(" + tip.getPercentValue() + "%) $"
+							+ decimFormat.format(priceTotal * tip.getPercentValue() / 100.0));
+					ttotalL.setText(
+							"$" + decimFormat.format(priceTotal + (priceTotal * tip.getPercentValue() / 100.0)));
 
 					// System.out.println("Tamaño de lista" + itemsList.size());
 					// rightSide.getChildren().add(refreshTable());
@@ -684,29 +856,36 @@ public class MainController {
 
 						RestBillDetail billDetail = new RestBillDetail();
 						RestBill bill = billsQuantity.get(0);
-						bill.setBillSubtotal(Double
-								.parseDouble(decimFormat.format(bill.getBillSubtotal() + item.getMenuItemPrice())));
-						bill.setBillTip(Double.parseDouble(decimFormat.format(bill.getBillSubtotal() * 0.10)));
-						bill.setBillTotal(Double.parseDouble(decimFormat.format(bill.getBillSubtotal() * 1.10)));
+						// bill.setBillSubtotal(Double
+						// .parseDouble(decimFormat.format(bill.getBillSubtotal()
+						// + item.getMenuItemPrice())));
+						// bill.setBillTip(Double.parseDouble(
+						// decimFormat.format(bill.getBillSubtotal() *
+						// tip.getPercentValue() / 100.0)));
+						// bill.setBillTotal(Double.parseDouble(
+						// decimFormat.format(bill.getBillSubtotal() * (1 +
+						// (tip.getPercentValue() / 100.0)))));
+						// System.out.println("la primera llamada" +
+						// bill.getBillTotal());
 
 						billDetail.setRestBill(bill);
-						billDetail
-								.setBillDetailSubtotal(Double.parseDouble(decimFormat.format(item.getMenuItemPrice())));
-						billDetail.setBillDetailTotal(
-								Double.parseDouble(decimFormat.format(item.getMenuItemPrice() * 1.10)));
+						billDetail.setBillDetailSubtotal(item.getMenuItemPrice());
+						billDetail.setBillDetailTotal(item.getMenuItemPrice() * (1 + (tip.getPercentValue() / 100.0)));
 
 						item.setNombFactura(bill.getBillName());
 						if (editandoOrden) {
 							inProcess = 1;
+							item.setIdentifier(itemsListAddition.size() + 1);
 							itemsListAddition.add(item);
 							billsDetailQuantityAddition.add(billDetail);
 
 						} else {
+							item.setIdentifier(itemsList.size() + 1);
 							itemsList.add(item);
 							billsDetailQuantity.add(billDetail);
 
 						}
-						manageRestBill.updateRestBill(bill);
+						// manageRestBill.updateRestBill(bill);
 						refreshTable();
 					} else {
 						Pane p = new Pane();
@@ -730,88 +909,14 @@ public class MainController {
 			i++;
 			pos++;
 		}
+		List<Integer> posY = new ArrayList<Integer>();
+		posY.add(pos);
+		posY.add(y);
+		return posY;
 	}
 
-	// public void loadPanesForMenuItemProduct(List<RestMenuItemProduct>
-	// menuItemProduct, Pane ap, String color) {
-	// int i = 0, pos = 1;
-	// int y = 10;
-	//
-	// while (i < menuItemProduct.size()) {
-	// Button p = new Button();
-	//
-	// p.setPrefHeight(50);
-	// p.setPrefWidth(50);
-	//
-	// switch (pos) {
-	// case 1:
-	// p.setLayoutX(5);
-	// break;
-	// case 2:
-	// p.setLayoutX(60);
-	// break;
-	// case 3:
-	// p.setLayoutX(115);
-	// break;
-	// case 4:
-	// p.setLayoutX(170);
-	// break;
-	// case 5:
-	// p.setLayoutX(225);
-	// break;
-	//
-	// }
-	// p.setLayoutY(y);
-	// if (pos % 5 == 0) {
-	// y = y + 55;
-	// // se pone cero porque se aumenta abajo
-	// pos = 0;
-	// }
-	// p.setStyle("-fx-background-color: " + color + ";-fx-font-size:8px");
-	//
-	// p.setId(String.valueOf(i));
-	//
-	// String menuItemName = "";
-	// if (menuItemProduct.get(i).getRestProduct().getProductName().length() >
-	// 20) {
-	// menuItemName =
-	// menuItemProduct.get(i).getRestProduct().getProductName().substring(0, 19)
-	// + "..";
-	// } else {
-	// menuItemName = menuItemProduct.get(i).getRestProduct().getProductName();
-	//
-	// }
-	//
-	// p.setText(menuItemName);
-	// p.setWrapText(true);
-	// p.setTextAlignment(TextAlignment.CENTER);
-	// p.setOnMouseClicked(new EventHandler<MouseEvent>() {
-	//
-	// @Override
-	// public void handle(MouseEvent arg0) {
-	// // ap.getChildren().clear();
-	// // JOptionPane.showMessageDialog(null, "Alerta" +
-	// // listaObjeto.getClass());
-	// Button clickeado = (Button) arg0.getSource();
-	//
-	// RestOrderDetailLess rodl = new RestOrderDetailLess();
-	// rodl.setRestProduct(menuItemProduct.get(Integer.valueOf(clickeado.getId())).getRestProduct());
-	// rodl.setRestTableAccount(restTableAccount);
-	// rodl.setQuantity(menuItemProduct.get(Integer.valueOf(clickeado.getId())).getQuantity());
-	// ordenDetailLess.add(rodl);
-	// ap.getChildren().remove(clickeado);
-	//
-	// }
-	//
-	// });
-	//
-	// ap.getChildren().add(p);
-	// i++;
-	// pos++;
-	// }
-	// }
-
 	public void loadPanesForHowManyBills(List<String> bills, Pane ap, String color) {
+		SplitOrderController.setMainAppC(this);
 		int i = 0, pos = 1;
 		int y = 30;
 		Label l = new Label();
@@ -865,6 +970,8 @@ public class MainController {
 					// listaObjeto.getClass());
 					Button clickeado = (Button) arg0.getSource();
 					int i = 0;
+					billsQuantity.clear();
+					billsDetailQuantity.clear();
 					if (optionSplit == 0) {
 						usSecurity.loadConfig();
 						String codeWaitress = usSecurity.verifyWaitress();
@@ -877,21 +984,28 @@ public class MainController {
 							tableAccount.setCreatedDatetime(new Date());
 
 							tableAccount.setRestShift1(null);
-							tableAccount.setRestShift2(null);
-							tableAccount.setAccountStatus("Proceso");
+							tableAccount.setRestShift2(restS);
+							tableAccount.setAccountStatus("OPEN");
+
+							tableAccount
+									.setGuestNum(Integer.parseInt(JOptionPane.showInputDialog("Numero de Personas")));
 							restTableAccount = manageRestTableAccount.insertRestTableAccount(tableAccount);
+
 							inProcess = 1;
+
 							while (i < Integer.valueOf(clickeado.getText())) {
 
 								RestBill bill = new RestBill();
 
-								bill.setBillName("Cuenta-" + i);
+								bill.setBillName("Cuenta-" + (i + 1));
 								bill.setEntryDate(new Date());
 								bill.setEntryUser(codeWaitress);
 								bill.setBillTip(0);
 								bill.setBillSubtotal(0);
 								bill.setBillTotal(0);
 								bill.setRestTableAccount(restTableAccount);
+								bill.setCtgTip(tip);
+								bill.setShiftId(restS.getIdShift());
 
 								billsQuantity.add(manageRestBill.insertRestBill(bill));
 								i++;
@@ -919,20 +1033,25 @@ public class MainController {
 
 								RestBill bill = new RestBill();
 
-								bill.setBillName("Cuenta-" + i);
+								bill.setBillName(
+										JOptionPane.showInputDialog("Ingrese el nombre de la cuenta # " + (i + 1)));
 								bill.setEntryDate(new Date());
 								bill.setEntryUser(codeWaitress);
 								bill.setBillTip(0);
 								bill.setBillSubtotal(0);
 								bill.setBillTotal(0);
 								bill.setRestTableAccount(restTableAccount);
+								bill.setCtgTip(manageTip.findDefaultCtgTip());
+								bill.setShiftId(restS.getIdShift());
 
 								billsQuantity.add(manageRestBill.insertRestBill(bill));
 								i++;
 
 							}
 							optionSplit = 0;
-							SplitOrderController splitController = new SplitOrderController();
+							billsDetailQuantity = manageRestBillDetail
+									.findAllRestBillDetailFromTableAccount(restTableAccount);
+
 							splitController.loadConfig();
 						} else {
 							JOptionPane.showMessageDialog(null, "El codigo de mesero ingresado no existe", "Alerta",
@@ -961,6 +1080,26 @@ public class MainController {
 
 	}
 
+	@FXML
+	public void initialize() {
+		AutowireCapableBeanFactory acbFactory = Main.context.getAutowireCapableBeanFactory();
+		acbFactory.autowireBean(this);
+		restS = manageRestShift.alreadyExistShift();
+		tip = manageTip.findDefaultCtgTip();
+		ttotalL.setStyle("-fx-text-inner-color: #73f455;-fx-background-color:#337c6f;");
+		propinaL.setStyle("-fx-text-inner-color:  #73f455;-fx-background-color:#337c6f;");
+		subtotalL.setStyle("-fx-text-inner-color:  #73f455;-fx-background-color:#337c6f;");
+
+		principalEstatica = principal;
+		if (restS == null) {
+			disableControls(true);
+			nuevaOrden.setDisable(true);
+			ordenes.setDisable(true);
+			paraLlevar.setDisable(true);
+			cerrarTurno.setDisable(true);
+		}
+	}
+
 	public Main getMainApp() {
 		return mainApp;
 	}
@@ -969,233 +1108,290 @@ public class MainController {
 		this.mainApp = mainApp;
 	}
 
+	public void fillTotalWithTotalBill(RestTableAccount rta) {
+
+		priceTotal = manageRestBill.getTotalAccountFromTable(rta);
+		System.out.println("diquepe precio total:" + priceTotal);
+
+		subtotalL.setText("$" + decimFormat.format(priceTotal / (1 + (tip.getPercentValue() / 100.0))));
+		propinaL.setText("(" + tip.getPercentValue() + "%) $"
+				+ decimFormat.format(priceTotal - (priceTotal / (1 + (tip.getPercentValue() / 100.0)))));
+		ttotalL.setText("$" + decimFormat.format(priceTotal));
+		priceTotal = priceTotal / (1 + (tip.getPercentValue() / 100.0));
+		billsDetailQuantity = manageRestBillDetail.findAllRestBillDetailFromTableAccount(rta);
+		fillTableWithOrders(billsDetailQuantity);
+
+	}
+
 	private void refreshTable() {
+		try {
+			// int i = 0;
+			// System.out.println("********************recorrido de item
+			// list******************************");
+			// while (i < itemsList.size()) {
+			//
+			// System.out.println(itemsList.get(i).getIdentifier() + "-" +
+			// itemsList.get(i).getMenuItemName());
+			// i++;
+			//
+			// }
+			itemsOrderTable.getColumns().clear();
 
-		itemsOrderTable.getColumns().clear();
+			TableColumn No = new TableColumn("#");
+			TableColumn id = new TableColumn("Id");
+			TableColumn elemento = new TableColumn("Elemento");
+			TableColumn precio = new TableColumn("Precio($)");
+			TableColumn facturaN = new TableColumn("Factura");
+			// TableColumn total = new TableColumn("Total");
+			No.setCellValueFactory(new PropertyValueFactory<RestMenuItem, String>("identifier"));
+			id.setCellValueFactory(new PropertyValueFactory<RestMenuItem, String>("menuItemId"));
+			elemento.setCellValueFactory(new PropertyValueFactory<RestMenuItem, String>("menuItemName"));
+			precio.setCellValueFactory(new PropertyValueFactory<RestMenuItem, Integer>("menuItemPrice"));
+			facturaN.setCellValueFactory(new PropertyValueFactory<RestMenuItem, String>("nombFactura"));
+			// total.setCellValueFactory(new PropertyValueFactory<>("total"));
 
-		TableColumn id = new TableColumn("Id");
-		TableColumn elemento = new TableColumn("Elemento");
-		TableColumn precio = new TableColumn("Precio($)");
-		TableColumn facturaN = new TableColumn("Factura");
-		// TableColumn total = new TableColumn("Total");
+			// itemsLocalList.setItems(itemsList);
+			// itemsLocalList.getColumns().addAll(id,elemento, precio, total);
+			if (editandoOrden && !itemsListAddition.isEmpty()) {
 
-		id.setCellValueFactory(new PropertyValueFactory<RestMenuItem, String>("menuItemId"));
-		elemento.setCellValueFactory(new PropertyValueFactory<RestMenuItem, String>("menuItemName"));
-		precio.setCellValueFactory(new PropertyValueFactory<RestMenuItem, Integer>("menuItemPrice"));
-		facturaN.setCellValueFactory(new PropertyValueFactory<RestMenuItem, String>("nombFactura"));
-		// total.setCellValueFactory(new PropertyValueFactory<>("total"));
+				itemsOrderTable.setItems(itemsListAddition);
+			} else {
+				itemsOrderTable.setItems(itemsList);
+			}
+			itemsOrderTable.getColumns().addAll(No, id, elemento, precio, facturaN);
 
-		// itemsLocalList.setItems(itemsList);
-		// itemsLocalList.getColumns().addAll(id,elemento, precio, total);
-		if (editandoOrden) {
+			itemsOrderTable.setOnMousePressed(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
+					if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
+						// pueda ser que ya no sea el elemento numero 9(el size
+						// se
+						// cuenta desde 1, por eso 9) cuando ya se crean mas
+						// objetos
+						// dentro de rightSide
+						if (rightSide.getChildren().size() == 10) {
+							rightSide.getChildren().remove(9);
+						}
+						// System.out.println(itemsOrderTable.getSelectionModel().getSelectedItem().getMenuItemName());
+						priceTotal = priceTotal
+								- itemsOrderTable.getSelectionModel().getSelectedItem().getMenuItemPrice();
 
-			itemsOrderTable.setItems(itemsListAddition);
-		} else {
-			itemsOrderTable.setItems(itemsList);
-		}
-		itemsOrderTable.getColumns().addAll(id, elemento, precio, facturaN);
+						subtotalL.setText("$" + decimFormat.format(priceTotal));
+						propinaL.setText("(" + tip.getPercentValue() + "%) $"
+								+ decimFormat.format(priceTotal * tip.getPercentValue() / 100.0));
+						ttotalL.setText(
+								"$" + decimFormat.format(priceTotal + (priceTotal * tip.getPercentValue() / 100.0)));
 
-		itemsOrderTable.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
-					// pueda ser que ya no sea el elemento numero 3(el size se
-					// cuenta desde 1, por eso 3) cuando ya se crean mas objetos
-					// dentro de rightSide
-					if (rightSide.getChildren().size() == 4) {
-						rightSide.getChildren().remove(3);
-					}
-					// System.out.println(itemsOrderTable.getSelectionModel().getSelectedItem().getMenuItemName());
-					priceTotal = priceTotal - itemsOrderTable.getSelectionModel().getSelectedItem().getMenuItemPrice();
-					totalL.setText("Total: $ " + decimFormat.format(priceTotal) + "\n" + "Propina (10%) $"
-							+ (decimFormat.format(priceTotal * 0.10)) + "\n" + "----------" + "\n" + "Total: $ "
-							+ decimFormat.format(priceTotal + (priceTotal * 0.10)));
+						System.out.println("tama;o de listaadditional" + itemsListAddition.size());
 
-					System.out.println("tama;o de listaadditional" + itemsListAddition.size());
+						if (!editandoOrden) {
 
-					if (!editandoOrden) {
-						billsDetailQuantity.remove(itemsOrderTable.getSelectionModel().getSelectedIndex());
-						itemsList.remove(itemsOrderTable.getSelectionModel().getSelectedItem());
-						refreshTable();
-					}
+							/****************************************************/
 
-					if (editandoOrden && itemsListAddition.size() == 0) {
-						usSecurity.loadConfig();
-						if (usSecurity.verifyIsAuto()) {
-							int n = JOptionPane.showConfirmDialog(null,
-									"¿Esta seguro que desea el pedido seleccionado?", "Pregunta",
-									JOptionPane.YES_NO_OPTION);
-							if (n == JOptionPane.YES_OPTION) {
-								try {
+							// RestBill rb = billsDetailQuantity
+							// .get(itemsOrderTable.getSelectionModel().getSelectedIndex()).getRestBill();
+							// rb.setBillSubtotal(Double.parseDouble(decimFormat.format(rb.getBillSubtotal()
+							// -
+							// itemsOrderTable.getSelectionModel().getSelectedItem().getMenuItemPrice())));
+							// //
+							// .getRestOrder().getRestMenuItem().getMenuItemPrice())));
+							// rb.setBillTip(Double.parseDouble(
+							// decimFormat.format(rb.getBillSubtotal() *
+							// tip.getPercentValue() / 100.0)));
+							// rb.setBillTotal(
+							// Double.parseDouble(decimFormat.format(rb.getBillSubtotal()
+							// + rb.getBillTip())));
+							// System.out.println("la segunda llamada" +
+							// rb.getBillTotal());
+							// manageRestBill.updateRestBill(rb);
 
-									RestBill rb = billsDetailQuantity
-											.get(itemsOrderTable.getSelectionModel().getSelectedIndex()).getRestBill();
-									rb.setBillSubtotal(
-											Double.parseDouble(
-													decimFormat
-															.format(rb.getBillSubtotal() - billsDetailQuantity
-																	.get(itemsOrderTable.getSelectionModel()
-																			.getSelectedIndex())
-																	.getRestOrder().getRestMenuItem()
-																	.getMenuItemPrice())));
-									rb.setBillTip(Double.parseDouble(decimFormat.format(rb.getBillSubtotal() * 0.10)));
-									rb.setBillTotal(Double
-											.parseDouble(decimFormat.format(rb.getBillSubtotal() + rb.getBillTip())));
-									manageRestBill.updateRestBill(rb);
-									if (rb.getBillSubtotal() == 0) {
-										n = JOptionPane.showConfirmDialog(null,
-												"¿La factura " + rb.getBillName()
-														+ " no contiene mas ordenes pendientes, desea eliminarla?",
-												"Pregunta", JOptionPane.YES_NO_OPTION);
-										if (n == JOptionPane.YES_OPTION) {
-											manageRestBill.deleteRestBill(rb);
-										}
+							/****************************************************/
+
+							billsDetailQuantity.remove(itemsOrderTable.getSelectionModel().getSelectedIndex());
+							itemsList.remove(itemsOrderTable.getSelectionModel().getSelectedItem());
+
+							// fillTableWithOrders(billsDetailQuantity);
+
+							refreshTable();
+						}
+
+						if (editandoOrden && itemsListAddition.size() == 0) {
+							usSecurity.loadConfig();
+							if (usSecurity.verifyIsAuto()) {
+								int n = JOptionPane.showConfirmDialog(null,
+										"¿Esta seguro que desea eliminar el pedido seleccionado?", "Pregunta",
+										JOptionPane.YES_NO_OPTION);
+								if (n == JOptionPane.YES_OPTION) {
+									try {
+
+										RestBill rb = billsDetailQuantity
+												.get(itemsOrderTable.getSelectionModel().getSelectedIndex())
+												.getRestBill();
+										rb.setBillSubtotal(rb.getBillSubtotal() - billsDetailQuantity
+												.get(itemsOrderTable.getSelectionModel().getSelectedIndex())
+												.getBillDetailSubtotal());
+										// .getRestOrder().getRestMenuItem().getMenuItemPrice())));
+										rb.setBillTip(rb.getBillSubtotal() * tip.getPercentValue() / 100.0);
+										rb.setBillTotal(rb.getBillSubtotal() + rb.getBillTip());
+										System.out.println("la segunda llamada" + rb.getBillTotal());
+										manageRestBill.updateRestBill(rb);
+										// if (rb.getBillSubtotal() == 0) {
+										// n =
+										// JOptionPane.showConfirmDialog(null,
+										// "¿La cuenta " + rb.getBillName()
+										// + " no contiene mas ordenes
+										// pendientes, desea eliminarla?",
+										// "Pregunta",
+										// JOptionPane.YES_NO_OPTION);
+										// if (n == JOptionPane.YES_OPTION) {
+										// manageRestBill.deleteRestBill(rb);
+										// }
+										// }
+										// billsDetailQuantity.remove(itemsOrderTable.getSelectionModel().getSelectedIndex());
+										// itemsList.remove(itemsOrderTable.getSelectionModel().getSelectedItem());
+
+										manageRestOrders.deleteRestOrder(billsDetailQuantity
+												.remove(itemsOrderTable.getSelectionModel().getSelectedIndex())
+												.getRestOrder());
+
+										billsDetailQuantity = manageRestBillDetail
+												.findAllRestBillDetailFromTableAccount(restTableAccount);
+
+										fillTableWithOrders(billsDetailQuantity);
+										// seteo esto, porque cuando entra en el
+										// refresh table, setea con
+										// listaddition, ya
+										// que estoy en editarorden, asi que
+										// obligo
+										// a que sea la orden ya tomada
+										itemsOrderTable.setItems(itemsList);
+										JOptionPane.showMessageDialog(null, "Pedido CANCELADO exitosamente");
+										loadPanesForTables(manageRestTables.findTablesByArea(restArea), principal,
+												"#f4efd8");
+
+									} catch (Exception e) {
+										StringWriter errors = new StringWriter();
+										e.printStackTrace(new PrintWriter(errors));
+										Util.writeIntoErrorLog(errors.toString(), "");
+										e.printStackTrace();
 									}
-									// billsDetailQuantity.remove(itemsOrderTable.getSelectionModel().getSelectedIndex());
-									// itemsList.remove(itemsOrderTable.getSelectionModel().getSelectedItem());
-									JOptionPane.showMessageDialog(null, "Pedido CANCELADO exitosamente");
-									manageRestOrders.deleteRestOrder(billsDetailQuantity
-											.remove(itemsOrderTable.getSelectionModel().getSelectedIndex())
-											.getRestOrder());
 
-									billsDetailQuantity = manageRestBillDetail
-											.findAllRestBillDetailFromTableAccount(restTableAccount);
+								}
 
-									fillTableWithOrders(billsDetailQuantity);
-									// seteo esto, porque cuando entra en el
-									// refresh table, setea con listaddition, ya
-									// que estoy en editarorden, asi que obligo
-									// a que sea la orden ya tomada
-									itemsOrderTable.setItems(itemsList);
+							} else {
+								JOptionPane.showMessageDialog(null, "Las credenciales ingresadas no estan autorizadas",
+										"Alerta", JOptionPane.ERROR_MESSAGE);
 
-									loadPanesForTables(manageRestTables.findTablesByArea(restArea), principal,
-											"#f4efd8");
+							}
 
-								} catch (Exception e) {
-									e.printStackTrace();
-									// JOptionPane.showMessageDialog(null,
-									// "Error:" + e.getMessage(), "Alerta",
-									// JOptionPane.ERROR_MESSAGE);
+						}
+						if (editandoOrden && itemsListAddition.size() > 0) {
+
+							/****************************************************/
+
+							// RestBill rb = billsDetailQuantityAddition
+							// .get(itemsOrderTable.getSelectionModel().getSelectedIndex()).getRestBill();
+							// rb.setBillSubtotal(Double
+							// .parseDouble(decimFormat.format(rb.getBillSubtotal()
+							// - billsDetailQuantityAddition
+							// .get(itemsOrderTable.getSelectionModel().getSelectedIndex())
+							// .getBillDetailSubtotal())));
+							// //
+							// .getRestOrder().getRestMenuItem().getMenuItemPrice())));
+							// rb.setBillTip(Double.parseDouble(
+							// decimFormat.format(rb.getBillSubtotal() *
+							// tip.getPercentValue() / 100.0)));
+							// rb.setBillTotal(
+							// Double.parseDouble(decimFormat.format(rb.getBillSubtotal()
+							// + rb.getBillTip())));
+							// System.out.println("la segunda llamada" +
+							// rb.getBillTotal());
+							// manageRestBill.updateRestBill(rb);
+
+							/****************************************************/
+
+							billsDetailQuantityAddition.remove(itemsOrderTable.getSelectionModel().getSelectedIndex());
+							itemsListAddition.remove(itemsOrderTable.getSelectionModel().getSelectedItem());
+
+							refreshTable();
+						}
+
+					}
+					if (event.isPrimaryButtonDown() && event.getClickCount() == 1) {
+						// pueda ser que ya no sea el elemento numero 3(el size
+						// se
+						// cuenta desde 1, por eso 3) cuando ya se crean mas
+						// objetos
+						// dentro de rightSide
+
+						System.out.println(rightSide.getChildren().size());
+						if (rightSide.getChildren().size() == 10) {
+							rightSide.getChildren().remove(9);
+						}
+						TextField txtComment = new TextField();
+
+						txtComment.setLayoutX(240.0);
+
+						txtComment.setLayoutY(itemsOrderTable.getSelectionModel().getSelectedIndex() * 20);
+						txtComment.setPrefHeight(100.0);
+						txtComment.setPrefWidth(200.0);
+						txtComment.setId(
+								String.valueOf(itemsOrderTable.getSelectionModel().getSelectedItem().getMenuItemId()));
+						txtComment.setText(
+								itemsOrderTable.getSelectionModel().getSelectedItem().getMenuItemDescription());
+
+						txtComment.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+							@Override
+							public void handle(KeyEvent event) {
+								if (event.getCode().equals(KeyCode.ENTER)) {
+									// se usa la descripcion solo para guardar
+									// el
+									// comentario que se inyectara a la orden,
+									// luego
+									// se borra. de todos modos el item menu no
+									// se
+									// va a persistir
+
+									itemsOrderTable.getSelectionModel().getSelectedItem()
+											.setMenuItemDescription(txtComment.getText());
+
+									rightSide.getChildren().remove(txtComment);
+								}
+								// para eliminar un comentario solo basta con
+								// abrir
+								// nuevmente el item y presionar escape
+								if (event.getCode().equals(KeyCode.ESCAPE)) {
+									// se usa la descripcion solo para guardar
+									// el
+									// comentario que se inyectara a la orden,
+									// luego
+									// se borra. de todos modos el item menu no
+									// se
+									// va a persistir
+									rightSide.getChildren().remove(txtComment);
+									itemsOrderTable.getSelectionModel().getSelectedItem().setMenuItemDescription("");
+
 								}
 
 							}
-
-						} else {
-							JOptionPane.showMessageDialog(null, "Las credenciales ingresadas no estan autorizadas",
-									"Alerta", JOptionPane.ERROR_MESSAGE);
-
-						}
+						});
+						rightSide.getChildren().add(txtComment);
+						efe.applyFadeTransitionToTextField(txtComment);
+						txtComment.requestFocus();
 
 					}
-					if (editandoOrden && itemsListAddition.size() > 0) {
-						billsDetailQuantityAddition.remove(itemsOrderTable.getSelectionModel().getSelectedIndex());
-						itemsListAddition.remove(itemsOrderTable.getSelectionModel().getSelectedItem());
-						refreshTable();
+					if (event.isSecondaryButtonDown() && event.getClickCount() == 1) {
+
 					}
-
 				}
-				if (event.isPrimaryButtonDown() && event.getClickCount() == 1) {
-					// pueda ser que ya no sea el elemento numero 3(el size se
-					// cuenta desde 1, por eso 3) cuando ya se crean mas objetos
-					// dentro de rightSide
-					System.out.println(rightSide.getChildren().size());
-					if (rightSide.getChildren().size() == 4) {
-						rightSide.getChildren().remove(3);
-					}
-
-					TextField txtComment = new TextField();
-					txtComment.setLayoutX(240.0);
-
-					txtComment.setLayoutY(itemsOrderTable.getSelectionModel().getSelectedIndex() * 20);
-					txtComment.setPrefHeight(100.0);
-					txtComment.setPrefWidth(200.0);
-					txtComment.setId(
-							String.valueOf(itemsOrderTable.getSelectionModel().getSelectedItem().getMenuItemId()));
-
-					txtComment.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-						@Override
-						public void handle(KeyEvent event) {
-							if (event.getCode().equals(KeyCode.ENTER)) {
-								// se usa la descripcion solo para guardar el
-								// comentario que se inyectara a la orden, luego
-								// se borra. de todos modos el item menu no se
-								// va a persistir
-								itemsOrderTable.getSelectionModel().getSelectedItem()
-										.setMenuItemDescription(txtComment.getText());
-								// si se crean mas objetos dentro de rightSide,
-								// este valor podria cambiar-OJO, podria ser que
-								// ya no seria el 2
-								rightSide.getChildren().remove(txtComment);
-							}
-							// para eliminar un comentario solo basta con abrir
-							// nuevmente el item y presionar escape
-							if (event.getCode().equals(KeyCode.ESCAPE)) {
-								// se usa la descripcion solo para guardar el
-								// comentario que se inyectara a la orden, luego
-								// se borra. de todos modos el item menu no se
-								// va a persistir
-								itemsOrderTable.getSelectionModel().getSelectedItem().setMenuItemDescription("");
-								// si se crean mas objetos dentro de rightSide,
-								// este valor podria cambiar-OJO, podria ser que
-								// ya no seria el 2
-								rightSide.getChildren().remove(txtComment);
-							}
-
-						}
-					});
-					rightSide.getChildren().add(txtComment);
-					efe.applyFadeTransitionToTextField(txtComment);
-					txtComment.requestFocus();
-
-				}
-				if (event.isSecondaryButtonDown() && event.getClickCount() == 1) {
-					// if (rightSide.getChildren().size() == 4) {
-					// rightSide.getChildren().remove(3);
-					// }
-					// Pane rec = new Pane();
-					// rec.setStyle(
-					// "-fx-background-color:#c1ebff;-fx-border-radius:
-					// 10.0px;-fx-border-color: aliceblue ;");
-					// rec.setPrefWidth(400.0);
-					// rec.setPrefHeight(400.0);
-					// rec.setLayoutX(240.0);
-					// rec.setId(String.valueOf(itemsOrderTable.getSelectionModel().getSelectedItem().getMenuItemId()));
-					// rec.setLayoutY(20);
-					// rightSide.getChildren().add(rec);
-					// efe.applyFadeTransitionToRectangle(rec);
-					// rec.requestFocus();
-					//
-					// rec.setOnKeyPressed(new EventHandler<KeyEvent>() {
-					//
-					// @Override
-					// public void handle(KeyEvent event) {
-					// if (event.getCode().equals(KeyCode.ENTER)) {
-					// // aqui se tenria que gurdar las guarniciones
-					// // del plato editddas
-					// // si se crean mas objetos dentro de rightSide,
-					// // este valor podria cambiar-OJO, podria ser que
-					// // ya no seria el 2
-					// rightSide.getChildren().remove(rec);
-					// }
-					// // para eliminar un comentario solo basta con abrir
-					// // nuevmente el item y presionar escape
-					// if (event.getCode().equals(KeyCode.ESCAPE)) {
-					// // se cancela
-					// rightSide.getChildren().remove(rec);
-					// }
-					//
-					// }
-					// });
-					// loadPanesForMenuItemProduct(manageRestMenuItemProduct
-					// .findIngredientes(itemsOrderTable.getSelectionModel().getSelectedItem()),
-					// rec, "#f1eff1");
-
-					// refreshTable();
-				}
-			}
-		});
-
+			});
+		} catch (Exception e) {
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			Util.writeIntoErrorLog(errors.toString(), "");
+			e.printStackTrace();
+		}
 	}
 
 	public void loadPanesForBills(List<RestBill> bills, Pane ap, String color, RestMenuItem item) {
@@ -1252,27 +1448,33 @@ public class MainController {
 					try {
 						RestBillDetail billDetail = new RestBillDetail();
 						RestBill bill = bills.get(Integer.parseInt(clickeado.getId()));
-						bill.setBillSubtotal(Double
-								.parseDouble(decimFormat.format(bill.getBillSubtotal() + item.getMenuItemPrice())));
-						bill.setBillTip(Double.parseDouble(decimFormat.format(bill.getBillSubtotal() * 0.10)));
-						bill.setBillTotal(Double.parseDouble(decimFormat.format(bill.getBillSubtotal() * 1.10)));
+						// bill.setBillSubtotal(Double
+						// .parseDouble(decimFormat.format(bill.getBillSubtotal()
+						// + item.getMenuItemPrice())));
+						// bill.setBillTip(Double.parseDouble(
+						// decimFormat.format(bill.getBillSubtotal() *
+						// tip.getPercentValue() / 100.0)));
+						// bill.setBillTotal(Double.parseDouble(
+						// decimFormat.format(bill.getBillSubtotal() * (1 +
+						// tip.getPercentValue() / 100.0))));
+						// System.out.println("la tercera llamada" +
+						// bill.getBillTotal());
 						billDetail.setRestBill(bill);
-						billDetail
-								.setBillDetailSubtotal(Double.parseDouble(decimFormat.format(item.getMenuItemPrice())));
-						billDetail.setBillDetailTotal(
-								Double.parseDouble(decimFormat.format(item.getMenuItemPrice() * 1.10)));
+						billDetail.setBillDetailSubtotal(item.getMenuItemPrice());
+						billDetail.setBillDetailTotal(item.getMenuItemPrice() * (1 + (tip.getPercentValue() / 100.0)));
 						item.setNombFactura(bill.getBillName());
 						if (editandoOrden) {
+							item.setIdentifier(itemsListAddition.size() + 1);
 							itemsListAddition.add(item);
-
 							MainController.billsDetailQuantityAddition.add(billDetail);
 						} else {
+							item.setIdentifier(itemsList.size() + 1);
 							itemsList.add(item);
 							MainController.getBillsDetailQuantity().add(billDetail);
 
 						}
 						refreshTable();
-						manageRestBill.updateRestBill(bill);
+						// manageRestBill.updateRestBill(bill);
 						principal.getChildren().remove(ap);
 
 					} catch (Exception e) {
@@ -1292,6 +1494,7 @@ public class MainController {
 	@FXML
 	public void confirmOrder() {
 		int i = 0;
+		List<RestOrder> ordersToPrint = new ArrayList<RestOrder>();
 		if (editandoOrden) {
 			if (itemsListAddition.size() > 0) {
 
@@ -1307,16 +1510,24 @@ public class MainController {
 						// en realidad la description del menuItem (EN ESTE
 						// CONTEXTO)
 						order.setOrderComment(itemsListAddition.get(i).getMenuItemDescription());
-						RestShift shift = new RestShift();
-						shift.setIdShift(1);
-						order.setRestShift(shift);
+						// RestShift shift = new RestShift();
+						// shift.setIdShift(1);
+						order.setRestShift(restS);
 						manageRestOrders.insertRestOrder(order);
+						ordersToPrint.add(order);
 
 						RestBillDetail det = new RestBillDetail();
 
 						det = billsDetailQuantityAddition.get(i);
 						det.setRestOrder(order);
+						RestBill bill = manageRestBill
+								.findRestBill(billsDetailQuantityAddition.get(i).getRestBill().getBillId());
+						bill.setBillSubtotal(
+								bill.getBillSubtotal() + billsDetailQuantityAddition.get(i).getBillDetailSubtotal());
+						bill.setBillTip(bill.getBillSubtotal() * tip.getPercentValue() / 100.0);
+						bill.setBillTotal(bill.getBillSubtotal() * (1 + tip.getPercentValue() / 100.0));
 
+						manageRestBill.updateRestBill(bill);
 						manageRestBillDetail.insertRestBillDetail(det);
 
 						i++;
@@ -1324,24 +1535,42 @@ public class MainController {
 						JOptionPane.showMessageDialog(null, "Error" + e.getMessage(), "Error",
 								JOptionPane.ERROR_MESSAGE);
 
+						StringWriter errors = new StringWriter();
+						e.printStackTrace(new PrintWriter(errors));
+						Util.writeIntoErrorLog(errors.toString(), "");
+
 					}
 
 				}
+				Printer pr = new Printer();
+				pr.printOrders(ordersToPrint);
+				ordersToPrint.clear();
 
-				itemsListAddition.clear();
-				itemsListOrders.clear();
+				// itemsListAddition.clear();
+				// itemsListOrders.clear();
 				menuTypePane.getChildren().clear();
 				principal.getChildren().clear();
 				restTableAccount = new RestTableAccount();
 
-				JOptionPane.showMessageDialog(null, "La(s) Ordene(s) se creaon exitosamente");
+				JOptionPane.showMessageDialog(null, "La(s) Ordene(s) se adicionaron exitosamente");
 				inProcess = 0;
+				opcionSelected = 2;
+				itemsList.clear();
+				itemsListOrders.clear();
+				billsDetailQuantity.clear();
+				billsDetailQuantityAddition.clear();
+				itemsListAddition.clear();
+				billsQuantity.clear();
+				editandoOrden = false;
+
+				disableControls(true);
+				loadPanesForTables(manageRestTables.findTablesByArea(restArea), principal, "#f4efd8");
 			} else {
 				JOptionPane.showMessageDialog(null, "No hay ordenes pendientes de crear", "Alerta",
 						JOptionPane.ERROR_MESSAGE);
 			}
 		} else {
-			restTable.setStatus("Ocupado");
+			restTable.setStatus("OCUPADO");
 			manageRestTables.updateRestTable(restTable);
 			if (itemsList.size() > 0) {
 
@@ -1357,16 +1586,24 @@ public class MainController {
 						// en realidad la description del menuItem (EN ESTE
 						// CONTEXTO)
 						order.setOrderComment(itemsList.get(i).getMenuItemDescription());
-						RestShift shift = new RestShift();
-						shift.setIdShift(1);
-						order.setRestShift(shift);
+						// RestShift shift = new RestShift();
+						// shift.setIdShift(1);
+						order.setRestShift(restS);
 						manageRestOrders.insertRestOrder(order);
+						ordersToPrint.add(order);
 
 						RestBillDetail det = new RestBillDetail();
 
 						det = billsDetailQuantity.get(i);
 						det.setRestOrder(order);
+						RestBill bill = manageRestBill
+								.findRestBill(billsDetailQuantity.get(i).getRestBill().getBillId());
+						bill.setBillSubtotal(
+								bill.getBillSubtotal() + billsDetailQuantity.get(i).getBillDetailSubtotal());
+						bill.setBillTip(bill.getBillSubtotal() * tip.getPercentValue() / 100.0);
+						bill.setBillTotal(bill.getBillSubtotal() * (1 + tip.getPercentValue() / 100.0));
 
+						manageRestBill.updateRestBill(bill);
 						manageRestBillDetail.insertRestBillDetail(det);
 
 						i++;
@@ -1374,9 +1611,17 @@ public class MainController {
 						JOptionPane.showMessageDialog(null, "Error" + e.getMessage(), "Error",
 								JOptionPane.ERROR_MESSAGE);
 
+						StringWriter errors = new StringWriter();
+						e.printStackTrace(new PrintWriter(errors));
+						Util.writeIntoErrorLog(errors.toString(), "");
+
 					}
 
 				}
+
+				Printer pr = new Printer();
+				pr.printOrders(ordersToPrint);
+				ordersToPrint.clear();
 
 				itemsList.clear();
 				itemsListOrders.clear();
@@ -1384,7 +1629,7 @@ public class MainController {
 				principal.getChildren().clear();
 				restTableAccount = new RestTableAccount();
 
-				JOptionPane.showMessageDialog(null, "La(s) Ordene(s) se creaon exitosamente");
+				JOptionPane.showMessageDialog(null, "La(s) Ordene(s) se crearon exitosamente");
 				inProcess = 0;
 			} else {
 				JOptionPane.showMessageDialog(null, "No hay ordenes por crear");
@@ -1392,18 +1637,6 @@ public class MainController {
 		}
 
 	}
-
-	// private void processInsertsOfLessProducts() {
-	// int i = 0;
-	// while (i < ordenDetailLess.size()) {
-	// // System.out.println("pra ingresar quantity" +
-	// // ordenDetailLess.get(i).getQuantity());
-	// manageRestOrderDetailLess.insertRestOrderDetailLess(ordenDetailLess.get(i));
-	// i++;
-	//
-	// }
-	//
-	// }
 
 	@FXML
 	public void exitApp() {
@@ -1415,12 +1648,12 @@ public class MainController {
 
 	public void loadOptionButtons(List<String> options, RestTable t, AnchorPane ap, String color) {
 		int i = 0, pos = 1;
-		int y = 10;
-
+		int y = 20;
+		PaymentController.setMainAppC(this);
 		while (i < options.size()) {
 			Button p = new Button();
 
-			p.setPrefHeight(90);
+			p.setPrefHeight(70);
 			p.setPrefWidth(90);
 
 			switch (pos) {
@@ -1442,48 +1675,50 @@ public class MainController {
 			case 6:
 				p.setLayoutX(510);
 				break;
-			case 7:
-				p.setLayoutX(610);
-				break;
-			case 8:
-				p.setLayoutX(710);
-				break;
-			case 9:
-				p.setLayoutX(810);
-				break;
-			case 10:
-				p.setLayoutX(910);
-				break;
-			case 11:
-				p.setLayoutX(1010);
-				break;
-			case 12:
-				p.setLayoutX(1110);
-				break;
-			case 13:
-				p.setLayoutX(1210);
-				break;
+			// case 7:
+			// p.setLayoutX(610);
+			// break;
+			// case 8:
+			// p.setLayoutX(710);
+			// break;
+			// case 9:
+			// p.setLayoutX(810);
+			// break;
+			// case 10:
+			// p.setLayoutX(910);
+			// break;
+			// case 11:
+			// p.setLayoutX(1010);
+			// break;
+			// case 12:
+			// p.setLayoutX(1110);
+			// break;
+			// case 13:
+			// p.setLayoutX(1210);
+			// break;
 
 			}
 			p.setLayoutY(y);
-			if (pos % 13 == 0) {
+			if (pos % 6 == 0) {
 				y = y + 100;
 				// se pone cero porque se aumenta abajo
 				pos = 0;
 			}
-			p.setStyle("-fx-background-color: " + color + ";-fx-border-color:white;-fx-border-radius: 5.0px;");
-
+			p.setStyle("-fx-background-color: " + color + ";-fx-border-color: #e4e4e4;-fx-border-radius: 10.0px;");
+			p.setEffect(new InnerShadow());
 			p.setText(options.get(i));
 			p.setWrapText(true);
 			p.setTextAlignment(TextAlignment.CENTER);
-			Label mesaSelected = new Label();
+			// Label mesaSelected = new Label();
 			this.restTableAccount = manageRestTableAccount.findRestTableAccountOpen(restTable);
-			mesaSelected.setText("Mesa N°:" + this.restTableAccount.getTableAccountId());
-			mesaSelected.setLayoutX(434.0);
-			mesaSelected.setLayoutY(148.0);
-			mesaSelected.prefWidth(350);
-			mesaSelected.setStyle("-fx-font-weight:bold;");
-			billsDetailQuantity = manageRestBillDetail.findAllRestBillDetailFromTableAccount(this.restTableAccount);
+			// mesaSelected.setText("Mesa N°:" +
+			// this.restTableAccount.getTableAccountId());
+			// mesaSelected.setLayoutX(434.0);
+			// mesaSelected.setLayoutY(148.0);
+			// mesaSelected.prefWidth(350);
+			// mesaSelected.setStyle("-fx-font-weight:bold;");
+			// billsDetailQuantity =
+			// manageRestBillDetail.findAllRestBillDetailFromTableAccount(this.restTableAccount);
 
 			fillTableWithOrders(billsDetailQuantity);
 			p.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -1495,8 +1730,10 @@ public class MainController {
 					// listaObjeto.getClass());
 					Button clickeado = (Button) arg0.getSource();
 					if (clickeado.getText().contains("Pagar")) {
+						billsDetailQuantity = manageRestBillDetail
+								.findAllRestBillDetailFromTableAccount(restTableAccount);
 						System.out.println("Entre a pagar");
-						PaymentController payment = new PaymentController();
+
 						payment.loadConfig();
 
 					}
@@ -1510,7 +1747,7 @@ public class MainController {
 							if (n == JOptionPane.YES_OPTION) {
 								try {
 									manageRestTableAccount.deleteRestTableAccount(restTableAccount);
-									restTable.setStatus("Desocupado");
+									restTable.setStatus("DESOCUPADO");
 									manageRestTables.updateRestTable(restTable);
 									restTableAccount = new RestTableAccount();
 									inProcess = 0;
@@ -1529,6 +1766,8 @@ public class MainController {
 						}
 					}
 					if (clickeado.getText().contains("Dividir")) {
+						billsDetailQuantity = manageRestBillDetail
+								.findAllRestBillDetailFromTableAccount(restTableAccount);
 						List<String> billsNo = new ArrayList<String>();
 						billsNo.add("1");
 						billsNo.add("2");
@@ -1560,8 +1799,32 @@ public class MainController {
 						confirmButton.setDisable(false);
 						menuTypePane.getChildren().clear();
 						principal.getChildren().clear();
-
+						billsDetailQuantity = manageRestBillDetail
+								.findAllRestBillDetailFromTableAccount(restTableAccount);
 						loadPanesForMenuType(manageCtgMenuType.loadMenuType(), menuTypePane, "#eadfff");
+					}
+					if (clickeado.getText().contains("Trasladar")) {
+						// System.out.println("Entre a editar");
+						// editandoOrden = true;
+						// itemsOrderTable.setDisable(false);
+						// confirmButton.setDisable(false);
+						// menuTypePane.getChildren().clear();
+						// principal.getChildren().clear();
+
+						String tableNom = JOptionPane
+								.showInputDialog("Ingrese el nombre de la mesa donde trasladara la cuenta:");
+						RestTable rt = manageRestTables.findRestTableByNameOrId(tableNom);
+						if (rt != null) {
+							restTableAccount.setRestTable(rt);
+							manageRestTableAccount.updateRestTableAccount(restTableAccount);
+							JOptionPane.showMessageDialog(null, "El cambio de mesa se efectuo correctamente");
+							loadPanesForTables(manageRestTables.findTablesByArea(restArea), principal, "#f4efd8");
+
+						} else {
+							JOptionPane.showMessageDialog(null, "La mesa ingresada no existe", "Alerta",
+									JOptionPane.ERROR_MESSAGE);
+						}
+
 					}
 
 				}
@@ -1569,7 +1832,7 @@ public class MainController {
 			});
 
 			ap.getChildren().add(p);
-			ap.getChildren().add(mesaSelected);
+			// ap.getChildren().add(mesaSelected);
 			efe.applyTranslateTransitionToButton(p, -500, 10);
 
 			i++;
@@ -1581,11 +1844,17 @@ public class MainController {
 		int i = 0;
 		itemsList.clear();
 		itemsListOrders.clear();
+
 		while (i < billsDetail.size()) {
 			RestMenuItem rmi = billsDetail.get(i).getRestOrder().getRestMenuItem();
 			rmi.setNombFactura(billsDetail.get(i).getRestBill().getBillName());
+			rmi.setIdentifier(i + 1);
+			System.out.println(rmi.getNombFactura() + "*************");
 			itemsList.add(rmi);
-			itemsListOrders.add(billsDetail.get(i).getRestOrder());
+
+			RestOrder ro = billsDetail.get(i).getRestOrder();
+			ro.setNombFactura(billsDetail.get(i).getRestBill().getBillName());
+			itemsListOrders.add(ro);
 			i++;
 		}
 		refreshTable();
@@ -1595,7 +1864,15 @@ public class MainController {
 	public void disableControls(boolean s) {
 		itemsOrderTable.setDisable(s);
 		confirmButton.setDisable(s);
-		totalL.setText("Total: $ \n" + "Propina (10%) $\n" + "----------" + "\n" + "Total: $ ");
+
+		setToZeroTotal();
+
+	}
+
+	public void setToZeroTotal() {
+		subtotalL.setText("$ 0.0");
+		propinaL.setText("(" + tip.getPercentValue() + "%) $ 0.0");
+		ttotalL.setText("$ 0.0");
 
 	}
 
@@ -1636,7 +1913,7 @@ public class MainController {
 				try {
 					if (!editandoOrden) {
 						manageRestTableAccount.deleteRestTableAccount(restTableAccount);
-						restTable.setStatus("Desocupado");
+						restTable.setStatus("DESOCUPADO");
 						manageRestTables.updateRestTable(restTable);
 						restTableAccount = new RestTableAccount();
 						inProcess = 0;
@@ -1662,8 +1939,79 @@ public class MainController {
 
 	}
 
+	@FXML
+	public void iniciarShift() {
+		usSecurity.loadConfig();
+		String us = usSecurity.verifyIsAutoReturnsN();
+
+		if (us != null) {
+			float iniMoney = Float.parseFloat(
+					JOptionPane.showInputDialog("Ingrese el monto de dinero con el que inciara este nuevo turno"));
+			RestShift newShift = new RestShift();
+			newShift.setInitialMoney(iniMoney);
+			newShift.setOpenedBy(us);
+			newShift.setOpeningDatetime(new Date());
+			newShift.setStatus("OPEN");
+			restS = manageRestShift.alreadyExistShift();
+			if (restS == null) {
+				restS = manageRestShift.insertRestShift(newShift);
+
+				nuevaOrden.setDisable(false);
+				ordenes.setDisable(false);
+				paraLlevar.setDisable(false);
+				cerrarTurno.setDisable(false);
+				JOptionPane.showMessageDialog(null, "Se aperturo un nuevo turno", "Exito",
+						JOptionPane.INFORMATION_MESSAGE);
+			} else {
+
+				JOptionPane.showMessageDialog(null, "Ya existe un turno abierto!, cierrelo antes de aperturar otro",
+						"Alerta", JOptionPane.ERROR_MESSAGE);
+
+			}
+
+		} else {
+
+			JOptionPane.showMessageDialog(null, "Las credenciales ingresadas no son válidas", "Alerta",
+					JOptionPane.ERROR_MESSAGE);
+		}
+
+	}
+
+	@FXML
+	public void cerrarShift() {
+
+		usSecurity.loadConfig();
+		String us = usSecurity.verifyIsAutoReturnsN();
+
+		if (us != null) {
+
+			if (restS != null) {
+				try {
+					manageRestShift.closeShift(restS.getIdShift(), us);
+					// restTableAccount.setRestShift1(restS);
+					// restTableAccount.setAccountStatus("CLOSED");
+					// manageRestTableAccount.updateRestTableAccount(restTableAccount);
+					nuevaOrden.setDisable(true);
+					ordenes.setDisable(true);
+					paraLlevar.setDisable(true);
+					JOptionPane.showMessageDialog(null, "Se ha cerrado el Shift", "Exito",
+							JOptionPane.INFORMATION_MESSAGE);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}
+
+		} else {
+			JOptionPane.showMessageDialog(null, "Las credenciales ingresadas no son válidas", "Alerta",
+					JOptionPane.ERROR_MESSAGE);
+
+		}
+
+	}
+
 	public static void setBillsDetailQuantity(List<RestBillDetail> billsDetailQuantity) {
 		MainController.billsDetailQuantity = billsDetailQuantity;
 	}
-
 }

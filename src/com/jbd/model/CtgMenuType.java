@@ -5,40 +5,44 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * The persistent class for the ctg_menu_type database table.
  *
  */
 @Entity
-@Table(name="ctg_menu_type")
-@NamedQuery(name="CtgMenuType.findAll", query="SELECT c FROM CtgMenuType c")
+@Table(name = "ctg_menu_type")
+@NamedQuery(name = "CtgMenuType.findAll", query = "SELECT c FROM CtgMenuType c")
 public class CtgMenuType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="MENU_TYPE_ID")
+	@Column(name = "MENU_TYPE_ID")
 	private int menuTypeId;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="ENTRY_DATE")
+	@Column(name = "ENTRY_DATE")
 	private Date entryDate;
 
-	@Column(name="ENTRY_USER")
+	@Column(name = "ENTRY_USER")
 	private String entryUser;
 
-	@Column(name="MENU_TYPE_DESCRIPTION")
+	@Column(name = "MENU_TYPE_DESCRIPTION")
 	private String menuTypeDescription;
 
-	@Column(name="MENU_TYPE_NAME")
+	@Column(name = "MENU_TYPE_NAME")
 	private String menuTypeName;
 
-	//bi-directional many-to-one association to RestMenuItem
-	@OneToMany(mappedBy="ctgMenuType")
+	// bi-directional many-to-one association to RestMenuItem
+	@OneToMany(mappedBy = "ctgMenuType")
 	private List<RestMenuItem> restMenuItems;
 
 	public CtgMenuType() {
+	}
+
+	public CtgMenuType(int id, String name) {
+		this.menuTypeId = id;
+		this.menuTypeName = name;
 	}
 
 	public int getMenuTypeId() {
@@ -103,10 +107,9 @@ public class CtgMenuType implements Serializable {
 		return restMenuItem;
 	}
 
-
 	@Override
-	public String toString(){
-		return this.menuTypeId + " - "+ this.menuTypeName;
+	public String toString() {
+		return this.menuTypeId + " - " + this.menuTypeName;
 	}
-	
+
 }

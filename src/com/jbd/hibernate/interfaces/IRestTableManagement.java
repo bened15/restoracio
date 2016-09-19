@@ -20,6 +20,7 @@ public interface IRestTableManagement {
 	public List<RestTable> findAll();
 
 	public List<RestTable> findTablesByExample(int areaId);
+	public RestTable findRestTableByNameOrId(String tableName) ;
 
 
 }

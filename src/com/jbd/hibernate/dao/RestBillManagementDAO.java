@@ -1,6 +1,7 @@
 
 package com.jbd.hibernate.dao;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -14,13 +15,11 @@ import com.jbd.hibernate.interfaces.IRestBillManagement;
 import com.jbd.model.RestBill;
 import com.jbd.model.RestTableAccount;
 
-
-
-
 public class RestBillManagementDAO implements IRestBillManagement {
 
 	@PersistenceContext
 	public EntityManager em;
+	private DecimalFormat decimFormat = new DecimalFormat("#.00");
 
 	public RestBillManagementDAO() {
 		// TODO Auto-generated constructor stub
@@ -103,25 +102,36 @@ public class RestBillManagementDAO implements IRestBillManagement {
 	}
 
 	@Override
-	public Double getTotalAccountFromTable(RestTableAccount ta, RestBill rb) {
+	public Double getTotalAccountFromTableCheckingDiscount(RestTableAccount ta, RestBill rb) {
 		try {
 			Query q = null;
+
 			if (rb.getCtgDiscount() != null) {
 				q = em.createQuery(
-						"select sum(b.billTotal-(b.billTotal*(b.ctgDiscount.discountPercentage/100.0))) from RestBill b where b.restTableAccount=:ta and b.restTableAccount.closedDatetime is null",
+						"select round(sum(bd.billDetailTotal-(bd.billDetailTotal*(bd.restBill.ctgDiscount.discountPercentage/100.0))),2) from RestBillDetail bd where bd.restBill.restTableAccount=:ta and bd.restBill.restTableAccount.closedDatetime is null",
 						Double.class);
 				q.setParameter("ta", ta);
+				// q.setParameter("rb", rb);
 				System.out.println("Tiene descuento");
 
 			} else {
 				q = em.createQuery(
-						"select  sum(b.billTotal) from RestBill b where b.restTableAccount=:ta and b.restTableAccount.closedDatetime is null",
+						"select  round(sum(bd.billDetailTotal),2) from RestBillDetail bd where bd.restBill.restTableAccount=:ta and bd.restBill.restTableAccount.closedDatetime is null",
 						Double.class);
 				System.out.println("No Tiene descuento");
 				q.setParameter("ta", ta);
-			}
+				// q.setParameter("rb", rb);
 
-			return (Double) q.getSingleResult();
+			}
+			double res = (double) q.getSingleResult();
+			System.out.println("total de la cuenta con descuento" + res);
+
+			// double result = Double
+			// .parseDouble(decimFormat.format(res * (1 +
+			// rb.getCtgTip().getPercentValue() / 100.0)));
+			// System.out.println("total de la cuenta con descuento2"+result);
+			return res;
+
 		} catch (Exception e) {
 
 			e.printStackTrace();
@@ -132,8 +142,18 @@ public class RestBillManagementDAO implements IRestBillManagement {
 
 	@Override
 	public Double getTotalAccountFromTable(RestTableAccount ta) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			Query q = em.createQuery(
+					"select  round(sum(bd.billDetailTotal),2) from RestBillDetail bd where bd.restBill.restTableAccount=:ta and bd.restBill.restTableAccount.closedDatetime is null",
+					Double.class);
+
+			q.setParameter("ta", ta);
+			return (Double) q.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 
 }

@@ -45,6 +45,9 @@ public class RestTableAccount implements Serializable {
 	@Column(name = "CREATED_BY")
 	private String createdBy;
 
+	@Column(name = "GUEST_NUM")
+	private Integer guestNum;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATETIME")
 	private Date createdDatetime;
@@ -59,7 +62,6 @@ public class RestTableAccount implements Serializable {
 	@Cascade({ CascadeType.DELETE })
 	private List<RestOrder> restOrders;
 
-	
 	// bi-directional many-to-one association to RestShift
 	@ManyToOne
 	@JoinColumn(name = "ID_SHIFT_CLOSED")
@@ -76,6 +78,14 @@ public class RestTableAccount implements Serializable {
 	private RestTable restTable;
 
 	public RestTableAccount() {
+	}
+
+	public Integer getGuestNum() {
+		return guestNum;
+	}
+
+	public void setGuestNum(Integer guestNum) {
+		this.guestNum = guestNum;
 	}
 
 	public int getTableAccountId() {
@@ -186,7 +196,4 @@ public class RestTableAccount implements Serializable {
 		this.restTable = restTable;
 	}
 
-
-
-	
 }

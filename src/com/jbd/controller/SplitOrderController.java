@@ -16,6 +16,7 @@ import com.jbd.hibernate.interfaces.IRestBillDetailManagement;
 import com.jbd.hibernate.interfaces.IRestBillManagement;
 import com.jbd.hibernate.interfaces.IRestBillPaymentManagement;
 import com.jbd.hibernate.interfaces.IRestTableAccountManagement;
+import com.jbd.hibernate.interfaces.IRestTableManagement;
 import com.jbd.model.CtgPaymentMethod;
 import com.jbd.model.RestBill;
 import com.jbd.model.RestBillDetail;
@@ -56,15 +57,18 @@ import javafx.stage.Stage;
 public class SplitOrderController {
 
 	@Autowired
+	private IRestTableManagement manageRestTable;
+	@Autowired
 	private Stage secondaryStage;
-	private MainController mainAppC;
+	private static MainController mainAppC;
 	@FXML
 	private GridPane numbersArea;
+	@FXML
+	private TextField subtotalL, ttotalL, propinaL;
 	@Autowired
 	private Effect efe;
 	private double priceTotal = 0;
-	@FXML
-	private Label totalL;
+
 	@FXML
 	private AnchorPane contentPane;
 	private DecimalFormat decimFormat = new DecimalFormat("#.00");
@@ -85,6 +89,7 @@ public class SplitOrderController {
 	private static double totalAccount = 0.0;
 	private int dotCounter = 0;
 	private ObservableList<RestOrder> itemsList = FXCollections.observableArrayList();
+	private List<RestOrder> menuItemsOrderGlobal = new ArrayList<RestOrder>();
 
 	// private static boolean actualizoLabels = false;
 
@@ -107,7 +112,7 @@ public class SplitOrderController {
 				this.secondaryStage.initOwner(Main.primaryStage);
 			}
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("../com/jbd/view/W_SplitOrderView.fxml"));
+			loader.setLocation(Main.class.getResource("/com/jbd/view/W_SplitOrderView.fxml"));
 			AnchorPane paymentOverview = (AnchorPane) loader.load();
 
 			Scene scene = new Scene(paymentOverview);
@@ -123,6 +128,7 @@ public class SplitOrderController {
 	public void initialize() {
 
 		enableAutowireCapabilities();
+		menuItemsOrderGlobal = MainController.getItemsListOrders();
 		loadPanesForMenuItem(MainController.getItemsListOrders(), contentPane, "#FEFCB8");
 
 	}
@@ -153,22 +159,22 @@ public class SplitOrderController {
 			case 5:
 				p.setLayoutX(370);
 				break;
-			case 6:
-				p.setLayoutX(460);
-				break;
-			case 7:
-				p.setLayoutX(550);
-				break;
-			case 8:
-				p.setLayoutX(640);
-				break;
-			case 9:
-				p.setLayoutX(730);
-				break;
+			// case 6:
+			// p.setLayoutX(460);
+			// break;
+			// case 7:
+			// p.setLayoutX(550);
+			// break;
+			// case 8:
+			// p.setLayoutX(640);
+			// break;
+			// case 9:
+			// p.setLayoutX(730);
+			// break;
 
 			}
 			p.setLayoutY(y);
-			if (pos % 9 == 0) {
+			if (pos % 5 == 0) {
 				y = y + 90;
 				// se pone cero porque se aumenta abajo
 				pos = 0;
@@ -209,9 +215,17 @@ public class SplitOrderController {
 					// partida[1].length())));
 
 					priceTotal = priceTotal + or.getRestMenuItem().getMenuItemPrice();
-					totalL.setText("Total: $ " + decimFormat.format(priceTotal) + "\n\n" + "Propina (10%) $"
-							+ (decimFormat.format(priceTotal * 0.10)) + "\n" + "\n" + "----------" + "\n" + "Total: $ "
-							+ decimFormat.format(priceTotal + (priceTotal * 0.10)));
+					subtotalL.setText("$" + decimFormat.format(priceTotal));
+					propinaL.setText("(" + MainController.getTip().getPercentValue() + "%) $"
+							+ decimFormat.format(priceTotal * MainController.getTip().getPercentValue() / 100.0));
+					ttotalL.setText("$" + decimFormat
+							.format(priceTotal + (priceTotal * MainController.getTip().getPercentValue() / 100.0)));
+					// totalL.setText("Total: $ " +
+					// decimFormat.format(priceTotal) + "\n\n" + "Propina (10%)
+					// $"
+					// + (decimFormat.format(priceTotal * 0.10)) + "\n" + "\n" +
+					// "----------" + "\n" + "Total: $ "
+					// + decimFormat.format(priceTotal + (priceTotal * 0.10)));
 
 					// System.out.println("Tamaño de lista" + itemsList.size());
 					// rightSide.getChildren().add(refreshTable());
@@ -222,9 +236,13 @@ public class SplitOrderController {
 					p.setPrefWidth(810.0);
 					p.setPrefHeight(700.0);
 					ap.getChildren().add(p);
-//					efe.applyFadeTransitionToRectangle(p);
+					// efe.applyFadeTransitionToRectangle(p);
+					menuItemOrder.remove(Integer.parseInt(clickeado.getId()));
+
 					contentPane.getChildren().remove(clickeado);
-					loadPanesForBills(MainController.getBillsQuantity(), p, "#a7c9c9", or);
+
+
+					loadPanesForBills(MainController.getBillsQuantity(), p, "#a7c9c9", or,menuItemOrder);
 
 				}
 
@@ -237,7 +255,7 @@ public class SplitOrderController {
 		}
 	}
 
-	public void loadPanesForBills(List<RestBill> bills, Pane ap, String color, RestOrder or) {
+	public void loadPanesForBills(List<RestBill> bills, Pane ap, String color, RestOrder or,List<RestOrder> menuItemOrder) {
 		int i = 0, pos = 1;
 		int y = 10;
 
@@ -293,19 +311,25 @@ public class SplitOrderController {
 						RestBill bill = bills.get(Integer.parseInt(clickeado.getId()));
 						bill.setBillSubtotal(Double.parseDouble(
 								decimFormat.format(bill.getBillSubtotal() + or.getRestMenuItem().getMenuItemPrice())));
-						bill.setBillTip(Double.parseDouble(decimFormat.format(bill.getBillSubtotal() * 0.10)));
-						bill.setBillTotal(Double.parseDouble(decimFormat.format(bill.getBillSubtotal() * 1.10)));
+						bill.setBillTip(Double.parseDouble(decimFormat
+								.format(bill.getBillSubtotal() * MainController.getTip().getPercentValue() / 100.0)));
+						bill.setBillTotal(Double.parseDouble(decimFormat.format(
+								bill.getBillSubtotal() * (1 + (MainController.getTip().getPercentValue() / 100.0)))));
 						billDetail.setRestBill(bill);
 						billDetail.setBillDetailSubtotal(
 								Double.parseDouble(decimFormat.format(or.getRestMenuItem().getMenuItemPrice())));
 						billDetail.setBillDetailTotal(
-								Double.parseDouble(decimFormat.format(or.getRestMenuItem().getMenuItemPrice() * 1.10)));
+								Double.parseDouble(decimFormat.format(or.getRestMenuItem().getMenuItemPrice()
+										* (1 + (MainController.getTip().getPercentValue() / 100.0)))));
 
 						bDetails.add(billDetail);
+						or.setNombFactura(clickeado.getText());
 						itemsList.add(or);
 						refreshTable();
 						manageRestBill.updateRestBill(bill);
-						contentPane.getChildren().remove(ap);
+//						contentPane.getChildren().remove(ap);
+						contentPane.getChildren().clear();
+						loadPanesForMenuItem(menuItemOrder, contentPane, "#FEFCB8");
 
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -328,17 +352,20 @@ public class SplitOrderController {
 		TableColumn id = new TableColumn("Id");
 		TableColumn elemento = new TableColumn("Elemento");
 		TableColumn precio = new TableColumn("Precio($)");
+		TableColumn facturaN = new TableColumn("Factura");
 		// TableColumn total = new TableColumn("Total");
 
 		id.setCellValueFactory(new PropertyValueFactory<RestOrder, String>("orderId"));
 		elemento.setCellValueFactory(new PropertyValueFactory<RestOrder, String>("menuItemName"));
 		precio.setCellValueFactory(new PropertyValueFactory<RestOrder, Double>("menuItemPrice"));
+		facturaN.setCellValueFactory(new PropertyValueFactory<RestOrder, String>("nombFactura"));
+
 		// total.setCellValueFactory(new PropertyValueFactory<>("total"));
 
 		// itemsLocalList.setItems(itemsList);
 		// itemsLocalList.getColumns().addAll(id,elemento, precio, total);
 		itemsOrderTable.setItems(itemsList);
-		itemsOrderTable.getColumns().addAll(id, elemento, precio);
+		itemsOrderTable.getColumns().addAll(id, elemento, precio, facturaN);
 
 	}
 
@@ -375,6 +402,12 @@ public class SplitOrderController {
 			JOptionPane.showMessageDialog(null, "La(s) Ordene(s) y Factura(s) se creaon exitosamente");
 			itemsList.clear();
 			// rightSide.getChildren().clear();
+			this.mainAppC.opcionSelected = 2;
+			this.mainAppC
+					.loadPanesForTables(
+							manageRestTable.findTablesByArea(MainController.getBillsQuantity().get(0)
+									.getRestTableAccount().getRestTable().getRestArea()),
+							MainController.principalEstatica, "#f4efd8");
 			this.secondaryStage.close();
 			// rightSide.getChildren().add(refreshTable());
 
@@ -395,12 +428,12 @@ public class SplitOrderController {
 		acbFactory.autowireBean(this);
 	}
 
-	public MainController getMainAppC() {
+	public static MainController getMainAppC() {
 		return mainAppC;
 	}
 
-	public void setMainAppC(MainController mainAppC) {
-		this.mainAppC = mainAppC;
+	public static void setMainAppC(MainController mainAppC) {
+		SplitOrderController.mainAppC = mainAppC;
 	}
 
 }

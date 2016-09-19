@@ -19,6 +19,6 @@ public interface IRestBillManagement {
 
 	public Double getTotalAccountFromTable(RestTableAccount ta);
 
-	Double getTotalAccountFromTable(RestTableAccount ta, RestBill rb);
+	public Double getTotalAccountFromTableCheckingDiscount(RestTableAccount ta, RestBill rb);
 
 }

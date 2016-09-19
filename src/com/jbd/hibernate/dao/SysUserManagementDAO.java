@@ -50,21 +50,40 @@ public class SysUserManagementDAO implements ISysUserManagement {
 		}
 	}
 
+	@Transactional
 	@Override
-	public void deleteSysUser(SysUser o) {
+		public boolean deleteSysUser(SysUser o) {
 		// TODO Auto-generated method stub
+		try {
+			em.remove(em.merge(o));
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 
 	}
 
 	@Override
 	public SysUser findSysUser(String oId) {
+		List userList;
+
 		try {
 		SysUser user;
 			TypedQuery<SysUser> tq = em.createQuery("select o from SysUser o where o.userCode=:prmUserCode",
 					SysUser.class);
 			tq.setParameter("prmUserCode", oId);
 
-			user = tq.getSingleResult();
+//			user = tq.getSingleResult();
+
+			userList = tq.getResultList();
+
+			if(userList.isEmpty()){
+				user = null;
+			}else{
+				user = (SysUser) userList.get(0);
+			}
+
 			return user;
 
 		} catch (Exception e) {
@@ -75,11 +94,11 @@ public class SysUserManagementDAO implements ISysUserManagement {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public List<SysUser> findAll() {
 		try {
-			
+
 			List<SysUser> userList;
 			TypedQuery<SysUser> tq = em.createQuery("select o from SysUser o ",
 					SysUser.class);
@@ -96,7 +115,7 @@ public class SysUserManagementDAO implements ISysUserManagement {
 	@Override
 	public List<SysUser> findByUserExample(String name, String lastName, String userCode) {
 		// TODO Auto-generated method stub
-		StringBuilder sqlQuery = new StringBuilder(); 
+		StringBuilder sqlQuery = new StringBuilder();
 		Boolean isFirst = true;
 		Boolean useName = false;
 		Boolean useLastName = false;
@@ -111,16 +130,16 @@ public class SysUserManagementDAO implements ISysUserManagement {
 					useName = true;
 					if(isFirst){
 						sqlQuery.append(" upper(t.userName) like '%' ||:prmUserName || '%'  ");
-						isFirst= false;					
+						isFirst= false;
 						}
 				}
 				if( (lastName != null && !lastName.isEmpty())){
 					useLastName = true;
 					if(isFirst){
 						sqlQuery.append(" upper(t.userLastname) like '%' ||:prmUserLastName || '%' ");
-						isFirst= false;					
+						isFirst= false;
 						}else{
-							sqlQuery.append(" and upper(t.userLastname) like '%' ||:prmUserLastName || '%'  ");						
+							sqlQuery.append(" and upper(t.userLastname) like '%' ||:prmUserLastName || '%'  ");
 						}
 
 				}
@@ -128,23 +147,23 @@ public class SysUserManagementDAO implements ISysUserManagement {
 					useCode = true;
 					if(isFirst){
 						sqlQuery.append(" upper(t.userCode) like '%' ||:prmUserCode || '%' ");
-						isFirst= false;					
+						isFirst= false;
 						}else{
-							sqlQuery.append(" and upper(t.userCode) like '%' ||:prmUserCode || '%'  ");						
+							sqlQuery.append(" and upper(t.userCode) like '%' ||:prmUserCode || '%'  ");
 						}
 				}
 					TypedQuery<SysUser> tq = em.createQuery(sqlQuery.toString(),
 							SysUser.class);
 					if(useName){
 						tq.setParameter("prmUserName", name.toUpperCase());
-						
+
 					}
 					if(useLastName){
 						tq.setParameter("prmUserLastName", lastName.toUpperCase());
-						
+
 					}
 					if(useCode){
-						tq.setParameter("prmUserCode", userCode.toUpperCase());						
+						tq.setParameter("prmUserCode", userCode.toUpperCase());
 					}
 					users = tq.getResultList();
 			}
@@ -157,7 +176,7 @@ public class SysUserManagementDAO implements ISysUserManagement {
 		}
 
 	}
-	
-	
+
+
 
 }

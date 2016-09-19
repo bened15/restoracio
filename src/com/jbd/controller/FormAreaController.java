@@ -11,7 +11,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.jbd.hibernate.interfaces.IRestAreaManagement;
-import com.jbd.model.AdmCustomer;
 import com.jbd.model.RestArea;
 
 import javafx.collections.FXCollections;
@@ -83,7 +82,7 @@ public class FormAreaController {
 
 	@FXML
 	public void onNew(MouseEvent event) {
-		resetRecord();
+		resetValues();
 		newModeEnabled();
 	}
 
@@ -186,9 +185,6 @@ public class FormAreaController {
 		restAreaRecordSelected = new RestArea();
 		isSmokingArea.setValue(null);
 		areaName.setText("");
-	}
-	public void resetRecord(){
-		restAreaRecordSelected = new RestArea();		 		 
 	}
 
 	public String validateRecord() {

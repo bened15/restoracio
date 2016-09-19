@@ -1,12 +1,11 @@
 package com.jbd.controller;
 
-import java.io.ByteArrayInputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
 import com.jbd.hibernate.interfaces.ICtgDiscountManagement;
 import com.jbd.hibernate.interfaces.ICtgPaymentMethodManagement;
+import com.jbd.hibernate.interfaces.ICtgTipManagement;
 import com.jbd.hibernate.interfaces.IRestBillDetailManagement;
 import com.jbd.hibernate.interfaces.IRestBillManagement;
 import com.jbd.hibernate.interfaces.IRestBillPaymentManagement;
@@ -21,13 +21,14 @@ import com.jbd.hibernate.interfaces.IRestTableAccountManagement;
 import com.jbd.hibernate.interfaces.IRestTableManagement;
 import com.jbd.model.CtgDiscount;
 import com.jbd.model.CtgPaymentMethod;
+import com.jbd.model.CtgTip;
 import com.jbd.model.RestBill;
 import com.jbd.model.RestBillDetail;
 import com.jbd.model.RestBillPayment;
-import com.jbd.model.RestMenuItem;
 import com.jbd.model.RestOrder;
 import com.jbd.model.RestTable;
 import com.jbd.model.RestTableAccount;
+import com.jbd.utils.Util;
 import com.jbd.utils.Effect;
 
 import application.Main;
@@ -47,18 +48,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.InnerShadow;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -67,13 +61,16 @@ public class PaymentController {
 
 	@Autowired
 	private Stage secondaryStage;
-	private MainController mainAppC;
+	private static MainController mainAppC;
 	@FXML
 	private GridPane numbersArea;
 	@Autowired
+	private IRestTableManagement manageRestTables;
+	@Autowired
 	private IRestTableManagement manageRestTable;
 	@FXML
-	private Label totalPropina, totalRecibido, totalCuenta, totalCambio, totalDescuento;
+	private Label totalPropina, totalRecibido, totalCuenta, totalCambio, totalDescuento, tableName, subtotal, propL,
+			discountTitle;
 	@FXML
 	private AnchorPane headerAP;
 	@FXML
@@ -81,7 +78,10 @@ public class PaymentController {
 	@FXML
 	private TableView<RestOrder> ordersTable = new TableView<RestOrder>();
 	private static final ChoiceBox facturaAPagar = new ChoiceBox();
+	private static final ChoiceBox tipsC = new ChoiceBox();
 	private DecimalFormat decimFormat = new DecimalFormat("#.00");
+	@Autowired
+	private ICtgTipManagement manageTips;
 	@Autowired
 	private IRestBillPaymentManagement manageRestBillPayment;
 	@Autowired
@@ -96,13 +96,14 @@ public class PaymentController {
 	private ICtgDiscountManagement manageCtgDiscount;
 	@Autowired
 	private CtgPaymentMethod paymentMethod;
-	private static String RestBillN = "";
+	private static String RestBillN = "", TipName = "";
 
 	private ObservableList<RestOrder> bDetailsOrders = FXCollections.observableArrayList();
 	private static double totalAccount = 0.0;
 	private int dotCounter = 0;
 	@Autowired
 	private Effect efe;
+
 	private String commentForPaymentMethod = "";
 	// private static boolean actualizoLabels = false;
 	@FXML
@@ -129,7 +130,7 @@ public class PaymentController {
 			}
 
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("../com/jbd/view/W_PaymentView.fxml"));
+			loader.setLocation(Main.class.getResource("/com/jbd/view/W_PaymentView.fxml"));
 			AnchorPane paymentOverview = (AnchorPane) loader.load();
 
 			facturaAPagar.setLayoutX(224.0);
@@ -191,27 +192,136 @@ public class PaymentController {
 
 	}
 
+	private void loadTipsToChoiceBox() {
+		try {
+			Stage st = new Stage();
+			st.initModality(Modality.WINDOW_MODAL);
+			st.initOwner(secondaryStage);
+			AnchorPane p = new AnchorPane();
+			Scene scene = new Scene(p);
+			p.setStyle("-fx-background-color:#9fb9b9");
+			p.setPrefHeight(200.0);
+			p.setPrefWidth(250.0);
+			List<CtgTip> tips = manageTips.findAll();
+			int i = 0;
+
+			ObservableList<String> tipList = FXCollections.observableArrayList();
+			while (i < tips.size()) {
+
+				System.out.println("Valores" + tips.get(i).getTipName());
+				tipList.add(tips.get(i).getTipName() + "--" + tips.get(i).getIdCtgTip());
+				i++;
+			}
+			// facturaAPagar.setValue();
+			this.tipsC.setItems(tipList);
+
+			tipsC.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+				public void changed(ObservableValue ov, Number value, Number new_value) {
+					if (tipsC.getItems().size() > 0) {
+						TipName = (String) tipsC.getItems().get((Integer) new_value);
+
+					}
+				}
+			});
+			PaymentController.tipsC.getSelectionModel().selectFirst();
+			tipsC.setLayoutX(25);
+			tipsC.setLayoutY(15);
+			p.getChildren().add(tipsC);
+			Button b = new Button();
+
+			b.setLayoutX(25);
+			b.setLayoutY(40);
+			b.setText("Guardar");
+			p.getChildren().add(b);
+			b.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+				@Override
+				public void handle(MouseEvent arg0) {
+
+					String[] bills = RestBillN.split("--");
+					String[] tips = TipName.split("--");
+					CtgTip t = manageTips.findCtgTip(Integer.parseInt(tips[1]));
+					System.out.println("Tip Seleccionada" + t.getTipName() + "Percente:" + t.getPercentValue());
+					RestBill r = manageRestBill.findRestBill(Integer.parseInt(bills[1]));
+
+					r.setCtgTip(t);
+					r.setBillTip(r.getBillSubtotal() * (t.getPercentValue() / 100.0));
+					r.setBillTotal(r.getBillSubtotal() * (1 + t.getPercentValue() / 100.0));
+
+					manageRestBill.updateRestBill(r);
+
+					List<RestBillDetail> rbd = manageRestBillDetail
+							.findAllRestBillDetailFromRestBill(new RestBill(Integer.parseInt(bills[1])));
+					int i = 0;
+					while (i < rbd.size()) {
+						RestBillDetail rbdd = rbd.get(i);
+						System.out.println(rbdd.getBillDetailSubtotal() + "sdfsdfsdfs");
+
+						rbdd.setBillDetailTotal(rbdd.getBillDetailSubtotal() * (1 + t.getPercentValue() / 100.0));
+
+						manageRestBillDetail.updateRestBillDetail(rbdd);
+						i++;
+
+					}
+
+					fillTotalLabels();
+					JOptionPane.showMessageDialog(null, "Se efectuo el cambio de la propina");
+					st.close();
+
+				}
+
+			});
+
+			st.setScene(scene);
+			st.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	public void fillTotalLabels() {
 		// actualizoLabels = true;
 		int i = 0;
-		double totalCuenta = 0;
+		double totalCuenta = 0.0, totalDiscount = 0.0;
 		List<RestBillDetail> rbd;
+		List<RestOrder> roL;
 
 		String[] bills = RestBillN.split("--");
 		// RestBill rb = null;
 		rbd = manageRestBillDetail.findAllRestBillDetailFromRestBill(new RestBill(Integer.parseInt(bills[1])));
+
 		if (rbd.size() > 0) {
+			tableName.setText(
+					rbd.get(0).getRestBill().getRestTableAccount().getRestTable().getTableName().toUpperCase());
 			bDetailsOrders.clear();
+			roL = manageRestBillDetail
+					.findAllRestBillDetailFromRestBillForTable(new RestBill(Integer.parseInt(bills[1])));
+			while (i < roL.size()) {
+				RestOrder oo = roL.get(i);
+				// uso este atributo solo para guardar el campo de de X para
+				// mostrarlo en la tabla
+				oo.setAttendant("X");
+				oo.setNombFactura(rbd.get(0).getRestBill().getBillName());
+				bDetailsOrders.add(oo);
+				i++;
+			}
+			i = 0;
 			while (i < rbd.size()) {
-				RestOrder ro = rbd.get(i).getRestOrder();
-				ro.setMenuItemName(ro.getRestMenuItem().getMenuItemName());
-				ro.setMenuItemPrice(Double.parseDouble(decimFormat.format(ro.getRestMenuItem().getMenuItemPrice())));
-				ro.setNombFactura(rbd.get(i).getRestBill().getBillName());
-				bDetailsOrders.add(ro);
+				// RestOrder ro = rbd.get(i).getRestOrder();
+				// ro.setMenuItemName(ro.getRestMenuItem().getMenuItemName());
+				// ro.setMenuItemPrice(Double.parseDouble(decimFormat.format(ro.getRestMenuItem().getMenuItemPrice())));
+				// ro.setNombFactura(rbd.get(i).getRestBill().getBillName());
+				// bDetailsOrders.add(ro);
+
 				if (rbd.get(i).getRestBill().getCtgDiscount() != null) {
 					totalCuenta = totalCuenta
 							+ (rbd.get(i).getBillDetailSubtotal() - (rbd.get(i).getBillDetailSubtotal()
 									* rbd.get(i).getRestBill().getCtgDiscount().getDiscountPercentage() / 100.0));
+					totalDiscount = totalDiscount + rbd.get(i).getBillDetailSubtotal()
+							* rbd.get(i).getRestBill().getCtgDiscount().getDiscountPercentage() / 100.0;
+					this.discountTitle
+					.setText("Descuento (" + rbd.get(0).getRestBill().getCtgDiscount().getDiscountPercentage() + "%)");
 				} else {
 					totalCuenta = totalCuenta + rbd.get(i).getBillDetailSubtotal();
 				}
@@ -231,8 +341,15 @@ public class PaymentController {
 			// } else {
 			// this.totalCuenta.setText(decimFormat.format(totalCuenta * 1.10));
 			// }
-			this.totalCuenta.setText(decimFormat.format(totalCuenta * 1.10));
-			this.totalPropina.setText(decimFormat.format(totalCuenta * 0.10));
+			this.propL.setText("Propina (" + rbd.get(0).getRestBill().getCtgTip().getPercentValue() + "%)");
+
+			this.subtotal.setText(decimFormat.format(totalCuenta));
+			this.totalCuenta.setText(decimFormat
+					.format(totalCuenta * (1 + (rbd.get(0).getRestBill().getCtgTip().getPercentValue()) / 100.0)));
+			this.totalPropina.setText(
+					decimFormat.format(totalCuenta * (rbd.get(0).getRestBill().getCtgTip().getPercentValue()) / 100.0));
+			this.totalDescuento.setText(decimFormat
+					.format(totalDiscount * (1 + (rbd.get(0).getRestBill().getCtgTip().getPercentValue()) / 100.0)));
 			this.totalRecibido.setText("");
 			this.totalCambio.setText("");
 		}
@@ -240,11 +357,13 @@ public class PaymentController {
 		bp = manageRestBillPayment.findRestBillPayments(Integer.parseInt(bills[1]));
 		i = 0;
 		if (bp.size() > 0) {
-			totalCuenta = totalCuenta * 1.10;
+			totalCuenta = totalCuenta * (1 + (rbd.get(0).getRestBill().getCtgTip().getPercentValue()) / 100.0);
 			while (i < bp.size()) {
 				totalCuenta = totalCuenta - bp.get(i).getAmount();
 				i++;
 			}
+			this.subtotal.setText(decimFormat
+					.format(totalCuenta / (1 + (rbd.get(0).getRestBill().getCtgTip().getPercentValue()) / 100.0)));
 			this.totalCuenta.setText(decimFormat.format(totalCuenta));
 			// this.totalPropina.setText(decimFormat.format(totalCuenta *
 			// 0.10));
@@ -260,12 +379,12 @@ public class PaymentController {
 		acbFactory.autowireBean(this);
 	}
 
-	public MainController getMainAppC() {
+	public static MainController getMainAppC() {
 		return mainAppC;
 	}
 
-	public void setMainAppC(MainController mainAppC) {
-		this.mainAppC = mainAppC;
+	public static void setMainAppC(MainController mainAppC) {
+		PaymentController.mainAppC = mainAppC;
 	}
 
 	@FXML
@@ -299,7 +418,8 @@ public class PaymentController {
 			} else {
 				String totalRecibidoT = totalRecibido.getText() + bClicked.getText();
 				if (totalRecibidoT.contains(".") && (totalRecibidoT.length() - 3) > totalRecibidoT.indexOf(".")) {
-					System.out.println("tiene punto y se intneto meter mas de dos decimales");
+					// System.out.println("tiene punto y se intneto meter mas de
+					// dos decimales");
 					String t = totalRecibidoT.substring(0, totalRecibidoT.indexOf(".") + 3);
 					totalRecibidoT = t;
 
@@ -333,14 +453,20 @@ public class PaymentController {
 
 	@FXML
 	public void tarjetaSelected() {
-		this.numbersArea.setDisable(false);
-		this.totalCambio.setText("0");
-		this.totalRecibido.setText(totalCuenta.getText());
-		paymentMethod = manageCtgPaymentMethod.findCtgPaymentMethod("Tarjeta");
-		this.commentForPaymentMethod = "";
-		disableButtons(true);
-		askForCardNumber();
+		try {
 
+			this.numbersArea.setDisable(false);
+			this.totalCambio.setText("0.0");
+			this.totalRecibido.setText(totalCuenta.getText());
+			paymentMethod = manageCtgPaymentMethod.findCtgPaymentMethod("Tarjeta");
+			this.commentForPaymentMethod = "";
+			disableButtons(true);
+			askForCardNumber();
+		} catch (Exception e) {
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			Util.writeIntoErrorLog(errors.toString(), "");
+		}
 	}
 
 	private void disableButtons(boolean status) {
@@ -680,6 +806,128 @@ public class PaymentController {
 
 	}
 
+	private void loadTypesOfTips(List<CtgTip> tipItem) {
+		AnchorPane ap = new AnchorPane();
+
+		Stage st = new Stage();
+		st.initModality(Modality.WINDOW_MODAL);
+		st.initOwner(secondaryStage);
+		int i = 0, pos = 1;
+		int y = 10;
+
+		while (i < tipItem.size()) {
+			Button p = new Button();
+
+			p.setPrefHeight(80);
+			p.setPrefWidth(80);
+
+			switch (pos) {
+			case 1:
+				p.setLayoutX(10);
+				break;
+			case 2:
+				p.setLayoutX(100);
+				break;
+			case 3:
+				p.setLayoutX(190);
+				break;
+			case 4:
+				p.setLayoutX(280);
+				break;
+			case 5:
+				p.setLayoutX(370);
+				break;
+			case 6:
+				p.setLayoutX(460);
+				break;
+			case 7:
+				p.setLayoutX(550);
+				break;
+			case 8:
+				p.setLayoutX(640);
+				break;
+			case 9:
+				p.setLayoutX(730);
+				break;
+
+			}
+			p.setLayoutY(y);
+			if (pos % 9 == 0) {
+				y = y + 90;
+				// se pone cero porque se aumenta abajo
+				pos = 0;
+			}
+			p.setStyle("-fx-background-color:#fffff;-fx-font-size:10px");
+			p.setEffect(new InnerShadow());
+			p.setId(String.valueOf(i));
+
+			String item = "";
+			if (tipItem.get(i).getTipName().length() > 30) {
+				item = tipItem.get(i).getTipName().substring(0, 29) + "..";
+			} else {
+				item = tipItem.get(i).getTipName();
+
+			}
+
+			p.setText(item + "\n" + "%  " + tipItem.get(i).getPercentValue());
+			p.setWrapText(true);
+			p.setTextAlignment(TextAlignment.CENTER);
+			p.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+				@Override
+				public void handle(MouseEvent arg0) {
+					Button clickeado = (Button) arg0.getSource();
+					efe.applyFadeTransitionToButton(clickeado);
+					String[] bills = RestBillN.split("--");
+					RestBill r = manageRestBill.findRestBill(Integer.parseInt(bills[1]));
+					CtgTip t = tipItem.get(Integer.parseInt(clickeado.getId()));
+					System.out.println("Tip Seleccionada" + t.getTipName() + "Percente:" + t.getPercentValue());
+
+					r.setCtgTip(t);
+					r.setBillTip(r.getBillSubtotal() * (t.getPercentValue() / 100.0));
+					r.setBillTotal(r.getBillSubtotal() * (1 + t.getPercentValue() / 100.0));
+
+					manageRestBill.updateRestBill(r);
+
+					List<RestBillDetail> rbd = manageRestBillDetail
+							.findAllRestBillDetailFromRestBill(new RestBill(Integer.parseInt(bills[1])));
+					int i = 0;
+					while (i < rbd.size()) {
+						RestBillDetail rbdd = rbd.get(i);
+						System.out.println(rbdd.getBillDetailSubtotal() + "sdfsdfsdfs");
+
+						rbdd.setBillDetailTotal(rbdd.getBillDetailSubtotal() * (1 + t.getPercentValue() / 100.0));
+
+						manageRestBillDetail.updateRestBillDetail(rbdd);
+						i++;
+
+					}
+
+					fillTotalLabels();
+					JOptionPane.showMessageDialog(null, "Se efectuo el cambio de la propina");
+					st.close();
+
+				}
+			});
+
+			p.setStyle("-fx-background-color:#9fb9b9");
+			ap.getChildren().add(p);
+			i++;
+			pos++;
+			// p.setLayoutX(218.0);
+
+			// p.setLayoutY(40.0);
+
+		}
+		ap.setPrefHeight(600.0);
+		ap.setPrefWidth(650.0);
+
+		Scene scene = new Scene(ap);
+		st.setScene(scene);
+		st.show();
+
+	}
+
 	private void askForCuponNumber() {
 		String cuponNum = JOptionPane.showInputDialog("Ingrese el numero de cupon");
 		commentForPaymentMethod = "Cupon # " + cuponNum;
@@ -717,91 +965,122 @@ public class PaymentController {
 
 	@FXML
 	public void generarPagoSelected() {
-		if (Double.parseDouble(this.totalCambio.getText()) >= 0 && this.totalCambio.getText() != ""
-				&& this.totalRecibido.getText() != "") {
+		try {
 
-			RestBillPayment rbp = new RestBillPayment();
-			System.out.println("Esto trae billname: " + RestBillN);
-			String[] bills = RestBillN.split("--");
-			rbp.setAmount(Float.parseFloat(totalRecibido.getText()) - Float.parseFloat(totalCambio.getText()));
-			rbp.setRestBill(new RestBill(Integer.parseInt(bills[1])));
-			rbp.setCtgPaymentMethod(this.paymentMethod);
-			rbp.setComments(commentForPaymentMethod);
-			rbp = manageRestBillPayment.insertRestBillPayment(rbp);
-			RestTableAccount ta = MainController.getBillsDetailQuantity().get(0).getRestBill().getRestTableAccount();
-			RestBill rb = manageRestBill.findRestBill(Integer.parseInt(bills[1]));
-			// System.out.println("supuestamente " + totalAccount);
-			if (manageRestBillPayment.isAmmountPaymentEqualOrMoreThanAccount(
-					manageRestBill.getTotalAccountFromTable(ta, rb),
-					MainController.getBillsDetailQuantity().get(0).getRestBill().getRestTableAccount())) {
+			if (Double.parseDouble(this.totalCambio.getText()) >= 0 && this.totalCambio.getText() != ""
+					&& this.totalRecibido.getText() != "") {
 
-				ta.setClosedDatetime(new Date());
-				ta.setAccountStatus("Cerrada");
+				RestBillPayment rbp = new RestBillPayment();
+				System.out.println("Esto trae billname: " + RestBillN);
+				String[] bills = RestBillN.split("--");
+				rbp.setAmount(Float.parseFloat(totalRecibido.getText()) - Float.parseFloat(totalCambio.getText()));
+				rbp.setRestBill(new RestBill(Integer.parseInt(bills[1])));
+				rbp.setCtgPaymentMethod(this.paymentMethod);
+				rbp.setComments(commentForPaymentMethod);
+				rbp = manageRestBillPayment.insertRestBillPayment(rbp);
+				RestTableAccount ta = MainController.getBillsDetailQuantity().get(0).getRestBill()
+						.getRestTableAccount();
+				RestBill rb = manageRestBill.findRestBill(Integer.parseInt(bills[1]));
+				// System.out.println("supuestamente " + totalAccount);
+				if (manageRestBillPayment.isAmmountPaymentEqualOrMoreThanAccount(
+						Double.parseDouble(decimFormat.format(manageRestBill.getTotalAccountFromTableCheckingDiscount(ta, rb))),
+						MainController.getBillsDetailQuantity().get(0).getRestBill().getRestTableAccount())) {
 
-				manageRestTableAccount.updateRestTableAccount(ta);
-				RestTable restTable = ta.getRestTable();
-				restTable.setStatus("Desocupado");
-				manageRestTable.updateRestTable(restTable);
-				JOptionPane.showMessageDialog(null,
-						"Se ha efectuado el pago completo de la cuenta total de la mesa, esta ventana se cerrará");
-				this.secondaryStage.close();
+					ta.setClosedDatetime(new Date());
+					ta.setAccountStatus("CLOSED");
+					ta.setRestShift1(MainController.getRestS());
+
+					manageRestTableAccount.updateRestTableAccount(ta);
+					RestTable restTable = ta.getRestTable();
+					System.out.println(restTable.getTableName());
+					restTable.setStatus("DESOCUPADO");
+					manageRestTable.updateRestTable(restTable);
+					JOptionPane.showMessageDialog(null,
+							"Se ha efectuado el pago completo de la cuenta total de la mesa, esta ventana se cerrará");
+					// MainController mc = new MainController();
+					this.mainAppC.opcionSelected = 2;
+					this.mainAppC.loadPanesForTables(manageRestTables.findTablesByArea(restTable.getRestArea()),
+							MainController.principalEstatica, "#f4efd8");
+
+					this.secondaryStage.close();
+
+				} else {
+
+					// falta pagar todavia alguna alguna bill pendiente
+					JOptionPane.showMessageDialog(null,
+							"Pago efectuado, sin embargo existen todavia facturas pendientes por pagar");
+				}
+				loadBillsToChoiceBox(ta);
+				fillTotalLabels();
 
 			} else {
-
-				// falta pagar todavia alguna alguna bill pendiente
 				JOptionPane.showMessageDialog(null,
-						"Pago efectuado, sin embargo existen todavia facturas pendientes por pagar");
+						"No se puede efectuar un pago inferior al monto que indica la factura");
+
 			}
-			loadBillsToChoiceBox(ta);
-			fillTotalLabels();
-
-		} else {
-			JOptionPane.showMessageDialog(null, "No se puede efectuar un pago inferior al monto que indica la factura");
-
+		} catch (Exception e) {
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			Util.writeIntoErrorLog(errors.toString(), "");
+			e.printStackTrace();
 		}
 	}
 
 	@FXML
 	public void generarPagoParcialSelected() {
-		if (this.totalRecibido.getText() != "") {
+		try {
 
-			RestBillPayment rbp = new RestBillPayment();
-			System.out.println("Esto trae billname: " + RestBillN);
-			String[] bills = RestBillN.split("--");
-			rbp.setAmount(Float.parseFloat(totalRecibido.getText()));
-			rbp.setRestBill(new RestBill(Integer.parseInt(bills[1])));
-			rbp.setCtgPaymentMethod(this.paymentMethod);
-			rbp = manageRestBillPayment.insertRestBillPayment(rbp);
-			RestTableAccount ta = MainController.getBillsDetailQuantity().get(0).getRestBill().getRestTableAccount();
-			// System.out.println("supuestamente " + totalAccount);
-			RestBill rb = manageRestBill.findRestBill(Integer.parseInt(bills[1]));
-			if (manageRestBillPayment.isAmmountPaymentEqualOrMoreThanAccount(
-					manageRestBill.getTotalAccountFromTable(ta, rb),
-					MainController.getBillsDetailQuantity().get(0).getRestBill().getRestTableAccount())) {
+			if (this.totalRecibido.getText() != "") {
 
-				ta.setClosedDatetime(new Date());
-				ta.setAccountStatus("Cerrada");
+				RestBillPayment rbp = new RestBillPayment();
+				System.out.println("Esto trae billname: " + RestBillN);
+				String[] bills = RestBillN.split("--");
+				rbp.setAmount(Float.parseFloat(totalRecibido.getText()));
+				rbp.setRestBill(new RestBill(Integer.parseInt(bills[1])));
+				rbp.setCtgPaymentMethod(this.paymentMethod);
+				rbp = manageRestBillPayment.insertRestBillPayment(rbp);
+				RestTableAccount ta = MainController.getBillsDetailQuantity().get(0).getRestBill()
+						.getRestTableAccount();
+				// System.out.println("supuestamente " + totalAccount);
+				RestBill rb = manageRestBill.findRestBill(Integer.parseInt(bills[1]));
+				if (manageRestBillPayment.isAmmountPaymentEqualOrMoreThanAccount(
+						Double.parseDouble(decimFormat.format(manageRestBill.getTotalAccountFromTableCheckingDiscount(ta, rb))),
+						MainController.getBillsDetailQuantity().get(0).getRestBill().getRestTableAccount())) {
 
-				manageRestTableAccount.updateRestTableAccount(ta);
-				RestTable restTable = ta.getRestTable();
-				restTable.setStatus("Desocupado");
-				manageRestTable.updateRestTable(restTable);
-				JOptionPane.showMessageDialog(null,
-						"Se ha efectuado el pago completo de la cuenta total de la mesa, esta ventana se cerrará");
-				this.secondaryStage.close();
+					ta.setClosedDatetime(new Date());
+					ta.setAccountStatus("CLOSED");
+					ta.setRestShift1(MainController.getRestS());
+					manageRestTableAccount.updateRestTableAccount(ta);
+					RestTable restTable = ta.getRestTable();
+					restTable.setStatus("DESOCUPADO");
+					manageRestTable.updateRestTable(restTable);
+					JOptionPane.showMessageDialog(null,
+							"Se ha efectuado el pago completo de la cuenta total de la mesa, esta ventana se cerrará");
+
+					this.mainAppC.opcionSelected = 2;
+					this.mainAppC.loadPanesForTables(manageRestTables.findTablesByArea(restTable.getRestArea()),
+							MainController.principalEstatica, "#f4efd8");
+					this.secondaryStage.close();
+
+				} else {
+
+					// falta pagar todavia alguna alguna bill pendiente
+					JOptionPane.showMessageDialog(null,
+							"Pago efectuado, sin embargo existen todavia facturas pendientes por pagar");
+				}
+				loadBillsToChoiceBox(ta);
+				fillTotalLabels();
 
 			} else {
-
-				// falta pagar todavia alguna alguna bill pendiente
 				JOptionPane.showMessageDialog(null,
-						"Pago efectuado, sin embargo existen todavia facturas pendientes por pagar");
+						"No se puede efectuar un pago inferior al monto que indica la factura");
+
 			}
-			loadBillsToChoiceBox(ta);
-			fillTotalLabels();
-
-		} else {
-			JOptionPane.showMessageDialog(null, "No se puede efectuar un pago inferior al monto que indica la factura");
-
+		} catch (Exception e) {
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			Util.writeIntoErrorLog(errors.toString(), "");
+			e.printStackTrace();
 		}
 	}
 
@@ -826,19 +1105,32 @@ public class PaymentController {
 		ordersTable.getColumns().clear();
 
 		TableColumn id = new TableColumn("Id");
+		id.setPrefWidth(10.0);
 		TableColumn elemento = new TableColumn("Elemento");
 		TableColumn precio = new TableColumn("Precio($)");
+		TableColumn elPor = new TableColumn("-");
+		TableColumn cantidad = new TableColumn("Cantidad");
+		TableColumn facturaN = new TableColumn("Factura");
+		facturaN.setPrefWidth(15.0);
 		// TableColumn total = new TableColumn("Total");
 
-		id.setCellValueFactory(new PropertyValueFactory<RestOrder, String>("orderId"));
+		cantidad.setStyle("-fx-font-weight:bold;-fx-text-alignment: center;");
+		precio.setStyle("-fx-font-weight:bold;-fx-text-alignment: center;");
+		elPor.setStyle("-fx-text-alignment: center;");
+
+		id.setCellValueFactory(new PropertyValueFactory<RestOrder, String>("idMenuItem"));
 		elemento.setCellValueFactory(new PropertyValueFactory<RestOrder, String>("menuItemName"));
 		precio.setCellValueFactory(new PropertyValueFactory<RestOrder, Double>("menuItemPrice"));
+		elPor.setCellValueFactory(new PropertyValueFactory<RestOrder, String>("attendant"));
+		cantidad.setCellValueFactory(new PropertyValueFactory<RestOrder, Integer>("cantidad"));
+		facturaN.setCellValueFactory(new PropertyValueFactory<RestOrder, String>("nombFactura"));
+
 		// total.setCellValueFactory(new PropertyValueFactory<>("total"));
 
 		// itemsLocalList.setItems(itemsList);
 		// itemsLocalList.getColumns().addAll(id,elemento, precio, total);
 		ordersTable.setItems(bDetailsOrders);
-		ordersTable.getColumns().addAll(id, elemento, precio);
+		ordersTable.getColumns().addAll(id, elemento, precio, elPor, cantidad, facturaN);
 
 		ordersTable.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
@@ -854,6 +1146,13 @@ public class PaymentController {
 				}
 			}
 		});
+
+	}
+
+	@FXML
+	public void changeTip() {
+
+		loadTypesOfTips(manageTips.findAll());
 
 	}
 }

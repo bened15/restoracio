@@ -85,7 +85,7 @@ public class FormSupplierController {
 
 	@FXML
 	public void onNew(MouseEvent event) {				
-			resetRecord();
+			resetValues();
 			newModeEnabled();
 	}
 	@FXML
@@ -203,12 +203,7 @@ public class FormSupplierController {
 		 supplierPhoneNumber.setText("");
 		 		 
 	}
-
-	public void resetRecord(){
-		supplierRecordSelected = new CtgSupplier();
-		 		 
-	}
-
+	
 	public String validateRecord() {
 		 defaultLabel();
 		 String errorString = null;

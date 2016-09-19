@@ -93,7 +93,7 @@ public class FormMenuItemCommentController {
 
 	@FXML
 	public void onNew(MouseEvent event) {	
-			resetRecord();
+			resetValues();
 			newModeEnabled();
 	}
 
@@ -222,10 +222,6 @@ public class FormMenuItemCommentController {
 		menuItemCommentRecordSelected = new RestMenuItemComment();		
 		menuItemCommentDescription.setText("");
 		menuItemComment.setText("");
-		 		 
-	}
-	public void resetRecord(){
-		menuItemCommentRecordSelected = new RestMenuItemComment();		
 		 		 
 	}
 	

@@ -41,6 +41,19 @@ public class UserSecurityController {
 
 	}
 
+	public String verifyIsAutoReturnsN() {
+
+		String usA = JOptionPane.showInputDialog("Ingrese un usuario autorizado");
+		String passA = JOptionPane.showInputDialog("Ingrese su password");
+		if (manageSysUserRol.findSysUserRol(usA, passA)) {
+
+			return usA;
+		} else {
+			return null;
+		}
+
+	}
+
 	public String verifyWaitress() {
 
 		String usA = JOptionPane.showInputDialog("Ingrese su codigo de empleado");

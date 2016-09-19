@@ -13,7 +13,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.jbd.general.GeneralFunctions;
 import com.jbd.hibernate.interfaces.ICtgDiscountManagement;
 import com.jbd.hibernate.interfaces.ICtgMenuTypeManagement;
-import com.jbd.model.AdmCustomer;
 import com.jbd.model.CtgDiscount;
 import com.jbd.model.CtgMenuType;
 
@@ -127,7 +126,7 @@ public class FormDiscountController {
 
 	@FXML
 	public void onNew(MouseEvent event) {
-		resetRecord();
+		resetValues();
 		newModeEnabled();
 	}
 
@@ -182,7 +181,6 @@ public class FormDiscountController {
 							"Registro actualizado exitosamente");
 						
 				}
-				
 				System.out.println("EXITO AL GUARDAR");
 				resetValues();
 				refreshList();
@@ -244,9 +242,6 @@ public class FormDiscountController {
 		discountBeginTime.setText("");
 		discountEndDate.setValue(null);
 		discountEndTime.setText("");
-	}
-	public void resetRecord(){
-		discountRecordSelected = new CtgDiscount();		 		 
 	}
 
 	public String validateRecord() {
@@ -353,9 +348,7 @@ public class FormDiscountController {
 			}
 			
 		}
-		if (errorMessage.toString().length() > 0){
-			errorString = errorMessage.toString();
-		}
+
 		return errorString;
 	}
 

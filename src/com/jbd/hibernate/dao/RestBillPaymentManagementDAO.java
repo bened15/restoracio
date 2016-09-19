@@ -1,5 +1,6 @@
 package com.jbd.hibernate.dao;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,6 +11,7 @@ import javax.persistence.TypedQuery;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jbd.hibernate.interfaces.IRestBillPaymentManagement;
+import com.jbd.model.RestBill;
 import com.jbd.model.RestBillPayment;
 import com.jbd.model.RestTableAccount;
 
@@ -17,6 +19,7 @@ public class RestBillPaymentManagementDAO implements IRestBillPaymentManagement 
 
 	@PersistenceContext
 	public EntityManager em;
+	private DecimalFormat decimFormat = new DecimalFormat("#.00");
 
 	public RestBillPaymentManagementDAO() {
 		// TODO Auto-generated constructor stub
@@ -67,11 +70,17 @@ public class RestBillPaymentManagementDAO implements IRestBillPaymentManagement 
 	public boolean isAmmountPaymentEqualOrMoreThanAccount(double totalAccount, RestTableAccount tableAc) {
 		try {
 			System.out.println("Total account supuestamente" + totalAccount);
+			System.out.println("Mesa supuestamente" + tableAc.getRestTable().getTableName());
 			Query q = em.createQuery(
 					"select sum(p.amount) from RestBillPayment p where p.restBill.restTableAccount=:tableAc",
 					Double.class);
 			q.setParameter("tableAc", tableAc);
-			double result = (Double) q.getSingleResult();
+
+			// System.out.println(q.getSingleResult()+"asdfasfasdfsdfsdfsfsfasfsdf");
+			double res = (double) q.getSingleResult();
+
+			double result = Double.parseDouble(decimFormat.format(res));
+			System.out.println("resultado comparacion" + result);
 			if (result >= totalAccount) {
 				return true;
 

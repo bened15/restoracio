@@ -2,6 +2,7 @@ package com.jbd.hibernate.interfaces;
 
 import java.util.List;
 
+import com.jbd.model.RestBill;
 import com.jbd.model.RestBillPayment;
 import com.jbd.model.RestTableAccount;
 

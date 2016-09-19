@@ -113,7 +113,7 @@ public class FormMenuItemDiscountController {
 	@FXML
 	public void onNew(MouseEvent event) {	
 		refreshComboBoxList();
-			resetRecord();
+			resetValues();
 			newModeEnabled();
 	}
 
@@ -244,12 +244,6 @@ public class FormMenuItemDiscountController {
 		menuItemType.setValue(null);
 		menuItem.setValue(null);
 		 		 
-	}
-
-	public void resetRecord(){
-		menuItemDiscountSelected = new CtgDiscountMenu();
-		menuItemSelected = new RestMenuItem();
-				 		 
 	}
 	
 	public String validateRecord() {

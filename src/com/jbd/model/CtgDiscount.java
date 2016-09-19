@@ -58,15 +58,13 @@ public class CtgDiscount implements Serializable {
 	@Column(name="TOTAL_PRODUCTS")
 	private int totalProducts;
 
-	
-	//bi-directional many-to-one association to RestBillDetailXDiscount
-	@OneToMany(mappedBy="ctgDiscount")
-	private List<RestBillDetailXDiscount> restBillDetailXDiscounts;
+
+
 
 	// bi-directional many-to-one association to RestBill
 	@OneToMany(mappedBy = "ctgDiscount")
 	private List<RestBill> restBills;
-	
+
 	public CtgDiscount() {
 	}
 
@@ -118,8 +116,8 @@ public class CtgDiscount implements Serializable {
 		this.discountValidUntil = discountValidUntil;
 	}
 
-	
-	
+
+
 	public String getDiscountValidSinceTime() {
 		return discountValidSinceTime;
 	}
@@ -160,29 +158,6 @@ public class CtgDiscount implements Serializable {
 		this.ctgMenuType = ctgMenuType;
 	}
 
-	public List<RestBillDetailXDiscount> getRestBillDetailXDiscounts() {
-		return this.restBillDetailXDiscounts;
-	}
-
-	public void setRestBillDetailXDiscounts(List<RestBillDetailXDiscount> restBillDetailXDiscounts) {
-		this.restBillDetailXDiscounts = restBillDetailXDiscounts;
-	}
-
-	public RestBillDetailXDiscount addRestBillDetailXDiscount(RestBillDetailXDiscount restBillDetailXDiscount) {
-		getRestBillDetailXDiscounts().add(restBillDetailXDiscount);
-		restBillDetailXDiscount.setCtgDiscount(this);
-
-		return restBillDetailXDiscount;
-	}
-
-	public RestBillDetailXDiscount removeRestBillDetailXDiscount(RestBillDetailXDiscount restBillDetailXDiscount) {
-		getRestBillDetailXDiscounts().remove(restBillDetailXDiscount);
-		restBillDetailXDiscount.setCtgDiscount(null);
-
-		return restBillDetailXDiscount;
-	}
-	
-	
 
 	public int getTotalProducts() {
 		return totalProducts;
@@ -191,7 +166,7 @@ public class CtgDiscount implements Serializable {
 	public void setTotalProducts(int totalProducts) {
 		this.totalProducts = totalProducts;
 	}
-	
+
 		public List<RestBill> getRestBills() {
 		return this.restBills;
 	}
@@ -213,4 +188,3 @@ public class CtgDiscount implements Serializable {
 	}
 }
 
-	

@@ -47,6 +47,7 @@ public class RestOrderManagementDAO implements IRestOrderManagement {
 
 			RestOrder or = em.find(RestOrder.class, o.getOrderId());
 			em.remove(or);
+			em.flush();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -65,6 +66,23 @@ public class RestOrderManagementDAO implements IRestOrderManagement {
 			TypedQuery<RestOrder> tq = em.createQuery("select o from RestOrder o where o.restTableAccount=:account",
 					RestOrder.class);
 			tq.setParameter("account", account);
+			List<RestOrder> ordenes = tq.getResultList();
+			return ordenes;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			List<RestOrder> ordenes = null;
+			return ordenes;
+
+		}
+
+	}
+
+	@Override
+	public List<RestOrder> findAllRestOrders() {
+		try {
+			TypedQuery<RestOrder> tq = em.createQuery("select o from RestOrder o",
+					RestOrder.class);
 			List<RestOrder> ordenes = tq.getResultList();
 			return ordenes;
 

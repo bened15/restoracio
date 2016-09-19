@@ -1,4 +1,3 @@
-
 package com.jbd.model;
 
 import java.io.Serializable;
@@ -55,6 +54,10 @@ public class RestBill implements Serializable {
 	@Column(name = "SHIFT_ID")
 	private int shiftId;
 
+	// bi-directional many-to-one association to CtgTip
+	@ManyToOne
+	@JoinColumn(name = "ID_CTG_TIP")
+	private CtgTip ctgTip;
 	// bi-directional many-to-one association to CtgPaymentMethod
 	@ManyToOne
 	@JoinColumn(name = "PAYMENT_METHOD_ID")
@@ -65,10 +68,10 @@ public class RestBill implements Serializable {
 	@JoinColumn(name = "TABLE_ACCOUNT_ID")
 	private RestTableAccount restTableAccount;
 
-	//bi-directional many-to-one association to CtgDiscount
-		@ManyToOne
-		@JoinColumn(name="ID_DISCOUNT")
-		private CtgDiscount ctgDiscount;
+	// bi-directional many-to-one association to CtgDiscount
+	@ManyToOne
+	@JoinColumn(name = "ID_DISCOUNT")
+	private CtgDiscount ctgDiscount;
 
 	// bi-directional many-to-one association to RestBillDetail
 	@OneToMany(mappedBy = "restBill")
@@ -79,11 +82,6 @@ public class RestBill implements Serializable {
 	@OneToMany(mappedBy = "restBill")
 	@Cascade({ org.hibernate.annotations.CascadeType.DELETE })
 	private List<RestBillPayment> restBillPayments;
-
-	// bi-directional many-to-one association to RestBillDetailXDiscount
-	@OneToMany(mappedBy = "restBill")
-	@Cascade({ org.hibernate.annotations.CascadeType.DELETE })
-	private List<RestBillDetailXDiscount> restBillDetailXDiscounts;
 
 	public RestBill() {
 	}
@@ -171,6 +169,7 @@ public class RestBill implements Serializable {
 	public void setRestTableAccount(RestTableAccount restTableAccount) {
 		this.restTableAccount = restTableAccount;
 	}
+
 	public CtgDiscount getCtgDiscount() {
 		return this.ctgDiscount;
 	}
@@ -230,26 +229,12 @@ public class RestBill implements Serializable {
 		return restBillPayment;
 	}
 
-	public List<RestBillDetailXDiscount> getRestBillDetailXDiscounts() {
-		return this.restBillDetailXDiscounts;
+	public CtgTip getCtgTip() {
+		return this.ctgTip;
 	}
 
-	public void setRestBillDetailXDiscounts(List<RestBillDetailXDiscount> restBillDetailXDiscounts) {
-		this.restBillDetailXDiscounts = restBillDetailXDiscounts;
-	}
-
-	public RestBillDetailXDiscount addRestBillDetailXDiscount(RestBillDetailXDiscount restBillDetailXDiscount) {
-		getRestBillDetailXDiscounts().add(restBillDetailXDiscount);
-		restBillDetailXDiscount.setRestBill(this);
-
-		return restBillDetailXDiscount;
-	}
-
-	public RestBillDetailXDiscount removeRestBillDetailXDiscount(RestBillDetailXDiscount restBillDetailXDiscount) {
-		getRestBillDetailXDiscounts().remove(restBillDetailXDiscount);
-		restBillDetailXDiscount.setRestBill(null);
-
-		return restBillDetailXDiscount;
+	public void setCtgTip(CtgTip ctgTip) {
+		this.ctgTip = ctgTip;
 	}
 
 }

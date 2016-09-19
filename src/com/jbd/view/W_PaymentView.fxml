@@ -24,22 +24,22 @@
 								<Font name="System Bold" size="23.0" />
 							</font>
 						</Label>
-						<Label layoutX="14.0" layoutY="16.0" text="Propina (10%):">
+						<Label fx:id="propL" layoutX="14.0" layoutY="53.0" onMouseClicked="#changeTip" onTouchPressed="#changeTip" text="Propina (10%):">
 							<font>
 								<Font name="System Bold" size="12.0" />
 							</font>
 						</Label>
-						<Label layoutX="14.0" layoutY="46.0" text="Descuento:">
+						<Label fx:id="discountTitle" layoutX="14.0" layoutY="32.0" text="Descuento:">
 							<font>
 								<Font name="System Bold" size="12.0" />
 							</font>
 						</Label>
-						<Label layoutX="106.0" layoutY="16.0" text="\$">
+						<Label layoutX="108.0" layoutY="53.0" text="\$">
 							<font>
 								<Font name="System Bold" size="12.0" />
 							</font>
 						</Label>
-						<Label layoutX="106.0" layoutY="46.0" text="\$">
+						<Label layoutX="108.0" layoutY="32.0" text="\$">
 							<font>
 								<Font name="System Bold" size="12.0" />
 							</font>
@@ -88,19 +88,39 @@
 								<Font name="System Bold" size="23.0" />
 							</font>
 						</Label>
-						<Label fx:id="totalDescuento" layoutX="125.0" layoutY="46.0" prefHeight="17.0" prefWidth="63.0" text="0">
+						<Label fx:id="totalDescuento" layoutX="125.0" layoutY="32.0" prefHeight="17.0" prefWidth="63.0" text="0">
 							<font>
 								<Font name="System Bold" size="12.0" />
 							</font>
 						</Label>
-						<Label fx:id="totalPropina" layoutX="125.0" layoutY="16.0" prefHeight="17.0" prefWidth="63.0" text="0">
+						<Label fx:id="totalPropina" layoutX="125.0" layoutY="53.0" prefHeight="17.0" prefWidth="63.0" text="0">
 							<font>
 								<Font name="System Bold" size="12.0" />
 							</font>
 						</Label>
+                  <Label fx:id="tableName" layoutX="7.0" layoutY="120.0" prefHeight="26.0" prefWidth="91.0" text="Mesa">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="subtotal" layoutX="125.0" layoutY="12.0" prefHeight="17.0" prefWidth="63.0" text="0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="108.0" layoutY="12.0" text="\$">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="14.0" layoutY="12.0" text="Subtotal">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
 					</children>
 				</AnchorPane>
-				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" fx:id="principal">
+				<AnchorPane fx:id="principal" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
 					<children>
 						<GridPane fx:id="numbersArea" disable="true" layoutX="8.0" layoutY="14.0" prefHeight="352.0" prefWidth="350.0">
 							<columnConstraints>

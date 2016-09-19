@@ -82,7 +82,7 @@ public class FormProductTypeController {
 
 	@FXML
 	public void onNew(MouseEvent event) {				
-			resetRecord();
+			resetValues();
 			newModeEnabled();
 	}
 	@FXML
@@ -186,11 +186,7 @@ public class FormProductTypeController {
 		 productTypeName.setText("");
 		 productTypeDescription.setText("");
 	}
-
-	public void resetRecord(){
-		productTypeRecordSelected = new CtgProductType();
-	}
-
+	
 	public String validateRecord() {
 		 defaultLabel();
 		 String errorString = null;

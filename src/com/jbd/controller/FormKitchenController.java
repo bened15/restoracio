@@ -41,14 +41,14 @@ public class FormKitchenController {
 	private IRestKitchenManagement manageKitchen;
 	//Declaracion Labels
 	@FXML
-	private Label lblKitchenName;
+	private Label lblKitchenName, lblKitchenPrinter;
 
 	//Declaracion Botones
 	@FXML
 	private Button newBtn  ,saveBtn,searchBtn  ,editBtn , clearBtn   ;
 	//Declaracion Campos
 	@FXML
-	private TextField kitchenName;	
+	private TextField kitchenName, kitchenPrinter;	
 	@FXML
 	private TextArea kitchenDescription;	
 
@@ -100,6 +100,7 @@ public class FormKitchenController {
 						newRecord = true;
 					}
 					kitchenRecordSelected.setKitchenName(kitchenName.getText());
+					kitchenRecordSelected.setKitchenPrinter(kitchenPrinter.getText());
 					kitchenRecordSelected.setKitchenDescription(kitchenDescription.getText());
 
 					kitchenRecord = new RestKitchen();
@@ -181,6 +182,7 @@ public class FormKitchenController {
 	public void resetValues(){
 		kitchenRecordSelected = new RestKitchen();
 		 kitchenName.setText("");
+		 kitchenPrinter.setText("");
 		 kitchenDescription.setText("");
 	}
 	public void resetRecord(){
@@ -193,12 +195,18 @@ public class FormKitchenController {
 			StringBuilder errorMessage = new StringBuilder();
 			int messageErrorNumber = 1;	
 
-		if (kitchenName.getText() == null || kitchenName.getText().isEmpty()){
-			errorMessage.append(messageErrorNumber+"-"+"El campo nombre es obligatorio.\n");
-			messageErrorNumber++;
-			lblKitchenName.setTextFill(Color.web("#ff0000"));
-			//return errorMessage;
-		}
+			if (kitchenName.getText() == null || kitchenName.getText().isEmpty()){
+				errorMessage.append(messageErrorNumber+"-"+"El campo nombre es obligatorio.\n");
+				messageErrorNumber++;
+				lblKitchenName.setTextFill(Color.web("#ff0000"));
+				//return errorMessage;
+			}
+			if (kitchenPrinter.getText() == null || kitchenPrinter.getText().isEmpty()){
+				errorMessage.append(messageErrorNumber+"-"+"El campo impresora es obligatorio.\n");
+				messageErrorNumber++;
+				lblKitchenPrinter.setTextFill(Color.web("#ff0000"));
+				//return errorMessage;
+			}
 		if (errorMessage.toString().length() > 0){
 			errorString = errorMessage.toString();
 		}
@@ -252,11 +260,13 @@ public class FormKitchenController {
 		kitchenRecordSelected = manageKitchen.findRestKitchen(kitchenCodePrm);
 		 kitchenName.setText(kitchenRecordSelected.getKitchenName());
 		 kitchenDescription.setText(kitchenRecordSelected.getKitchenDescription());
+		 kitchenPrinter.setText(kitchenRecordSelected.getKitchenPrinter());
 		 
 			}
 
 	public void defaultModeEnabled(){
 		kitchenName.setEditable(true);
+		kitchenPrinter.setEditable(false);
 		kitchenDescription.setEditable(false);
 		 searchBtn.setDisable(false);
 		 newBtn.setDisable(false);
@@ -268,6 +278,7 @@ public class FormKitchenController {
 	public void initModeEnabled(){
 		kitchenName.setEditable(true);
 		kitchenDescription.setEditable(false);
+		kitchenPrinter.setEditable(false);
 		 searchBtn.setDisable(false);
 		 newBtn.setDisable(false);
 		 editBtn.setDisable(true);
@@ -280,6 +291,7 @@ public class FormKitchenController {
 		
 		kitchenName.setEditable(true);
 		kitchenDescription.setEditable(true);
+		kitchenPrinter.setEditable(true);
 		 searchBtn.setDisable(false);
 		 newBtn.setDisable(false);
 		 editBtn.setDisable(false);
@@ -292,6 +304,7 @@ public class FormKitchenController {
 		
 		kitchenName.setEditable(true);
 		kitchenDescription.setEditable(true);
+		kitchenPrinter.setEditable(true);
 		 searchBtn.setDisable(true);
 		 newBtn.setDisable(true);
 		 editBtn.setDisable(true);
@@ -304,6 +317,7 @@ public class FormKitchenController {
 		
 		kitchenName.setEditable(true);
 		kitchenDescription.setEditable(true);
+		kitchenPrinter.setEditable(true);
 		 searchBtn.setDisable(true);
 		 newBtn.setDisable(true);
 		 editBtn.setDisable(true);
@@ -314,6 +328,7 @@ public class FormKitchenController {
 	
 		public void defaultLabel(){
 			lblKitchenName.setTextFill(Color.web("#000000"));
+			lblKitchenPrinter.setTextFill(Color.web("#000000"));
 			
 		}
 

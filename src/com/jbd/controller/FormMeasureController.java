@@ -81,7 +81,7 @@ public class FormMeasureController {
 
 	@FXML
 	public void onNew(MouseEvent event) {				
-			resetRecord();
+			resetValues();
 			newModeEnabled();
 	}
 	@FXML
@@ -184,9 +184,6 @@ public class FormMeasureController {
 		measureRecordSelected = new CtgMeasureUnit();
 		 measureName.setText("");
 		 measureUnit.setText("");
-	}
-	public void resetRecord(){
-		measureRecordSelected = new CtgMeasureUnit();
 	}
 	
 	public String validateRecord() {

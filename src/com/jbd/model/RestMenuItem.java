@@ -4,59 +4,62 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the rest_menu_item database table.
  *
  */
 @Entity
-@Table(name="rest_menu_item")
-@NamedQuery(name="RestMenuItem.findAll", query="SELECT r FROM RestMenuItem r")
+@Table(name = "rest_menu_item")
+@NamedQuery(name = "RestMenuItem.findAll", query = "SELECT r FROM RestMenuItem r")
 public class RestMenuItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="MENU_ITEM_ID")
+	@Column(name = "MENU_ITEM_ID")
 	private int menuItemId;
 
 	private int available;
 
-	@Column(name="MENU_ITEM_DESCRIPTION")
+	@Column(name = "MENU_ITEM_DESCRIPTION")
 	private String menuItemDescription;
 
-	@Column(name="MENU_ITEM_NAME")
+	@Column(name = "MENU_ITEM_NAME")
 	private String menuItemName;
 
-	@Column(name="MENU_ITEM_SHORT_NAME")
+	@Column(name = "MENU_ITEM_SHORT_NAME")
 	private String menuItemShortName;
 
-	@Column(name="MENU_ITEM_PRICE")
-	private float menuItemPrice;
+	@Column(name = "MENU_ITEM_PRICE")
+	private double menuItemPrice;
 
-	@Column(name="MENU_IMAGE")
+	@Column(name = "MENU_IMAGE")
 	private byte[] menuImage;
 
-	//bi-directional many-to-one association to CtgMenuType
+	// bi-directional many-to-one association to CtgMenuType
 	@ManyToOne
-	@JoinColumn(name="MENU_TYPE_ID")
+	@JoinColumn(name = "MENU_TYPE_ID")
 	private CtgMenuType ctgMenuType;
 
-	//bi-directional many-to-one association to RestMenuItemProduct
-	@OneToMany(mappedBy="restMenuItem")
+	@ManyToOne
+	@JoinColumn(name = "MENU_SUB_TYPE_ID")
+	private CtgMenuSubType ctgMenuSubType;
+
+	// bi-directional many-to-one association to RestMenuItemProduct
+	@OneToMany(mappedBy = "restMenuItem")
 	private List<RestMenuItemProduct> restMenuItemProducts;
 
-	//bi-directional many-to-one association to RestMenuItemProduct
-	@OneToMany(mappedBy="restMenuItem")
+	// bi-directional many-to-one association to RestMenuItemProduct
+	@OneToMany(mappedBy = "restMenuItem")
 	private List<RestMenuItemComment> restMenuItemComments;
 
-	//bi-directional many-to-one association to RestOrder
-	@OneToMany(mappedBy="restMenuItem")
+	// bi-directional many-to-one association to RestOrder
+	@OneToMany(mappedBy = "restMenuItem")
 	private List<RestOrder> restOrders;
 
-	//bi-directional many-to-one association to CtgMenuType
+	// bi-directional many-to-one association to CtgMenuType
 	@ManyToOne
-	@JoinColumn(name="KITCHEN_ID")
+	@JoinColumn(name = "KITCHEN_ID")
 	private RestKitchen restKitchen;
 
 	public RestMenuItem() {
@@ -94,15 +97,14 @@ public class RestMenuItem implements Serializable {
 		this.menuItemName = menuItemName;
 	}
 
-	public float getMenuItemPrice() {
+	public double getMenuItemPrice() {
 		return this.menuItemPrice;
 	}
 
-	public void setMenuItemPrice(float menuItemPrice) {
+	public void setMenuItemPrice(double menuItemPrice) {
 		this.menuItemPrice = menuItemPrice;
 	}
 
-	
 	public byte[] getMenuImage() {
 		return menuImage;
 	}
@@ -163,9 +165,6 @@ public class RestMenuItem implements Serializable {
 		return restOrder;
 	}
 
-	
-
-	
 	public RestKitchen getRestKitchen() {
 		return restKitchen;
 	}
@@ -174,6 +173,13 @@ public class RestMenuItem implements Serializable {
 		this.restKitchen = restKitchen;
 	}
 
+	public CtgMenuSubType getCtgMenuSubType() {
+		return this.ctgMenuSubType;
+	}
+
+	public void setCtgMenuSubType(CtgMenuSubType ctgMenuSubType) {
+		this.ctgMenuSubType = ctgMenuSubType;
+	}
 
 	public List<RestMenuItemComment> getRestMenuItemComments() {
 		return this.restMenuItemComments;
@@ -197,8 +203,6 @@ public class RestMenuItem implements Serializable {
 		return restMenuItemComment;
 	}
 
-	
-
 	public String getMenuItemShortName() {
 		return menuItemShortName;
 	}
@@ -206,8 +210,6 @@ public class RestMenuItem implements Serializable {
 	public void setMenuItemShortName(String menuItemShortName) {
 		this.menuItemShortName = menuItemShortName;
 	}
-
-
 
 	@Transient
 	private String menuItemTypeText;
@@ -219,14 +221,27 @@ public class RestMenuItem implements Serializable {
 	public void setMenuItemTypeText(String menuItemTypeName) {
 		this.menuItemTypeText = menuItemTypeName;
 	}
-	
+
 	@Override
-	public String toString(){
-		return this.menuItemId + " - "+ this.menuItemName;
+	public String toString() {
+		return this.menuItemId + " - " + this.menuItemName;
 	}
 
 	@Transient
 	private String nombFactura;
+
+	@Transient
+	private int identifier;
+
+
+
+	public int getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(int identifier) {
+		this.identifier = identifier;
+	}
 
 	public String getNombFactura() {
 		return nombFactura;

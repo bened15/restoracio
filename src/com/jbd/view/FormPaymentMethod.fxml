@@ -22,9 +22,9 @@
                <children>
                   <TableView fx:id="paymentMethodList" layoutX="-12.0" onMouseClicked="#getSelectedRow" prefHeight="478.0" prefWidth="236.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn fx:id="paymentMethodNameColumn" prefWidth="87.0" text="Name" />
+                      <TableColumn fx:id="paymentMethodNameColumn" prefWidth="87.0" text="Nombre" />
                         <TableColumn fx:id="paymentMethodIdColumn" prefWidth="87.0" text="Payment method Id" visible="false" />
-                        <TableColumn fx:id="paymentMethodDescriptionColumn" prefWidth="87.0" text="Description" />
+                        <TableColumn fx:id="paymentMethodDescriptionColumn" prefWidth="87.0" text="Descripcion" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -54,10 +54,10 @@
                               <RowConstraints maxHeight="50.0" minHeight="0.0" prefHeight="50.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label fx:id="lblPaymentMethodName" text="Name" GridPane.rowIndex="1" />
-                              <Label fx:id="lblPaymentMethodDescription" text="Description" GridPane.rowIndex="2" />
+                              <Label prefHeight="20.0" prefWidth="161.0" text="Tipo de pago" GridPane.columnSpan="2" />
+                              <Label fx:id="lblPaymentMethodName" text="Nombre" GridPane.rowIndex="1" />
+                              <Label fx:id="lblPaymentMethodDescription" text="Descripcion" GridPane.rowIndex="2" />
                               <TextField fx:id="paymentMethodName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label prefHeight="20.0" prefWidth="161.0" text="Payment method details" GridPane.columnSpan="2" />
                               <TextArea fx:id="paymentMethodDescription" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
@@ -73,11 +73,11 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" text="Save" GridPane.columnIndex="3" />
-                              <Button fx:id="editBtn" mnemonicParsing="false" text="Edit" GridPane.columnIndex="2" />
-                              <Button fx:id="newBtn" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#onNew" text="New" GridPane.columnIndex="1" />
-                              <Button fx:id="searchBtn" alignment="TOP_CENTER" mnemonicParsing="false" onMouseClicked="#onSearch" text="Search" />
-                              <Button fx:id="clearBtn" mnemonicParsing="false" onMouseClicked="#onClear" text="Clear" GridPane.columnIndex="4" />
+                              <Button fx:id="saveBtn" mnemonicParsing="false" onMouseClicked="#onSave" text="Guardar" GridPane.columnIndex="3" />
+                              <Button fx:id="editBtn" mnemonicParsing="false" text="Editar" GridPane.columnIndex="2" />
+                              <Button fx:id="newBtn" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#onNew" text="Nuevo" GridPane.columnIndex="1" />
+                              <Button fx:id="searchBtn" alignment="TOP_CENTER" mnemonicParsing="false" onMouseClicked="#onSearch" text="Buscar" />
+                              <Button fx:id="clearBtn" mnemonicParsing="false" onMouseClicked="#onClear" text="Limpiar" GridPane.columnIndex="4" />
                            </children>
                         </GridPane>
                      </children>

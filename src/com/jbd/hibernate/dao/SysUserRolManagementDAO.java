@@ -9,9 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jbd.hibernate.interfaces.ISysUserRolManagement;
 import com.jbd.model.SysUserRol;
 
-
 public class SysUserRolManagementDAO implements ISysUserRolManagement {
-
 
 	@PersistenceContext
 	public EntityManager em;
@@ -59,12 +57,13 @@ public class SysUserRolManagementDAO implements ISysUserRolManagement {
 		// TODO Auto-generated method stub
 
 	}
+
 	@Override
 	public boolean findSysUserRol(String uName, String uPass) {
 		// System.out.println("Entre-finduserrole");
 		try {
 			Query q = em.createQuery(
-					"SELECT ur from SysUserRol ur where ur.sysUser.userCode=:uName and ur.sysUser.userPassword=:uPass",
+					"SELECT ur from SysUserRol ur where ur.sysUser.userCode=:uName and ur.sysUser.userPassword=:uPass and ur.sysRole.rolCode in('ADM')",
 					SysUserRol.class);
 
 			q.setParameter("uName", uName);
@@ -73,7 +72,7 @@ public class SysUserRolManagementDAO implements ISysUserRolManagement {
 			q.getSingleResult();
 			return true;
 		} catch (Exception e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			return false;
 		}
 

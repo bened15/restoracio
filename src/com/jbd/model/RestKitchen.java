@@ -28,6 +28,9 @@ public class RestKitchen implements Serializable {
 	@Column(name="KITCHEN_NAME")
 	private String kitchenName;
 
+	@Column(name="KITCHEN_PRINTER")
+	private String kitchenPrinter;
+
 	//bi-directional many-to-one association to RestMenuItem
 	@OneToMany(mappedBy="restKitchen")
 	private List<RestMenuItem> restMenuItems;
@@ -82,6 +85,15 @@ public class RestKitchen implements Serializable {
 		return restMenuItem;
 	}
 
+	
+
+	public String getKitchenPrinter() {
+		return kitchenPrinter;
+	}
+
+	public void setKitchenPrinter(String kitchenPrinter) {
+		this.kitchenPrinter = kitchenPrinter;
+	}
 
 	@Override
 	public String toString(){

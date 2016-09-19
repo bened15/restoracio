@@ -108,7 +108,7 @@ public class FormProductController {
 
 	@FXML
 	public void onNew(MouseEvent event) {
-		resetRecord();
+		resetValues();
 		newModeEnabled();
 	}
 
@@ -221,11 +221,6 @@ public class FormProductController {
 		productType.getSelectionModel().select(null);
 		productMeasure.getSelectionModel().select(null);
 		productSupplier.getSelectionModel().select(null);
-
-	}
-
-	public void resetRecord() {
-		productRecordSelected = new RestProduct();
 
 	}
 

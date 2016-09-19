@@ -17,4 +17,7 @@ public interface IRestOrderManagement {
 
 	public List<RestOrder> findAllRestOrdersFromTableAccount(RestTableAccount account);
 
+	List<RestOrder> findAllRestOrders();
+
+
 }

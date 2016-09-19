@@ -10,7 +10,7 @@ public interface ICtgMenuTypeManagement {
 
 	public CtgMenuType updateCtgMenuType(CtgMenuType o);
 
-	public void deleteCtgMenuType(CtgMenuType o);
+	public boolean deleteCtgMenuType(CtgMenuType o);
 
 	public CtgMenuType findCtgMenuType(Integer oId);
 

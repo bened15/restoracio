@@ -10,6 +10,7 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.jbd.general.Crypter;
 import com.jbd.general.GeneralFunctions;
 import com.jbd.hibernate.interfaces.ISysRoleManagement;
 import com.jbd.hibernate.interfaces.ISysUserManagement;
@@ -27,6 +28,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -45,6 +47,7 @@ public class FormUserController {
 	private SysUser userRecordSelected = new SysUser();
 	private String userEntry = "Douglas";
 	private GeneralFunctions gf = new GeneralFunctions();
+	private Crypter crypter = new Crypter();
 	
 	@Autowired
 	private ISysUserManagement manageUser;
@@ -54,7 +57,7 @@ public class FormUserController {
 	private ISysUserRolManagement manageUserRole;
 	//Declaracion Labels
 	@FXML
-	private Label lblName, lblLastname,lblBegindate, lblUsercode, lblUserPassword, lblUserRole   ;
+	private Label lblName, lblLastname,lblBegindate, lblUsercode, lblUserPassword,lblUserPasswordConfirm, lblUserRole   ;
 	//Declaracion ComboBox
 	@FXML
 	private ComboBox userRole   ;
@@ -66,7 +69,9 @@ public class FormUserController {
 	private Button newBtn  ,saveBtn,searchBtn  ,editBtn , clearBtn   ;
 	//Declaracion Campos
 	@FXML
-	private TextField userCode,userPassword;
+	private TextField userCode;
+	@FXML
+	private PasswordField userPassword,userPasswordConfirm;
 	@FXML
 	private TextField userName,userLastname,userAddress,userPhone1,userEmail;
 	@FXML	
@@ -112,7 +117,10 @@ public class FormUserController {
 	}
 		@FXML
 		public void onSave(MouseEvent event) {
-			
+			SysUser userToDelete = null;				
+			String userCodeToDelete = null;				
+						boolean withOutError = false;
+
 			System.out.println(userRole.getValue());
 				String error = validateRecord();
 				System.out.println(error);
@@ -120,10 +128,19 @@ public class FormUserController {
 					boolean newRecord = false;
 					if (userRecordSelected.getUserCode() == null ){
 						newRecord = true;
+					}else{
+						userCodeToDelete = userRecordSelected.getUserCode();
 					}
 					userRecordSelected.setUserCode(userCode.getText());;
-					userRecordSelected.setUserPassword(userPassword.getText());
-					userRecordSelected.setUserName(userName.getText());
+					try {
+						System.out.println("Encriptado:"+crypter.encrypt( userPassword.getText()));
+						userRecordSelected.setUserPassword(crypter.encrypt( userPassword.getText()));
+					} catch (Exception e) {
+						System.out.println("Exception");
+						userRecordSelected.setUserPassword(userPassword.getText());
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					userRecordSelected.setUserName(userName.getText());
 					userRecordSelected.setUserLastname(userLastname.getText());
 					userRecordSelected.setUserAddress(userAddress.getText());
@@ -166,6 +183,12 @@ public class FormUserController {
 						item.setSysRole(role);
 						item.setSysUser(userRecord);
 						manageUserRole.updateSysUserRol(item);
+						if (!userRecord.getUserCode().equals(userCodeToDelete)){
+							System.out.println("Primary Key changed");
+							userToDelete = manageUser.findSysUser(userCodeToDelete);
+							withOutError = manageUser.deleteSysUser(userToDelete);						
+							System.out.println("Exito al eliminar = " + withOutError);
+						}
 
 					}
 					if (userRecord==null){
@@ -241,6 +264,7 @@ public class FormUserController {
 		userRecordSelected = new SysUser();
 		 userCode.setText("");
 		 userPassword.setText("");
+		 userPasswordConfirm.setText("");
 		 userName.setText("");
 		 userLastname.setText("");
 		 userAddress.setText("");
@@ -271,23 +295,35 @@ public class FormUserController {
 			lblUsercode.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
 		} else {
-			if (userRecordSelected.getUserCode() == null ){
-				SysUser user = null;
-				user = manageUser.findSysUser(userCode.getText().trim());
-				if (user == null || user.getUserCode() == null){
-					errorMessage.append(messageErrorNumber+"-"+"El usuario a ingresar ya existe.\n");
-					messageErrorNumber++;
-					lblUsercode.setTextFill(Color.web("#ff0000"));
-					
-				}
+			if (userRecordSelected == null ){
+			SysUser user = null;
+			user = manageUser.findSysUser(userCode.getText().trim());
+			if (user != null ){
+				errorMessage.append(messageErrorNumber+"-"+"El usuario a ingresar ya existe.\n");
+				messageErrorNumber++;
+				lblUsercode.setTextFill(Color.web("#ff0000"));
+
 			}
 		}
+			
+		}
+
 		if (userPassword.getText()== null ||userPassword.getText().isEmpty()){
 			errorMessage.append(messageErrorNumber+"-"+ "El campo de contraseña es obligatorio.\n");
 			messageErrorNumber++;
 			lblUserPassword.setTextFill(Color.web("#ff0000"));
 			//return errorMessage;
+		}else{
+			if (!userPassword.getText().equals(userPasswordConfirm.getText())){
+				errorMessage.append(messageErrorNumber+"-"+ "El campo contraseña y confirmacion contraseña no son iguales.\n");
+				messageErrorNumber++;
+				lblUserPassword.setTextFill(Color.web("#ff0000"));
+				lblUserPasswordConfirm.setTextFill(Color.web("#ff0000"));
+				//return errorMessage;
+			}
+
 		}
+		
 		if (userName.getText()==null || userName.getText().isEmpty()){
 			errorMessage.append(messageErrorNumber+"-"+"El campo nombre es obligatorio.\n");
 			messageErrorNumber++;
@@ -390,7 +426,20 @@ public void refreshComboBoxList(){
 	public void loadRecordInformation(String userCodePrm){
 		userRecordSelected = manageUser.findSysUser(userCodePrm);
 		 userCode.setText(userRecordSelected.getUserCode());
-		 userPassword.setText(userRecordSelected.getUserPassword());
+		 
+		 try {
+				userPassword.setText(crypter.decrypt(userRecordSelected.getUserPassword()));
+				userPasswordConfirm.setText(crypter.decrypt(userRecordSelected.getUserPassword()));
+		} catch (Exception e) {
+			userPassword.setText(userRecordSelected.getUserPassword());
+			userPasswordConfirm.setText(userRecordSelected.getUserPassword());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			System.out.println("LOADING");
+			System.out.println(userPassword.getText());
+			System.out.println(userPasswordConfirm.getText());
+
 		 userName.setText(userRecordSelected.getUserName());
 		 userLastname.setText(userRecordSelected.getUserLastname());
 		 userAddress.setText(userRecordSelected.getUserAddress());
@@ -417,6 +466,7 @@ public void refreshComboBoxList(){
 	public void defaultModeEnabled(){
 		 userCode.setEditable(true);
 		 userPassword.setEditable(false);
+		 userPasswordConfirm.setEditable(false);
 		 userName.setEditable(true);
 		 userLastname.setEditable(true);
 		 userAddress.setEditable(false);
@@ -438,6 +488,7 @@ public void refreshComboBoxList(){
 	public void initModeEnabled(){
 		 userCode.setEditable(true);
 		 userPassword.setEditable(false);
+		 userPasswordConfirm.setEditable(false);
 		 userName.setEditable(true);
 		 userLastname.setEditable(true);
 		 userAddress.setEditable(false);
@@ -460,6 +511,7 @@ public void refreshComboBoxList(){
 	public void rowSelectedModeEnabled(){
 		userCode.setEditable(true);
 		 userPassword.setEditable(true);
+		 userPasswordConfirm.setEditable(true);
 		 userName.setEditable(true);
 		 userLastname.setEditable(true);
 		 userAddress.setEditable(true);
@@ -482,6 +534,7 @@ public void refreshComboBoxList(){
 	public void editModeEnabled(){
 		userCode.setEditable(true);
 		 userPassword.setEditable(true);
+		 userPasswordConfirm.setEditable(true);
 		 userName.setEditable(true);
 		 userLastname.setEditable(true);
 		 userAddress.setEditable(true);
@@ -504,6 +557,7 @@ public void refreshComboBoxList(){
 	public void newModeEnabled(){
 		 userCode.setEditable(true);
 		 userPassword.setEditable(true);
+		 userPasswordConfirm.setEditable(true);
 		 userName.setEditable(true);
 		 userLastname.setEditable(true);
 		 userAddress.setEditable(true);
@@ -529,6 +583,7 @@ public void refreshComboBoxList(){
 			lblBegindate.setTextFill(Color.web("#000000"));
 			lblUsercode.setTextFill(Color.web("#000000"));
 			lblUserPassword.setTextFill(Color.web("#000000"));
+			lblUserPasswordConfirm.setTextFill(Color.web("#000000"));
 			lblUserRole.setTextFill(Color.web("#000000"));
 		}
 
